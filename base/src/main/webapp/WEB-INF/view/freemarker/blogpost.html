@@ -1,0 +1,92 @@
+<#import "/spring.ftl" as spring />
+<#macro basePath><#if springMacroRequestContext.getContextPath()=="/"><#else>${springMacroRequestContext.getContextPath()}</#if></#macro>
+<#global contextPath><@basePath/></#global>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Blog Home - Start Bootstrap Template</title>
+    <!-- Bootstrap Core CSS -->
+    <link href="${contextPath}/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="${contextPath}/static/theme/default/css/post.css" rel="stylesheet">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+<#include "./header.html">
+
+    <!-- Page Content -->
+    <div class="container">
+
+        <div class="row">
+
+            <!-- Blog Post Content Column -->
+            <div class="col-lg-8">
+                <!-- Blog Post -->
+                <!-- Title -->
+                <h1>${entity.title}</h1>
+                <hr>
+                <!-- Date/Time -->
+                <p><span class="glyphicon glyphicon-time"></span> 发表于 ${entity.timestamp}</p>
+                <hr>
+                <!-- Post Content -->
+               ${entity.articleData.lobContent}
+                <hr>
+                <!-- Blog Comments -->
+                <!-- Comments Form -->
+                <div class="well">
+                    <h4>发表评论:</h4>
+                    <form role="form">
+                        <div class="form-group">
+                            <textarea class="form-control" rows="3"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">提交</button>
+                    </form>
+                </div>
+                <hr>
+                <!-- Posted Comments -->
+                <!-- Comment -->
+                   <#list entity.comments as item>
+                <div class="media">
+                    <a class="pull-left" href="#">
+                        <img class="media-object" src="http://placehold.it/64x64" alt="">
+                    </a>
+                    <div class="media-body">
+                        <h4 class="media-heading">${item.name}
+                            <small>${item.createDate}</small>
+                        </h4>
+                        ${item.content}
+                    </div>
+                </div>
+   </#list>
+            </div>
+   <#include "./sidebar.html">
+        </div>
+        <!-- /.row -->
+        <hr>
+        
+        
+ <#include "./footer.html">
+
+    </div>
+    <!-- /.container -->
+
+    <!-- jQuery -->
+    <script src="js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+
+</body>
+
+</html>

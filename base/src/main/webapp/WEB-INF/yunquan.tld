@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
+	version="2.0">
+
+	<description>yunquan</description>
+	<display-name>yunquan</display-name>
+	<tlib-version>1.0</tlib-version>
+	<short-name>w</short-name>
+	<uri>http://www.yunquan.com/dev/taglib/core</uri>
+	<function>
+		<description>
+     将Iterable转换为Iterator
+    </description>
+		<name>it</name>
+		<function-class>com.buswe.base.web.taglib.WebFunctions</function-class>
+		<function-signature>java.util.Iterator iterableChange(java.lang.Iterable)</function-signature>
+	</function>
+	<function>
+		<description>
+     获取第一个排序
+    </description>
+		<name>firstOrder</name>
+		<function-class>com.buswe.base.web.taglib.WebFunctions</function-class>
+		<function-signature>org.springframework.data.domain.Sort.Order firstOrder(org.springframework.data.domain.Sort)</function-signature>
+	</function>
+	
+	<tag>
+<name>topMenu</name>
+	<tag-class>com.buswe.base.web.taglib.TopMenuTag</tag-class>
+</tag>
+
+	<tag>
+	<name>sideBar</name>
+	<tag-class>com.buswe.base.web.taglib.SideBarTaglib</tag-class>
+</tag>
+	
+<tag>
+<name>coderadio</name>
+	<tag-class>com.buswe.base.web.taglib.CodeRadioTaglib</tag-class>
+		<attribute>
+			<name>type</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+				<attribute>
+			<name>value</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+				<attribute>
+			<name>name</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+</tag>
+<tag>
+<name>codeselect</name>
+	<tag-class>com.buswe.base.web.taglib.CodeSelectTaglib</tag-class>
+		<attribute>
+			<name>type</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		
+			<attribute>
+			<name>css</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		
+			<attribute>
+			<name>name</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+			<attribute>
+			<name>value</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+			<attribute>
+			<name>ref</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+</tag>
+
+	<tag>
+		<name>page</name>
+		<tag-class>com.buswe.base.web.taglib.PageTaglib</tag-class>
+		<description>
+         分页标签
+        </description>
+		<attribute>
+			<name>page</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description>
+                分页对象
+            </description>
+		</attribute>
+				<attribute>
+			<name>jumpFunction</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description>
+                分页函数
+            </description>
+		</attribute>
+	</tag>
+
+<tag>
+	<name>code</name>
+		<tag-class>com.buswe.base.web.taglib.CodeValueTaglib</tag-class>
+		<description>
+        获取码表值
+        </description>
+        		<attribute>
+			<name>type</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		        		<attribute>
+			<name>key</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+</tag>
+
+</taglib>

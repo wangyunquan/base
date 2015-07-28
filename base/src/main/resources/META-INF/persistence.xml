@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0"
+	xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+				http://java.sun.com/xml/ns/persistence			http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+<!--属性参见 AvailableSettings.class-->
+ 
+ 
+	<persistence-unit name="yunquan">	
+	
+		<!-- For JBPM  
+		<mapping-file>META-INF/JBPMorm.xml</mapping-file>
+		<mapping-file>META-INF/Taskorm.xml</mapping-file>	
+
+	
+<class>org.jbpm.persistence.processinstance.ProcessInstanceInfo</class>
+<class>org.drools.persistence.info.SessionInfo</class>
+<class>org.drools.persistence.info.WorkItemInfo</class>
+<class>org.jbpm.process.audit.ProcessInstanceLog</class>
+<class>org.jbpm.process.audit.NodeInstanceLog</class>
+<class>org.jbpm.process.audit.VariableInstanceLog</class>
+ 
+ 
+<class>org.jbpm.task.Attachment</class>
+<class>org.jbpm.task.Content</class>
+<class>org.jbpm.task.BooleanExpression</class>
+<class>org.jbpm.task.Comment</class>
+<class>org.jbpm.task.Deadline</class>
+<class>org.jbpm.task.Comment</class>
+<class>org.jbpm.task.Deadline</class>
+<class>org.jbpm.task.Delegation</class>
+<class>org.jbpm.task.Escalation</class>
+<class>org.jbpm.task.Group</class>
+<class>org.jbpm.task.I18NText</class>
+<class>org.jbpm.task.Notification</class>
+<class>org.jbpm.task.EmailNotification</class>
+<class>org.jbpm.task.EmailNotificationHeader</class>
+<class>org.jbpm.task.PeopleAssignments</class>
+<class>org.jbpm.task.Reassignment</class>
+<class>org.jbpm.task.Status</class>
+<class>org.jbpm.task.Task</class>
+<class>org.jbpm.task.TaskData</class>
+<class>org.jbpm.task.SubTasksStrategy</class>
+<class>org.jbpm.task.OnParentAbortAllSubTasksEndStrategy</class>
+<class>org.jbpm.task.OnAllSubTasksEndParentEndStrategy</class>
+<class>org.jbpm.task.User</class>
+ 
+	-->
+		<properties>
+			<property name="hibernate.jdbc.fetch_size" value="20" />
+			<property name="hibernate.jdbc.batch_size" value="50" />
+		   	<property name="hibernate.default_batch_fetch_size" value="1"/>
+		   	<property name="hibernate.max_fetch_depth" value="3"/>
+		   	<property name="hibernate.current_session_context_class" value="thread"/> 
+		   	<!-- cache
+			<property name="hibernate.cache.region.factory_class" value="net.sf.ehcache.hibernate.EhCacheRegionFactory" />
+			<property name="net.sf.ehcache.configurationResourceName" value="conf/ehcache.xml" />
+			<property name="hibernate.cache.use_query_cache" value="true" />
+			<property name="hibernate.cache.use_second_level_cache" value="true" />
+		
+	  	-->
+		   
+		   
+		</properties>
+		 
+	</persistence-unit>
+</persistence>

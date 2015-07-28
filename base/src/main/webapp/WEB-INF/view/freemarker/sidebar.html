@@ -1,0 +1,41 @@
+
+<div class="col-md-4">
+
+	<!-- Blog Search Well -->
+	<div class="well">
+		<h4>Blog Search</h4>
+		<div class="input-group">
+			<input type="text" class="form-control"> <span
+				class="input-group-btn">
+				<button class="btn btn-default" type="button">
+					<span class="glyphicon glyphicon-search"></span>
+				</button>
+			</span>
+		</div>
+		<!-- /.input-group -->
+	</div>
+	
+	<!-- Blog Categories Well -->
+	<div class="well">
+		<h4>标签</h4>
+		<div class="row">
+			<div class="col-lg-12">
+				<#list tagsList as item>
+			<a href="${contextPath}/blog/tag/${ item.tagName}"><button class="btn btn-default" type="button" style="padding-top:30px;">
+					${ item.tagName} <span class="badge">${item.refCount}</span>
+				</button></a>
+				</#list>
+			</div>
+		</div>
+		<!-- /.row -->
+	</div>
+
+	<!-- Side Widget Well -->
+	<div class="well">
+		<h4>关于我</h4>
+		<p>邮箱：wangyunquan@live.com
+			QQ：1371392495
+			 </p>
+	</div>
+
+</div>
