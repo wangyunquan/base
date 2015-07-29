@@ -58,15 +58,15 @@ public class MvcConfig
     registry.addResourceHandler(new String[] { "/static/**" }).addResourceLocations(new String[] { "/static/" });
   }
   
-  @Bean
-  public HandlerExceptionResolver simpleMappingExceptionResolver()
-  {
-    SimpleMappingExceptionResolver b = new SimpleMappingExceptionResolver();
-    Properties mappings = new Properties();
-    mappings.put("org.springframework.dao.DataAccessException", "error");
-    b.setExceptionMappings(mappings);
-    return b;
-  }
+//  @Bean 测试环境不需要
+//  public HandlerExceptionResolver simpleMappingExceptionResolver()
+//  {
+//    SimpleMappingExceptionResolver b = new SimpleMappingExceptionResolver();
+//    Properties mappings = new Properties();
+//    mappings.put("org.springframework.dao.DataAccessException", "error");
+//    b.setExceptionMappings(mappings);
+//    return b;
+//  }
   
   @Bean(name={"multipartResolver"})
   public MultipartResolver multipartResolver()

@@ -9,7 +9,6 @@ import com.buswe.moudle.core.service.MenuService;
 
 public class MenuHolder
 {
-  private static List<Menu> allMenu = null;
   
   public static Set<Menu> getMenuOfMoudle(String url)
   {

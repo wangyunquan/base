@@ -15,17 +15,13 @@ import org.springframework.security.web.access.intercept.FilterInvocationSecurit
 public class SecurityMetadataSourceAuthImpl
   implements FilterInvocationSecurityMetadataSource
 {
-  private Set<ConfigAttribute> authSet = new HashSet();
+  private Set<ConfigAttribute> authSet = new HashSet<ConfigAttribute>();
   
   public Collection<ConfigAttribute> getAttributes(Object object)
     throws IllegalArgumentException
   {
     HttpServletRequest request = ((FilterInvocation)object)
       .getRequest();
-    
-
-
-
     String requestpath = getRequestPath(request);
     String auth = requestpath.replace("/", "_").toUpperCase().substring(1);
     ConfigAttribute security = new SecurityConfig(auth);
@@ -40,12 +36,10 @@ public class SecurityMetadataSourceAuthImpl
     }
     return url;
   }
-  
   public Collection<ConfigAttribute> getAllConfigAttributes()
   {
     return this.authSet;
   }
-  
   public boolean supports(Class<?> clazz)
   {
     return true;
