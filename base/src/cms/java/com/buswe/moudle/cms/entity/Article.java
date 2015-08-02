@@ -16,12 +16,22 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
+import org.hibernate.search.annotations.Analyze;
+import org.hibernate.search.annotations.DateBridge;
+import org.hibernate.search.annotations.DocumentId;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Index;
+import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.IndexedEmbedded;
+import org.hibernate.search.annotations.Resolution;
+import org.hibernate.search.annotations.Store;
 
 import com.buswe.base.domain.IdEntity;
 import com.buswe.moudle.core.entity.UserBasic;
 
 @Entity
 @Table(name="cms_article")
+@Indexed
 public class Article
   extends IdEntity
 {
@@ -40,6 +50,7 @@ public class Article
   private Site site;
   @OneToMany(cascade={javax.persistence.CascadeType.PERSIST, javax.persistence.CascadeType.MERGE, javax.persistence.CascadeType.REMOVE}, fetch=FetchType.LAZY, mappedBy="article")
   private List<Comment> comments = new ArrayList();
+  @Field(index=Index.YES, analyze=Analyze.YES, store=Store.NO)
   private String title;
   private String color;
   private String thumb;
@@ -50,18 +61,30 @@ public class Article
   private Integer hits;
   private String posid;
   private Date inputDate;
+  @Field(index=Index.YES, analyze=Analyze.NO, store=Store.YES)
+  @DateBridge(resolution=Resolution.DAY)
   private Date updateDate;
   private String content;
   private String copyfrom;
   private String allowComment;
   private String templates;
   private String tags;
+  @Field(index=Index.YES, analyze=Analyze.YES, store=Store.NO)
   private String outline;
   @ManyToMany
   @JoinTable(name="cms_articletag", joinColumns={@JoinColumn(name="article_id")}, inverseJoinColumns={@JoinColumn(name="tags_id")})
+  @IndexedEmbedded
   private List<Tags> tagList;
   @OneToOne(fetch=FetchType.LAZY, cascade={javax.persistence.CascadeType.REMOVE}, mappedBy="article")
+  @IndexedEmbedded
   private ArticleData articleData;
+  
+  @DocumentId  //索引ID
+  public String getArticleId()
+  {
+	  
+	  return this.id;
+  }
   
   public List<Tags> getTagList()
   {

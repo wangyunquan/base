@@ -21,7 +21,9 @@ public abstract interface ArticleService
   
   public abstract Page<Article> findCatArticle(String paramString, Pageable paramPageable);
   
-  public abstract Page<Article> findByTags(String paramString, Pageable paramPageable);
+  public abstract Page<Article> findByTags(Tags tags, Pageable paramPageable);
   
   public abstract Tags getTagbyName(String tagName,String siteId);
+  
+	public Page<Article> search(String keyWords, Pageable pageable);
 }

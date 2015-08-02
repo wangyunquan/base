@@ -119,16 +119,21 @@ public class ArticleServiceImpl
     return article;
   }
   
-  public Page<Article> findByTags(String tagId, Pageable page)
+  public Page<Article> findByTags(Tags tags, Pageable page)
   {
 
-	List<Tags>  article= Arrays.asList(tagsDao.findOne(tagId));
-    return this.articleDao.findByTagId(article, page);
+	List<Tags>  article= Arrays.asList(tags);
+    return this.articleDao.findByTagListInAndStatusOrderByUpdateDateDesc(article, "0",page);
   }
 
 @Override
 public Tags getTagbyName(String tagName, String siteId) {
 	 
 	return tagsDao.findByTagNameAndSiteId(tagName, siteId);
+}
+
+@Override
+public Page<Article> search(String keyWords, Pageable pageable) {
+	return articleDao.queryList(keyWords, pageable);
 }
 }

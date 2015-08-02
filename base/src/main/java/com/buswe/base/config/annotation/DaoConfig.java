@@ -18,6 +18,8 @@ import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 
+import com.alibaba.druid.filter.logging.Log4jFilter;
+import com.alibaba.druid.filter.stat.StatFilter;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.buswe.base.dao.springdata.BaseRepositoryFactoryBean;
 
@@ -28,6 +30,22 @@ public class DaoConfig
   @Autowired
   private Environment env;
   
+  
+  @Bean (name="stat-filter")
+ public  StatFilter statFilter()
+ {
+	  StatFilter statFilter=new StatFilter();
+	  statFilter.setLogSlowSql(true);
+	  statFilter.setSlowSqlMillis(10000);
+	  return statFilter;
+ }
+  @Bean (name="log4j-filter")
+  public Log4jFilter log4jFilter()
+  {
+	  Log4jFilter log4jFilter=new Log4jFilter();
+	  log4jFilter.setStatementExecutableSqlLogEnable(true);
+	  return log4jFilter;
+  }
   @Bean(name={"dataSource"}, initMethod="init", destroyMethod="close")
   public DataSource dataSource()
   {
@@ -39,7 +57,7 @@ public class DaoConfig
     ds.setMaxActive(20);
     try
     {
-      ds.setFilters("stat");
+      ds.setFilters("stat,log4j");
     }
     catch (SQLException e)
     {

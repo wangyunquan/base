@@ -7,6 +7,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import org.hibernate.search.annotations.Field;
+
 import com.buswe.base.domain.IdEntity;
 
 @Entity
@@ -17,6 +19,7 @@ public class Tags
   @ManyToMany
   @JoinTable(name="cms_articletag", joinColumns={@javax.persistence.JoinColumn(name="tags_id")}, inverseJoinColumns={@javax.persistence.JoinColumn(name="article_id")})
   private List<Article> articles;
+  @Field
   private String tagName;
   private Integer publishCount;
   private Integer refCount;

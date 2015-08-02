@@ -39,6 +39,12 @@ public class FrontController
     return "blogindex";
   }
   
+  @RequestMapping({"/"})
+  public String seach(String q,Pageable page,Model model)
+  {
+	   model.addAttribute("page" ,articleService.search(q, page));
+	  return "search";
+  }
   @RequestMapping({"/cat/{catName}"})
   public String cat(Model model, @PathVariable String catName, Pageable page)
   {
@@ -60,7 +66,8 @@ public class FrontController
   {
     model.addAllAttributes(CmsUtil.CmsPublic());
     Tags tagsData = articleService.getTagbyName(tagName,CmsUtil.getContextSite().getId());
-    model.addAttribute("page",this.articleService.findByTags(tagsData.getId(), page));
+    model.addAttribute("page",this.articleService.findByTags(tagsData, page));
+    model.addAttribute("tags",tagsData);
     return "blogtag";
   }
   

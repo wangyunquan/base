@@ -46,6 +46,8 @@
 <class>org.jbpm.task.User</class>
  
 	-->
+	
+	
 		<properties>
 			<property name="hibernate.jdbc.fetch_size" value="20" />
 			<property name="hibernate.jdbc.batch_size" value="50" />
@@ -59,7 +61,12 @@
 			<property name="hibernate.cache.use_second_level_cache" value="true" />
 		
 	  	-->
-		   
+		   <!-- Hibernate search -->
+		   <property name="hibernate.search.default.directory_provider"
+          value="filesystem"/>
+
+<property name="hibernate.search.default.indexBase"
+          value="D:\\code\\indexes"/>
 		   
 		</properties>
 		 
