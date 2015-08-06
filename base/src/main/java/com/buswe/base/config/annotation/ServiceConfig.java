@@ -7,8 +7,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
-@ComponentScan(basePackages={"com.buswe.**.service**"}, excludeFilters={@org.springframework.context.annotation.ComponentScan.Filter({org.springframework.stereotype.Controller.class})})
+@ComponentScan(basePackages={"com.buswe"}, excludeFilters={@org.springframework.context.annotation.ComponentScan.Filter({org.springframework.stereotype.Controller.class})})
 @EnableTransactionManagement
 @EnableScheduling
 @EnableAspectJAutoProxy
+
 public class ServiceConfig {}

@@ -121,11 +121,9 @@ public class ArticleServiceImpl
   
   public Page<Article> findByTags(Tags tags, Pageable page)
   {
-
 	List<Tags>  article= Arrays.asList(tags);
     return this.articleDao.findByTagListInAndStatusOrderByUpdateDateDesc(article, "0",page);
   }
-
 @Override
 public Tags getTagbyName(String tagName, String siteId) {
 	 
@@ -134,6 +132,12 @@ public Tags getTagbyName(String tagName, String siteId) {
 
 @Override
 public Page<Article> search(String keyWords, Pageable pageable) {
-	return articleDao.queryList(keyWords, pageable);
+	
+	if(keyWords.startsWith(":index")) //TODO   and must be admin
+	{
+		articleDao.reindex(articleDao.getEntityManager());
+	}
+	
+	return articleDao.search(articleDao.getEntityManager(),keyWords, pageable);
 }
 }

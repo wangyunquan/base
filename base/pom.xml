@@ -45,16 +45,6 @@
     	<version>4.1.7.RELEASE</version>
     </dependency>
     <dependency>
-    	<groupId>org.springframework.security</groupId>
-    	<artifactId>spring-security-taglibs</artifactId>
-    	<version>4.0.1.RELEASE</version>
-    </dependency>
-    <dependency>
-    	<groupId>org.springframework.security</groupId>
-    	<artifactId>spring-security-config</artifactId>
-    	<version>4.0.1.RELEASE</version>
-    </dependency>
-    <dependency>
     	<groupId>org.hibernate</groupId>
     	<artifactId>hibernate-entitymanager</artifactId>
     	<version>4.3.10.Final</version>
@@ -187,6 +177,28 @@
     	<artifactId>hibernate-search-orm</artifactId>
     	<version>5.3.0.Final</version>
     </dependency>
+    <dependency>
+    	<groupId>org.apache.shiro</groupId>
+    	<artifactId>shiro-core</artifactId>
+    	<version>1.2.4</version>
+    </dependency>
+    
+    			<dependency>
+				<groupId>org.apache.shiro</groupId>
+				<artifactId>shiro-spring</artifactId>
+				<version>1.2.4</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.shiro</groupId>
+				<artifactId>shiro-web</artifactId>
+			<version>1.2.4</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.shiro</groupId>
+				<artifactId>shiro-ehcache</artifactId>
+					<version>1.2.4</version>
+							</dependency>
+		 
   </dependencies>
   <build>
     <finalName>base</finalName>

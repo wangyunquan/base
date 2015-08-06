@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.buswe.base.dao.springdata.BaseRepository;
+import com.buswe.base.security.PasswordUtil;
 import com.buswe.base.service.BaseServiceImpl;
 import com.buswe.moudle.core.dao.GroupInfoDao;
 import com.buswe.moudle.core.dao.RolesinfoDao;
@@ -37,6 +38,7 @@ public class UserBasicServiceImpl
   public UserBasic save(UserBasic entity, String[] rolesIds)
   {
     Set<Rolesinfo> rolesinfo = entity.getRolesinfos();
+    PasswordUtil.entryptPassword(entity);
     rolesinfo.clear();
     for (String roleId : rolesIds)
     {

@@ -78,14 +78,8 @@ public class Article
   @OneToOne(fetch=FetchType.LAZY, cascade={javax.persistence.CascadeType.REMOVE}, mappedBy="article")
   @IndexedEmbedded
   private ArticleData articleData;
-  
-  @DocumentId  //索引ID
-  public String getArticleId()
-  {
-	  
-	  return this.id;
-  }
-  
+
+ 
   public List<Tags> getTagList()
   {
     return this.tagList;

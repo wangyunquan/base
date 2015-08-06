@@ -28,7 +28,7 @@
    <mapping path="*/tree**" exclue="true"/>
    <mapping path="*/html/**" exclue="true"/>
      <mapping path="*/blog/**" exclue="true"/>
-  
+    <mapping path="/login" exclue="true"/>
   <!-- 自定义 tag 规则 
   <content-processor>
     <tag-rule-bundle class="com.something.CssCompressingBundle" />

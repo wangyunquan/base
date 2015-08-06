@@ -3,6 +3,7 @@ package com.buswe.base.config.annotation;
 import java.sql.SQLException;
 import java.util.Properties;
 
+import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,12 +25,11 @@ import com.alibaba.druid.pool.DruidDataSource;
 import com.buswe.base.dao.springdata.BaseRepositoryFactoryBean;
 
 @Configuration
-@EnableJpaRepositories(basePackages={"com.buswe.moudle.*.dao"}, entityManagerFactoryRef="entityManagerFactory", transactionManagerRef="jpaTransaction", repositoryFactoryBeanClass=BaseRepositoryFactoryBean.class, excludeFilters={@org.springframework.context.annotation.ComponentScan.Filter({org.springframework.stereotype.Controller.class})})
+@EnableJpaRepositories(basePackages={"com.buswe"}, entityManagerFactoryRef="entityManagerFactory", transactionManagerRef="jpaTransaction", repositoryFactoryBeanClass=BaseRepositoryFactoryBean.class, excludeFilters={@org.springframework.context.annotation.ComponentScan.Filter({org.springframework.stereotype.Controller.class})})
 public class DaoConfig
 {
   @Autowired
   private Environment env;
-  
   
   @Bean (name="stat-filter")
  public  StatFilter statFilter()
@@ -67,7 +67,7 @@ public class DaoConfig
   }
   
   @Bean
-  public LocalContainerEntityManagerFactoryBean entityManagerFactory()
+  public LocalContainerEntityManagerFactoryBean entityManagerFactory(JpaVendorAdapter jpaVendorAdapter,DataSource dataSource)
   {
     LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
     Properties jpaProperties = new Properties();
@@ -83,9 +83,9 @@ public class DaoConfig
     }
     jpaProperties.setProperty("hibernate.cache.use_structured_entries", this.env.getProperty("hibernate.cache.use_structured_entries"));
     factory.setJpaProperties(jpaProperties);
-    factory.setPackagesToScan(new String[] { "com.buswe.moudle" });
-    factory.setJpaVendorAdapter(jpaVendorAdapter());
-    factory.setDataSource(dataSource());
+    factory.setPackagesToScan(new String[] { "com.buswe" });
+    factory.setJpaVendorAdapter(jpaVendorAdapter);
+    factory.setDataSource(dataSource);
     factory.setLoadTimeWeaver(new InstrumentationLoadTimeWeaver());
     return factory;
   }
@@ -104,10 +104,10 @@ public class DaoConfig
   }
   
   @Bean
-  public JpaTransactionManager jpaTransaction()
+  public JpaTransactionManager jpaTransaction(LocalContainerEntityManagerFactoryBean entityManagerFactory )
   {
     JpaTransactionManager manager = new JpaTransactionManager();
-    manager.setEntityManagerFactory(entityManagerFactory().getObject());
+    manager.setEntityManagerFactory(entityManagerFactory.getObject());
     return manager;
   }
 }

@@ -8,8 +8,8 @@ import javax.servlet.ServletRegistration;
 
 import org.sitemesh.config.ConfigurableSiteMeshFilter;
 import org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter;
-import org.springframework.security.web.session.HttpSessionEventPublisher;
 import org.springframework.web.filter.CharacterEncodingFilter;
+import org.springframework.web.filter.DelegatingFilterProxy;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 import org.springframework.web.util.IntrospectorCleanupListener;
 import org.springframework.web.util.WebAppRootListener;
@@ -23,7 +23,7 @@ public class DefaultWebApplicationInitializer
     throws ServletException
   {
     servletContext.addListener(IntrospectorCleanupListener.class);
-    servletContext.addListener(HttpSessionEventPublisher.class);
+  //  servletContext.addListener(HttpSessionEventPublisher.class);
     servletContext.addListener(WebAppRootListener.class);
     StatViewServlet DruidStatView = new StatViewServlet();
     ServletRegistration.Dynamic registration = 
@@ -53,8 +53,10 @@ public class DefaultWebApplicationInitializer
     CharacterEncodingFilter encodingFilter = new CharacterEncodingFilter();
     encodingFilter.setEncoding("UTF-8");
     ConfigurableSiteMeshFilter siteMeshFilter = new ConfigurableSiteMeshFilter();
-    
-    return new Filter[] { encodingFilter, openEntityManagerInViewFilter, siteMeshFilter };
+    DelegatingFilterProxy delegatingFilterProxy=new DelegatingFilterProxy();
+    delegatingFilterProxy.setTargetFilterLifecycle(true);
+    delegatingFilterProxy.setTargetBeanName("shiroFilter");
+    return new Filter[] { encodingFilter, delegatingFilterProxy,openEntityManagerInViewFilter, siteMeshFilter };
   }
   
   protected void customizeRegistration(ServletRegistration.Dynamic registration)

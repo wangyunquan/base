@@ -39,11 +39,13 @@ public class FrontController
     return "blogindex";
   }
   
-  @RequestMapping({"/"})
-  public String seach(String q,Pageable page,Model model)
+  @RequestMapping({"/search"})
+  public String search(String q,Pageable page,Model model)
   {
+	    model.addAllAttributes(CmsUtil.CmsPublic());
 	   model.addAttribute("page" ,articleService.search(q, page));
-	  return "search";
+	   model.addAttribute("seachkey" ,q);
+	  return "blogsearch";
   }
   @RequestMapping({"/cat/{catName}"})
   public String cat(Model model, @PathVariable String catName, Pageable page)

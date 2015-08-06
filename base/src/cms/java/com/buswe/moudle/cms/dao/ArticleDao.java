@@ -13,7 +13,7 @@ import com.buswe.base.dao.springdata.BaseRepository;
 import com.buswe.moudle.cms.entity.Article;
 import com.buswe.moudle.cms.entity.Tags;
 
-public abstract interface ArticleDao extends BaseRepository<Article, String>,ArticleDaoSearch {
+public abstract interface ArticleDao extends BaseRepository<Article, String>,ArticleDaoCustom {
 	@Query("select new Article(id,user.id,user.name,title,desciption,updateDate)  from Article   where  category.id=:catId and status =0  and updateDate between :beginDate and:endDate  order by updateDate, weight")
 	public abstract List<Article> queryCatArticle(@Param("catId") String paramString,
 			@Param("beginDate") Date paramDate1, @Param("endDate") Date paramDate2);

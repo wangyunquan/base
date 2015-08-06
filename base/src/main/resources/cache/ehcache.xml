@@ -285,7 +285,7 @@
             />
  
  
-    <cache name="securityCache"
+    <cache name="cache_all_menu"
             maxElementsInMemory="500"
             eternal="true"
             overflowToDisk="true"
