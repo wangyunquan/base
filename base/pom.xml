@@ -214,6 +214,7 @@
 				<artifactId>je</artifactId>
 				<version>5.0.73</version>
 			</dependency>
+ 
   </dependencies>
   <build>
     <finalName>base</finalName>

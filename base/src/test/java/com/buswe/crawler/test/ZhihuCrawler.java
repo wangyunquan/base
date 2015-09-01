@@ -14,8 +14,8 @@ public class ZhihuCrawler extends  BreadthCrawler{
 
 	public static void main(String[] args) {
 		 ZhihuCrawler crawler=new ZhihuCrawler("D:\\code\\crawl",true);  
-	     crawler.addSeed("http://www.avmask.net/cn");  
-	      crawler.addRegex("http://www.avmask.net/cn/.*");  
+	     crawler.addSeed("http://www.zhihu.com");  
+	      crawler.addRegex("http://www.zhihu.com/.*");  
        try {
 		crawler.start(2);
 	} catch (Exception e) {
