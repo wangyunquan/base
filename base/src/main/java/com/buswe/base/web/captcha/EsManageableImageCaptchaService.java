@@ -5,6 +5,8 @@
  */
 package com.buswe.base.web.captcha;
 
+import com.octo.captcha.service.image.DefaultManageableImageCaptchaService;
+
 /**
  * <p>User: Zhang Kaitao
  * <p>Date: 13-3-22 下午3:38

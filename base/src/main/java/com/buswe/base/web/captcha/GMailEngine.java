@@ -4,6 +4,24 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.image.ImageFilter;
 
+import com.octo.captcha.component.image.backgroundgenerator.BackgroundGenerator;
+import com.octo.captcha.component.image.backgroundgenerator.UniColorBackgroundGenerator;
+import com.octo.captcha.component.image.color.RandomListColorGenerator;
+import com.octo.captcha.component.image.deformation.ImageDeformation;
+import com.octo.captcha.component.image.deformation.ImageDeformationByFilters;
+import com.octo.captcha.component.image.fontgenerator.FontGenerator;
+import com.octo.captcha.component.image.fontgenerator.RandomFontGenerator;
+import com.octo.captcha.component.image.textpaster.DecoratedRandomTextPaster;
+import com.octo.captcha.component.image.textpaster.TextPaster;
+import com.octo.captcha.component.image.textpaster.textdecorator.TextDecorator;
+import com.octo.captcha.component.image.wordtoimage.DeformedComposedWordToImage;
+import com.octo.captcha.component.image.wordtoimage.WordToImage;
+import com.octo.captcha.component.word.FileDictionary;
+import com.octo.captcha.component.word.wordgenerator.ComposeDictionaryWordGenerator;
+import com.octo.captcha.component.word.wordgenerator.WordGenerator;
+import com.octo.captcha.engine.image.ListImageCaptchaEngine;
+import com.octo.captcha.image.gimpy.GimpyFactory;
+
 /**
  * from https://code.google.com/p/musicvalley/source/browse/trunk/musicvalley/doc/springSecurity/springSecurityIII/src/main/java/com/spring/security/jcaptcha/GMailEngine.java?spec=svn447&r=447
  * JCaptcha验证码图片生成引擎, 仿照JCaptcha2.0编写类似GMail验证码的样式.

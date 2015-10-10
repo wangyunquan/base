@@ -8,6 +8,7 @@ import javax.servlet.Filter;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
+import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.mgt.WebSecurityManager;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
@@ -17,6 +18,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 
+import com.buswe.base.security.JCaptchaValidateFilter;
+import com.buswe.base.security.MyFormAuthenticationFilter;
 import com.buswe.base.security.ShiroDbRealm;
 import com.buswe.base.security.URLPermissionsFilter;
 @Configuration
@@ -42,13 +45,25 @@ DefaultFilter  规定了默认的Filter，在ShiroFilterFactoryBean时通过 Def
 
 				 */
 
-		URLPermissionsFilter urlPermissionFilter=new URLPermissionsFilter();
+
 		
 		Map<String, Filter> filters=new HashMap<String,Filter>();
+		
+		MyFormAuthenticationFilter authcFilter=new MyFormAuthenticationFilter();
+		filters.put("authc", authcFilter);
+		//验证码过滤器
+		JCaptchaValidateFilter captchaFilter=new JCaptchaValidateFilter();
+		captchaFilter.setEnabled(true);
+		captchaFilter.setJcaptchaParam("jcaptchaCode");
+		captchaFilter.setFailureKeyAttribute("shiroLoginFailure");
+		filters.put("jCaptchaValidate", captchaFilter);
+		
+		URLPermissionsFilter urlPermissionFilter=new URLPermissionsFilter();
 		filters.put("urlPermission", urlPermissionFilter);
+		
 		shiroFilterFactoryBean.setFilters(filters);
 		
-		filterChainDefinitionMap.put("/login", "authc");
+		filterChainDefinitionMap.put("/login", "jCaptchaValidate,authc");
 		filterChainDefinitionMap.put("/logout", "logout");
  	filterChainDefinitionMap.put("/core/**", "urlPermission");
  	filterChainDefinitionMap.put("/cms/**", "urlPermission");
@@ -56,6 +71,7 @@ DefaultFilter  规定了默认的Filter，在ShiroFilterFactoryBean时通过 Def
 		shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
 		return shiroFilterFactoryBean;
 	}
+ 
 	
 	@Bean
 public 	WebSecurityManager securityManager(org.apache.shiro.cache.ehcache.EhCacheManager  securityCacheManager,ShiroDbRealm shiroDbRealm)
