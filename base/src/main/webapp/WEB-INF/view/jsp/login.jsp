@@ -84,6 +84,20 @@
         <input type="text"  id="username" class="form-control" placeholder="用户名"  name="username" required autofocus>
         <label for="inputPassword" class="sr-only">密码</label>
         <input type="password" id="inputPassword" class="form-control" placeholder="密码"  name="password" required>
+        <div>
+        
+        <c:if test="${jcaptchaEbabled}">
+    验证码：
+    <input type="text" name="jcaptchaCode">
+    <a class="jcaptcha-btn" href="javascript:;">
+<img class="jcaptcha-btn jcaptcha-img" 
+src="${pageContext.request.contextPath}/captcha/" title="点击更换验证码">
+    换一张</a>
+    <br/>
+</c:if> 
+      
+        
+        </div>
         <div class="checkbox">
           <label>
             <input type="checkbox"  id="rememberMe" name="rememberMe"> 记住我

@@ -15,6 +15,7 @@ import org.springframework.web.util.IntrospectorCleanupListener;
 import org.springframework.web.util.WebAppRootListener;
 
 import com.alibaba.druid.support.http.StatViewServlet;
+import com.buswe.core.web.servlet.CaptchaServlet;
 
 public class DefaultWebApplicationInitializer
   extends AbstractAnnotationConfigDispatcherServletInitializer
@@ -26,11 +27,16 @@ public class DefaultWebApplicationInitializer
   //  servletContext.addListener(HttpSessionEventPublisher.class);
     servletContext.addListener(WebAppRootListener.class);
     StatViewServlet DruidStatView = new StatViewServlet();
-    ServletRegistration.Dynamic registration = 
+    ServletRegistration.Dynamic druidRegistration = 
       servletContext.addServlet("DruidStatView", DruidStatView);
-    registration.addMapping(new String[] { "/druid/*" });
+    druidRegistration.addMapping(new String[] { "/druid/*" });
+    CaptchaServlet captchaServlet=new CaptchaServlet();
+    ServletRegistration.Dynamic captchaRegistration = 
+    	      servletContext.addServlet("captchaServlet", captchaServlet);
+    captchaRegistration.addMapping(new String[] { "/captcha/*" });
     super.onStartup(servletContext);
   }
+  
   
   protected Class<?>[] getRootConfigClasses()
   {

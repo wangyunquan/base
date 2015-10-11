@@ -47,10 +47,11 @@ public class MvcConfig
     return resolver;
   }
   
-  public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers)
-  {
-    argumentResolvers.add(new PageableHandlerMethodArgumentResolver());
-  }
+//  public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers)
+//  {
+ //已开启  @EnableSpringDataWebSupport
+//    argumentResolvers.add(new PageableHandlerMethodArgumentResolver());
+//  }
   
   public void addResourceHandlers(ResourceHandlerRegistry registry)
   {
