@@ -4,11 +4,10 @@ import java.util.Objects;
 /**
  * 自定义Authentication对象，使得Subject除了携带用户的登录名外还可以携带更多信息.
  */
-public class ShiroUser implements java.io.Serializable{
+public class ShiroUser{
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 8440193674745301481L;
 	public String loginName;
 	public String name;
 
