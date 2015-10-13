@@ -12,6 +12,7 @@ import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
@@ -49,8 +50,9 @@ public class UploadController
       
       String fileUrl = getFilepath(extension);
       File destFile = new File(SystemEnvy.WEBROOT + File.separator + fileUrl);
-      if ((ImageUtils.isImgExtension(extension)) && 
-        (ImageUtils.isImage(file.getInputStream())))
+      FileUtils.touch(destFile);
+      if ((ImageUtils.isImgExtension(extension)) 
+          )
       {
         String width = request.getParameter("width");
         String height = request.getParameter("height");
@@ -100,7 +102,6 @@ public class UploadController
   {
     String uuid = UUID.randomUUID().toString();
     String date = new SimpleDateFormat("yyyyMMdd").format(new Date());
-    
     String path = "";
     if (ImageUtils.isImgExtension(extension)) {
       path = CmsConfig.getImageFolder() + File.separator + date + File.separator;

@@ -66,7 +66,6 @@ public class ArticleServiceImpl
     ArticleData data = (ArticleData)this.articleDataDao.save(entity.getArticleData());
     entity.setArticleData(data);
     entity = (Article)this.articleDao.save(entity);
-    
     String tag = entity.getTags();
     List<String> tags = new ArrayList();
     if (tag.contains("，")) {

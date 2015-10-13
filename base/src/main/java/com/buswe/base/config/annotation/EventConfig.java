@@ -38,7 +38,6 @@ public class EventConfig
     loggingEventHandler.setExplicitMatching(false);
     Set<Class<? extends ApplicationEvent>> events = new HashSet();
     events.add(ApplicationEvent.class);
-    events.add(ApplicationEvent.class);
     loggingEventHandler.setSupportedEvents(events);
     return loggingEventHandler;
   }

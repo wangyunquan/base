@@ -56,6 +56,7 @@ public class MvcConfig
   public void addResourceHandlers(ResourceHandlerRegistry registry)
   {
     registry.addResourceHandler(new String[] { "/static/**" }).addResourceLocations(new String[] { "/static/" });
+    registry.addResourceHandler(new String[] { "/upload/**" }).addResourceLocations(new String[] { "/upload/" });
   }
   
 //  @Bean 测试环境不需要
