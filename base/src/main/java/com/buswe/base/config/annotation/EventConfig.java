@@ -11,6 +11,8 @@ import org.springframework.context.event.SimpleApplicationEventMulticaster;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import com.buswe.base.event.LoggingEventHandler;
+import com.buswe.moudle.cms.statics.ContentVistEvent;
+import com.buswe.moudle.cms.statics.VistEventHandler;
 
 @Configuration
 public class EventConfig
@@ -36,9 +38,20 @@ public class EventConfig
   {
     LoggingEventHandler loggingEventHandler = new LoggingEventHandler();
     loggingEventHandler.setExplicitMatching(false);
-    Set<Class<? extends ApplicationEvent>> events = new HashSet();
+    Set<Class<? extends ApplicationEvent>> events = new HashSet<Class<? extends ApplicationEvent>>();
     events.add(ApplicationEvent.class);
     loggingEventHandler.setSupportedEvents(events);
     return loggingEventHandler;
   }
+  @Bean
+  VistEventHandler vistEventHandler()
+  {
+	  VistEventHandler eventHandler = new VistEventHandler();
+	    eventHandler.setExplicitMatching(false);
+	    Set<Class<? extends ApplicationEvent>> events = new HashSet<Class<? extends ApplicationEvent>>();
+	    events.add(ContentVistEvent.class);
+	    eventHandler.setSupportedEvents(events);
+	    return eventHandler;
+  }
+ 
 }

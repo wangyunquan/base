@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,10 +32,15 @@ public class FrontController
   @Resource
   private SiteService siteService;
   
-  @RequestMapping({"/"})
-  public String index(Model model)
+  @RequestMapping({"/{page}"})
+  public String index(Model model,@PathVariable String page)
   {
-    model.addAttribute("page", this.siteService.getArtiClePage("0", CmsConstants.BLOG_SITE_ID));
+	  Integer pageNum=0;
+	 if(!StringUtils.isBlank(page))
+	 {
+		 pageNum=new Integer(page);
+	 }
+    model.addAttribute("page", this.siteService.getArtiClePage(pageNum, CmsConstants.BLOG_SITE_ID));
     model.addAllAttributes(CmsUtil.CmsPublic());
     return "blogindex";
   }

@@ -38,7 +38,7 @@ public class SiteServiceImpl
     return this.siteDao;
   }
   
-  public Page<Article> getArtiClePage(String pageNo, String siteId)
+  public Page<Article> getArtiClePage(Integer pageNo, String siteId)
   {
     Specification<Article> spec = QueryHelper.filter("category.site.id", MatchType.EQ, siteId);
     return this.articleDao.findAll(spec, new PageRequest(new Integer(pageNo).intValue(), 20, Sort.Direction.DESC, new String[] { "updateDate" }));

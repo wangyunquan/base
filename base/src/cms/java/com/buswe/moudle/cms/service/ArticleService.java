@@ -26,4 +26,6 @@ public abstract interface ArticleService
   public abstract Tags getTagbyName(String tagName,String siteId);
   
 	public Page<Article> search(String keyWords, Pageable pageable);
+	
+	public void hitAricle(String id);
 }

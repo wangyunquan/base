@@ -6,7 +6,7 @@ import javax.persistence.Table;
 import com.buswe.base.domain.IdEntity;
 
 @Entity
-@Table(name="base_menu")
+@Table(name="base_statistic")
 public class Statistic
   extends IdEntity
 {

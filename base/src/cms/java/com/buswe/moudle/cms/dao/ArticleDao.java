@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -26,4 +27,8 @@ public abstract interface ArticleDao extends BaseRepository<Article, String>,Art
 
 //	@Query(value=" select entity  from Article  entity      where  entity.tagList in(:tagId) and entity.status=0 order by entity.weight desc,entity.updateDate desc ",countQuery="select count(1)  from Article  entity   where  entity.tagList in(:tagId) and entity.status=0 ")
 	public abstract Page<Article> findByTagListInAndStatusOrderByUpdateDateDesc(Collection <Tags> tagId, String status,Pageable paramPageable);
+	
+	@Modifying 
+	@Query("update Article set hits=hits+1 where id=:id")
+	public void hitArticle(@Param("id") String id);
 }

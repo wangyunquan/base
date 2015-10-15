@@ -7,12 +7,14 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.buswe.base.config.ContextHolder;
 import com.buswe.base.dao.springdata.BaseRepository;
 import com.buswe.base.service.BaseServiceImpl;
 import com.buswe.moudle.cms.dao.ArticleDao;
@@ -29,6 +31,7 @@ import com.buswe.moudle.cms.entity.Tags;
 import com.buswe.moudle.cms.helper.CmsUtil;
 import com.buswe.moudle.cms.service.ArticleService;
 import com.buswe.moudle.cms.service.CategoryService;
+import com.buswe.moudle.cms.statics.ContentVistEvent;
 
 @Service
 @Transactional("jpaTransaction")
@@ -111,10 +114,13 @@ public class ArticleServiceImpl
   
   public Article getArticle(String artId)
   {
+
     Article article = this.articleDao.getArticle(artId);
     article.getArticleData().getLobContent();
     List<Comment> comment = this.commentDao.findByArticleId(article.getId());
     article.setComments(comment);
+    ApplicationContext context=  ContextHolder.getApplicationContext();
+    context.publishEvent(new ContentVistEvent(context,artId));
     return article;
   }
   
@@ -138,5 +144,11 @@ public Page<Article> search(String keyWords, Pageable pageable) {
 	}
 	
 	return articleDao.search(articleDao.getEntityManager(),keyWords, pageable);
+}
+
+@Override
+public void hitAricle(String id) {
+	articleDao.hitArticle(id);
+	
 }
 }

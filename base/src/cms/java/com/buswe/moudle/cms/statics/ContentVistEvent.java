@@ -5,15 +5,26 @@ import org.springframework.context.event.ApplicationContextEvent;
 
 public class ContentVistEvent extends ApplicationContextEvent {
 
-private 	String ip;
-private	String type; //content tag 
-private	String id;
-
+	private String contentId;
 	
 	public ContentVistEvent(ApplicationContext source) {
 		super(source);
 	}
 
-	
+	public ContentVistEvent(ApplicationContext source, String contentId)
+
+	{
+		super(source);
+       this.contentId=contentId;
+	}
+
+	public String getContentId() {
+		return contentId;
+	}
+
+	 public String toString()
+	 {
+		 return "content  visit "+contentId+"    source"+getSource();
+	 }
 	
 }

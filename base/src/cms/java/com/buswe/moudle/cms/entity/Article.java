@@ -58,7 +58,7 @@ public class Article
   private String desciption;
   private String status;
   private Integer weight = Integer.valueOf(0);
-  private Integer hits;
+  private Integer hits=0;
   private String posid;
   private Date inputDate;
   @Field(index=Index.YES, analyze=Analyze.NO, store=Store.YES)

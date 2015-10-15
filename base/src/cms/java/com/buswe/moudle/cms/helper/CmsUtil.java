@@ -23,19 +23,13 @@ public class CmsUtil
   {
     Map<String, Object> model = new HashMap<String, Object>();
     model.put("ctx", WebHelper.request().getContextPath());
-    
-
-
     model.put("site", getContextSite());
-    
     CategoryService catService = (CategoryService)ContextHolder.getBean(CategoryService.class);
     List<Category> catList = catService.findBySiteId(getContextSite().getId());
     model.put("catList", catList);
-    
     ArticleService artiCleservice = (ArticleService)ContextHolder.getBean(ArticleService.class);
     List<Tags> tagsList = artiCleservice.getTopTags(Integer.valueOf(20), getContextSite().getId());
     model.put("tagsList", tagsList);
-    
     return model;
   }
   

@@ -80,8 +80,6 @@ public class UploadController
         response.setCharacterEncoding("UTF-8");
         response.setContentType("text/html");
         response.setHeader("Cache-Control", "no-cache");
-        
-
         String error = "";
         String callback = request.getParameter("CKEditorFuncNum");
         outString.append("<script type=\"text/javascript\">");
