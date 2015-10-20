@@ -4,7 +4,11 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import org.apache.lucene.util.Version;
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.search.highlight.Highlighter;
+import org.apache.lucene.search.highlight.QueryScorer;
+import org.apache.lucene.search.highlight.SimpleFragmenter;
+import org.apache.lucene.search.highlight.SimpleHTMLFormatter;
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.jpa.FullTextQuery;
 import org.hibernate.search.jpa.Search;
@@ -31,10 +35,19 @@ public class ArticleDaoImpl  implements ArticleDaoCustom{
 	Long time =System.nanoTime();
 		FullTextEntityManager fullTextEntityManager = org.hibernate.search.jpa.Search.getFullTextEntityManager(em);
 		QueryBuilder qb = fullTextEntityManager.getSearchFactory().buildQueryBuilder().forEntity(Article.class).get();
+	 
 		
-		QueryParser queryParser=new QueryParser(Version.LUCENE_4_9_1, keyWords, new IKAnalyzer()) ;
 		/**
-		 * 
+		   QueryParser parser = new QueryParser(Version.LUCENE_31, "content",  
+                new SimpleAnalyzer(Version.LUCENE_31));  
+        org.apache.lucene.search.Query luceneQuery = null;  
+        try {  
+            luceneQuery = parser.parse(content);  
+        } catch (ParseException e) {  
+            e.printStackTrace();  
+        }  
+        
+      
 		 */
 		org.apache.lucene.search.Query luceneQuery = qb.keyword().onFields("title", "outline", "articleData.lobContent")
 				.matching(keyWords).createQuery();
@@ -43,6 +56,30 @@ public class ArticleDaoImpl  implements ArticleDaoCustom{
 		jpaQuery.setMaxResults(pageable.getPageSize());
 		Integer total = jpaQuery.getResultSize();
 		List<Article> result = jpaQuery.getResultList();
+		//高亮显示
+		  SimpleHTMLFormatter formatter = new SimpleHTMLFormatter(
+					"<b><font color='red'>", "</font></b>");
+					QueryScorer qs = new QueryScorer(luceneQuery);
+					Highlighter highlighter = new Highlighter(formatter, qs);  
+					// 这个20是指定关键字字符串的context的长度，你可以自己设定，因为不可能返回整篇正文内容  
+			        highlighter.setTextFragmenter(new SimpleFragmenter(20));  
+			        String contentStr="";
+			        for (Article article : result) {  
+			            Analyzer analyzer = new IKAnalyzer();  
+			            try {  
+			                contentStr = article.getArticleData().getLobContent();
+			                // 去掉所有html元素,  
+			                contentStr = contentStr.replaceAll("<[a-zA-Z]+[1-9]?[^><]*>",  
+			                        "").replaceAll("</[a-zA-Z]+[1-9]?>", "");  
+			  
+			                String contentHighLighter = highlighter.getBestFragment(  
+			                        analyzer, keyWords, contentStr);  
+			                article.getArticleData().setLobContent(contentHighLighter);
+			            } catch (Exception e) {  
+			                e.printStackTrace();  
+			            }  
+			        }  
+					
 		PageImpl<Article> page = new PageImpl<Article>(result, pageable, total);
 	Long totalTime=System.nanoTime()-time;
 	logger.debug("Seach total time is "+totalTime);
