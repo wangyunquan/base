@@ -1,10 +1,10 @@
 package com.buswe.moudle.cms.dao.impl;
 
-import java.time.ZonedDateTime;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 
+import org.apache.lucene.util.Version;
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.jpa.FullTextQuery;
 import org.hibernate.search.jpa.Search;
@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.wltea.analyzer.lucene.IKAnalyzer;
 
 import com.buswe.moudle.cms.dao.ArticleDaoCustom;
 import com.buswe.moudle.cms.entity.Article;
@@ -30,6 +31,11 @@ public class ArticleDaoImpl  implements ArticleDaoCustom{
 	Long time =System.nanoTime();
 		FullTextEntityManager fullTextEntityManager = org.hibernate.search.jpa.Search.getFullTextEntityManager(em);
 		QueryBuilder qb = fullTextEntityManager.getSearchFactory().buildQueryBuilder().forEntity(Article.class).get();
+		
+		QueryParser queryParser=new QueryParser(Version.LUCENE_4_9_1, keyWords, new IKAnalyzer()) ;
+		/**
+		 * 
+		 */
 		org.apache.lucene.search.Query luceneQuery = qb.keyword().onFields("title", "outline", "articleData.lobContent")
 				.matching(keyWords).createQuery();
 		FullTextQuery jpaQuery = fullTextEntityManager.createFullTextQuery(luceneQuery, Article.class);

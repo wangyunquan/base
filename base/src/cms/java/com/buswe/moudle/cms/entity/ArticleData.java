@@ -9,10 +9,12 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.search.annotations.Analyze;
+import org.hibernate.search.annotations.Analyzer;
 import org.hibernate.search.annotations.ContainedIn;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Index;
 import org.hibernate.search.annotations.Store;
+import org.wltea.analyzer.lucene.IKAnalyzer;
 
 @Entity
 @Table(name="cms_articledata")
@@ -26,7 +28,7 @@ public class ArticleData
   private Article article;
   @Lob
   @ContainedIn
-  @Field(index=Index.YES, analyze=Analyze.NO, store=Store.YES)
+  @Field(index=Index.YES, store=Store.YES,analyzer = @Analyzer(impl = IKAnalyzer.class))
   private String lobContent;
   
   public String getId()

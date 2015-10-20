@@ -32,15 +32,11 @@ public class FrontController
   @Resource
   private SiteService siteService;
   
-  @RequestMapping({"/{page}"})
-  public String index(Model model,@PathVariable String page)
+  @RequestMapping({""})
+  public String index(Model model,Pageable page)
   {
-	  Integer pageNum=0;
-	 if(!StringUtils.isBlank(page))
-	 {
-		 pageNum=new Integer(page);
-	 }
-    model.addAttribute("page", this.siteService.getArtiClePage(pageNum, CmsConstants.BLOG_SITE_ID));
+ 
+    model.addAttribute("page", this.siteService.getArtiClePage(page.getPageNumber(), CmsConstants.BLOG_SITE_ID));
     model.addAllAttributes(CmsUtil.CmsPublic());
     return "blogindex";
   }

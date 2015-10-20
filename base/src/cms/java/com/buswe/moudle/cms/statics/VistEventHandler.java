@@ -13,7 +13,6 @@ public class VistEventHandler   extends YunquanEventListener
 
 	@Override
 	public void onApplicationEvent(ApplicationEvent paramApplicationEvent) {
- 
 		ContentVistEvent event=(ContentVistEvent)paramApplicationEvent;
 		ApplicationContext context=	event.getApplicationContext();
 		ArticleService service=	context.getBean(ArticleService.class);
