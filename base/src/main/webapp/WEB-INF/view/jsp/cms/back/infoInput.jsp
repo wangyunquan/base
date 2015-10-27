@@ -49,13 +49,11 @@
 					    </div>
             <div class="form-group">
              <div class="col-sm-12">
-             <textarea rows="10" cols="200"  id="ckEditor"  name="articleData.lobContent">
-             ${entity.articleData.lobContent}
+             <textarea rows="10" cols="200"  id="ckEditor"  name="lobContent">
+             ${entity.lobContent}
              </textarea>
              </div>
-             	<c:if test="${entity.articleData.id!=null}">
-						<input type="hidden" name="articleData.id" value="${entity.articleData.id}">
-						</c:if>
+ 
              </div>
     
  <p />

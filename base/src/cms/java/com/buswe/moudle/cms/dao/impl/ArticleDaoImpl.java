@@ -67,14 +67,14 @@ public class ArticleDaoImpl  implements ArticleDaoCustom{
 			        for (Article article : result) {  
 			            Analyzer analyzer = new IKAnalyzer();  
 			            try {  
-			                contentStr = article.getArticleData().getLobContent();
+			                contentStr = article.getLobContent();
 			                // 去掉所有html元素,  
 			                contentStr = contentStr.replaceAll("<[a-zA-Z]+[1-9]?[^><]*>",  
 			                        "").replaceAll("</[a-zA-Z]+[1-9]?>", "");  
 			  
 			                String contentHighLighter = highlighter.getBestFragment(  
 			                        analyzer, keyWords, contentStr);  
-			                article.getArticleData().setLobContent(contentHighLighter);
+			                article.setLobContent(contentHighLighter);
 			            } catch (Exception e) {  
 			                e.printStackTrace();  
 			            }  

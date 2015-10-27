@@ -32,6 +32,7 @@ public class ArticleController
   public String list(Pageable page, HttpServletRequest request, Model model)
   {
     List<PropertyFilter> filters = WebHelper.filterRequest(request);
+    request.setAttribute("siteId", request.getParameter("siteId"));
     model.addAttribute("page", this.service.findPage(page, filters));
     return "cms/back/infoList";
   }
@@ -62,5 +63,11 @@ public class ArticleController
     model.addAttribute("catList", this.catService.findBySiteId("1"));
     model.addAttribute("entity", entity);
     return "cms/back/infoInput";
+  }
+  @RequestMapping({"/delete"})
+  public String delete(String id)
+  {
+	  service.delete(id);
+	   return "redirect:";
   }
 }

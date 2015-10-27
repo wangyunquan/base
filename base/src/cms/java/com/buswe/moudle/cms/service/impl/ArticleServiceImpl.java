@@ -18,12 +18,10 @@ import com.buswe.base.config.ContextHolder;
 import com.buswe.base.dao.springdata.BaseRepository;
 import com.buswe.base.service.BaseServiceImpl;
 import com.buswe.moudle.cms.dao.ArticleDao;
-import com.buswe.moudle.cms.dao.ArticleDataDao;
 import com.buswe.moudle.cms.dao.CategoryDao;
 import com.buswe.moudle.cms.dao.CommentDao;
 import com.buswe.moudle.cms.dao.TagsDao;
 import com.buswe.moudle.cms.entity.Article;
-import com.buswe.moudle.cms.entity.ArticleData;
 import com.buswe.moudle.cms.entity.Category;
 import com.buswe.moudle.cms.entity.Comment;
 import com.buswe.moudle.cms.entity.Site;
@@ -43,8 +41,7 @@ public class ArticleServiceImpl
   private ArticleDao articleDao;
   @Resource
   private CategoryDao catDao;
-  @Resource
-  private ArticleDataDao articleDataDao;
+ 
   @Resource
   private TagsDao tagsDao;
   @Resource
@@ -63,11 +60,9 @@ public class ArticleServiceImpl
     entity.setCategory(cat);
     Site site = cat.getSite();
     entity.setSite(site);
-    entity.setOutline(CmsUtil.getOutLine(entity.getArticleData().getLobContent()));
+    entity.setOutline(CmsUtil.getOutLine(entity.getLobContent()));
     
-    entity.getArticleData().setArticle(entity);
-    ArticleData data = (ArticleData)this.articleDataDao.save(entity.getArticleData());
-    entity.setArticleData(data);
+ 
     entity = (Article)this.articleDao.save(entity);
     String tag = entity.getTags();
     List<String> tags = new ArrayList();
@@ -116,7 +111,6 @@ public class ArticleServiceImpl
   {
 
     Article article = this.articleDao.getArticle(artId);
-    article.getArticleData().getLobContent();
     List<Comment> comment = this.commentDao.findByArticleId(article.getId());
     article.setComments(comment);
     ApplicationContext context=  ContextHolder.getApplicationContext();

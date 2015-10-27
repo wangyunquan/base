@@ -11,20 +11,20 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.search.annotations.Analyze;
+import org.hibernate.search.annotations.Analyzer;
 import org.hibernate.search.annotations.DateBridge;
-import org.hibernate.search.annotations.DocumentId;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Index;
 import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.IndexedEmbedded;
 import org.hibernate.search.annotations.Resolution;
 import org.hibernate.search.annotations.Store;
+import org.wltea.analyzer.lucene.IKAnalyzer;
 
 import com.buswe.base.domain.IdEntity;
 import com.buswe.moudle.core.entity.UserBasic;
@@ -75,12 +75,23 @@ public class Article
   @JoinTable(name="cms_articletag", joinColumns={@JoinColumn(name="article_id")}, inverseJoinColumns={@JoinColumn(name="tags_id")})
   @IndexedEmbedded
   private List<Tags> tagList;
-  @OneToOne(fetch=FetchType.LAZY, cascade={javax.persistence.CascadeType.REMOVE}, mappedBy="article")
-  @IndexedEmbedded
-  private ArticleData articleData;
+//  @OneToOne(fetch=FetchType.LAZY, cascade={javax.persistence.CascadeType.REMOVE}, mappedBy="article")
+//  @IndexedEmbedded
+//  private ArticleData articleData;
+  
+ @Field(index=Index.YES, store=Store.YES,analyzer = @Analyzer(impl = IKAnalyzer.class))
+ private String lobContent;
 
  
-  public List<Tags> getTagList()
+  public String getLobContent() {
+	return lobContent;
+}
+
+public void setLobContent(String lobContent) {
+	this.lobContent = lobContent;
+}
+
+public List<Tags> getTagList()
   {
     return this.tagList;
   }
@@ -313,13 +324,5 @@ public class Article
     this.allowComment = allowComment;
   }
   
-  public ArticleData getArticleData()
-  {
-    return this.articleData;
-  }
-  
-  public void setArticleData(ArticleData articleData)
-  {
-    this.articleData = articleData;
-  }
+ 
 }

@@ -43,7 +43,7 @@ public class PageHelper
   public static List<TitleText> getContent(Article info)
   {
     List<TitleText> list = new ArrayList();
-    String t = info.getArticleData().getLobContent();
+    String t = info.getLobContent();
     String ftt = info.getTitle();
     String title = ftt;
     if (t != null)

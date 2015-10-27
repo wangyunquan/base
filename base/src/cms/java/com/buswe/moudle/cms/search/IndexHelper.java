@@ -71,8 +71,7 @@ public class IndexHelper
     
     doc.add(new TextField("keywords", info.getKeywords(), Field.Store.NO));
     
-    String content = PageHelper.getTextWithoutPageBreak(info
-      .getArticleData().getLobContent());
+    String content = PageHelper.getTextWithoutPageBreak(info.getLobContent());
     
     doc.add(new TextField("text", content, Field.Store.NO));
     return doc;
@@ -240,7 +239,7 @@ public class IndexHelper
        keywords, new String[] { "title", "text" }, 
         new BooleanClause.Occur[] { BooleanClause.Occur.SHOULD, BooleanClause.Occur.SHOULD }, this.analyzer);
     }
-    catch (ParseException e)
+    catch (Exception e)
     {
       e.printStackTrace();
     }

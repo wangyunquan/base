@@ -20,7 +20,7 @@
 							</div>
 							<button type="submit" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-search"></span> 查询</button>
 							
-							<a class="btn btn-sm btn-default" type="button" href="input"  style="float:right"><span class="glyphicon glyphicon-plus"></span>新增</a>
+							<a class="btn btn-sm btn-default" type="button" href="input?siteId=${siteId}"  style="float:right"><span class="glyphicon glyphicon-plus"></span>新增</a>
 						</div>
 					</div>
 		</div>
