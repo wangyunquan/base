@@ -103,6 +103,7 @@ public class DaoConfig
     return new HibernateExceptionTranslator();
   }
   
+  
   @Bean
   public JpaTransactionManager jpaTransaction(LocalContainerEntityManagerFactoryBean entityManagerFactory )
   {
