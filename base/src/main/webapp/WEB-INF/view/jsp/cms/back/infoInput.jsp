@@ -74,17 +74,6 @@
           filebrowserImageUploadUrl : '${ctx}/cms/back/upload/file',
           filebrowserFlashUploadUrl :  '${ctx}/cms/back/upload/file'
     });
-        var stack_bottomright = {"dir1": "up", "dir2": "left", "firstpos1": 25, "firstpos2": 25};
-        $(function() {
-        new PNotify({
-            title: 'Regular Success',
-            text: 'That thing that you were trying to do worked!',
-            addclass: "stack-bottomright",
-            stack: stack_bottomright,
-            type: 'success'
-        });
-        });
- 
     </script>
   </body>
 

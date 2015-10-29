@@ -65,7 +65,7 @@ public class ArticleServiceImpl
  
     entity = (Article)this.articleDao.save(entity);
     String tag = entity.getTags();
-    List<String> tags = new ArrayList();
+    List<String> tags = new ArrayList<String>();
     if (tag.contains("，")) {
       tags = Arrays.asList(tag.split("，"));
     } else if (tag.contains(",")) {
@@ -73,20 +73,34 @@ public class ArticleServiceImpl
     }
     for (String taginput : tags)
     {
+    	
       Tags tagsData = this.tagsDao.findByTagNameAndSiteId(taginput,entity.getSite().getId());
+
       if (tagsData == null)
       {
         tagsData = new Tags(taginput);
         tagsData.setPublishCount(Integer.valueOf(1));
         tagsData.setRefCount(Integer.valueOf(1));
         tagsData.setSiteId(site.getId());
+        List<Article> articles =new ArrayList<Article>();
+        articles.add(entity);
+        tagsData.setArticles(articles);
         tagsData = (Tags)this.tagsDao.save(tagsData);
       }
       else
       {
-        tagsData.setPublishCount(Integer.valueOf(tagsData.getPublishCount().intValue() + 1));
-        tagsData.setRefCount(Integer.valueOf(tagsData.getRefCount().intValue() + 1));
-        tagsData = (Tags)this.tagsDao.save(tagsData);
+    	  List<Article> articles=	 tagsData.getArticles();
+    	 
+    	for(Article article: articles)
+    	{
+    		if(article.getId().equals(entity.getId()))
+    		{
+    		      tagsData.setPublishCount(Integer.valueOf(tagsData.getPublishCount().intValue() + 1));
+    		        tagsData.setRefCount(Integer.valueOf(tagsData.getRefCount().intValue() + 1));
+    		        tagsData = (Tags)this.tagsDao.save(tagsData);
+    		}
+    	}
+  
       }
     }
     return entity;
