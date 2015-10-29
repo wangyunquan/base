@@ -3,7 +3,7 @@ package com.buswe.base.config;
 import org.springframework.core.env.Environment;
 
 public class AppConfig
-{
+{ 
   public static final String DB_RESTORE_SQL = "dbrestore";
   private static String WEBAPP_ROOT = null;
   private static Integer DEFAULT_PAGENUMBER;
