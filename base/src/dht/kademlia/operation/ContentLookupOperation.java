@@ -280,6 +280,8 @@ public class ContentLookupOperation implements Operation, Receiver
             this.addNodes(msg.getNodes());
             this.askNodesorFinish();
         }
+        
+        System.out.println(" ContentLookupOperation  "+incoming.toString() +"   " +comm);
     }
 
     /**

@@ -114,6 +114,8 @@ public class ConnectOperation implements Operation, Receiver
 
         /* Wake up any waiting thread */
         notify();
+        
+    //    System.out.println(" ConnectOperation  "+incoming.toString() +"   " +comm);
     }
 
     /**

@@ -30,26 +30,21 @@ public class AutoRefreshOperation2 implements Simulation
             /* Setting up 2 Kad networks */
             final JKademliaNode kad1 = new JKademliaNode("JoshuaK", new KademliaId("ASF456789djem4567463"), 12049);
             final JKademliaNode kad2 = new JKademliaNode("Crystal", new KademliaId("AS84k678DJRW84567465"), 4585);
-            final JKademliaNode kad3 = new JKademliaNode("Shameer", new KademliaId("AS84k67894758456746A"), 8104);
 
             /* Connecting nodes */
             System.out.println("Connecting Nodes");
             kad2.bootstrap(kad1.getNode());
-            kad3.bootstrap(kad2.getNode());
 
-            DHTContentImpl c = new DHTContentImpl(new KademliaId("AS84k678947584567465"), kad1.getOwnerId());
-            c.setData("Setting the data");
-            kad1.putLocally(c);
-
-            System.out.println("\n Content ID: " + c.getKey());
-            System.out.println(kad1.getNode() + " Distance from content: " + kad1.getNode().getNodeId().getDistance(c.getKey()));
-            System.out.println(kad2.getNode() + " Distance from content: " + kad2.getNode().getNodeId().getDistance(c.getKey()));
-            System.out.println(kad3.getNode() + " Distance from content: " + kad3.getNode().getNodeId().getDistance(c.getKey()));
-            System.out.println("\nSTORING CONTENT 1 locally on " + kad1.getOwnerId() + "\n\n\n\n");
+//            DHTContentImpl c = new DHTContentImpl(new KademliaId("AS84k678947584567465"), kad1.getOwnerId());
+//            c.setData("Setting the data");
+//            kad1.putLocally(c);
+//
+//            System.out.println(kad1.getNode() + " Distance from content: " + kad1.getNode().getNodeId().getDistance(c.getKey()));
+//            System.out.println(kad2.getNode() + " Distance from content: " + kad2.getNode().getNodeId().getDistance(c.getKey()));
+//            System.out.println("\nSTORING CONTENT 1 locally on " + kad1.getOwnerId() + "\n\n\n\n");
 
             System.out.println(kad1);
             System.out.println(kad2);
-            System.out.println(kad3);
 
             /* Print the node states every few minutes */
             KadConfiguration config = new DefaultConfiguration();
@@ -62,7 +57,6 @@ public class AutoRefreshOperation2 implements Simulation
                         {
                             System.out.println(kad1);
                             System.out.println(kad2);
-                            System.out.println(kad3);
                         }
                     },
                     // Delay                        // Interval

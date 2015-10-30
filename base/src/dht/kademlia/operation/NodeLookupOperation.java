@@ -278,6 +278,8 @@ public class NodeLookupOperation implements Operation, Receiver
         /* Add the received nodes to our nodes list to query */
         this.addNodes(msg.getNodes());
         this.askNodesorFinish();
+        
+//        System.out.println(" NodeLookupOperation  "+incoming.toString() +"   " +comm);
     }
 
     /**

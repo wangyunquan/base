@@ -56,6 +56,7 @@ public class NodeLookupReceiver implements Receiver
             /* Let the Server send the reply */
             this.server.reply(origin, reply, comm);
         }
+      //  System.out.println(" NodeLookupOperation  "+incoming.toString() +"   " +comm);
     }
 
     /**
