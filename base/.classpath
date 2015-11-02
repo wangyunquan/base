@@ -20,6 +20,7 @@
 	</classpathentry>
 	<classpathentry kind="src" path="src/crawler"/>
 	<classpathentry kind="src" path="src/dht"/>
+	<classpathentry kind="src" path="src/dhtcrawler"/>
 	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
 		<attributes>
 			<attribute name="maven.pomderived" value="true"/>

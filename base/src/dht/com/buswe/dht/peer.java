@@ -16,10 +16,10 @@ public class peer {
         {
       //      peer.ProcessFileInputArgs(args);
         	peer.setID("10");
-        	peer.setHostname("67.215.246.10");
+        	peer.setHostname("router.utorrent.com");
         	peer.setPort("6881");
         	peer.setMaxId(800);
-        	peer.setRedirectHostName("67.215.246.10");
+        	peer.setRedirectHostName("router.utorrent.com");
         	peer.setRedirectPort("6881");
             peer.run();
             

@@ -11,21 +11,22 @@ import java.net.InetAddress;
 import java.util.NoSuchElementException;
 import java.util.Timer;
 import java.util.TimerTask;
-import kademlia.dht.GetParameter;
+
 import kademlia.dht.DHT;
+import kademlia.dht.GetParameter;
+import kademlia.dht.JKademliaStorageEntry;
 import kademlia.dht.KadContent;
 import kademlia.dht.KademliaDHT;
-import kademlia.dht.KademliaStorageEntry;
-import kademlia.dht.JKademliaStorageEntry;
 import kademlia.exceptions.ContentNotFoundException;
 import kademlia.exceptions.RoutingException;
 import kademlia.message.MessageFactory;
-import kademlia.node.Node;
 import kademlia.node.KademliaId;
+import kademlia.node.Node;
+import kademlia.operation.BucketRefreshOperation;
 import kademlia.operation.ConnectOperation;
 import kademlia.operation.ContentLookupOperation;
-import kademlia.operation.Operation;
 import kademlia.operation.KadRefreshOperation;
+import kademlia.operation.Operation;
 import kademlia.operation.StoreOperation;
 import kademlia.routing.JKademliaRoutingTable;
 import kademlia.routing.KademliaRoutingTable;
@@ -253,8 +254,10 @@ public class JKademliaNode implements KademliaNode
     public synchronized final void bootstrap(Node n) throws IOException, RoutingException
     {
         long startTime = System.nanoTime();
-        Operation op = new ConnectOperation(this.server, this, n, this.config);
-        op.execute();
+        
+      //  BucketRefreshOperation bt=new BucketRefreshOperation(this.server,this,config);
+  Operation op = new ConnectOperation(this.server, this, n, this.config);
+  op.execute();
         long endTime = System.nanoTime();
         this.statistician.setBootstrapTime(endTime - startTime);
     }
