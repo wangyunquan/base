@@ -22,7 +22,7 @@ public class SaveStateTest2
             /* Setting up 2 Kad networks */
             JKademliaNode kad1 = new JKademliaNode("JoshuaK", new KademliaId("ASF45678947584567463"), 12049);
             JKademliaNode kad2 = new JKademliaNode("Crystal", new KademliaId("ASF45678947584567464"), 4585);
-            kad2.getDHT();
+
             /* Connecting 2 to 1 */
             System.out.println("Connecting Nodes 1 & 2");
             kad2.bootstrap(kad1.getNode());

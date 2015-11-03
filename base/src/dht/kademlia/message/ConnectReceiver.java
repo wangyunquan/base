@@ -42,8 +42,6 @@ public class ConnectReceiver implements Receiver
 
         /* Reply to the connect message with an Acknowledgement */
         this.server.reply(mess.getOrigin(), msg, comm);
-        System.out.println(" ConnectReceiver  "+incoming.toString() +"   " +comm);
-
     }
 
     /**
