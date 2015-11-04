@@ -1,5 +1,5 @@
 package com.buswe.dht;
 
-public class MessageFactory {
+public class DhtClient {
 
 }

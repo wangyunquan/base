@@ -75,9 +75,8 @@ public class KadServer
         this.localNode = localNode;
         this.messageFactory = mFactory;
         this.statistician = statistician;
-
         /* Start listening for incoming requests in a new thread */
-        this.startListener();
+   this.startListener();
     }
 
     /**
@@ -183,7 +182,24 @@ public class KadServer
             DatagramPacket pkt = new DatagramPacket(data, 0, data.length);
             pkt.setSocketAddress(to.getSocketAddress());
             socket.send(pkt);
+System.out.println(msg+"~~~~~~~~~~~~~~~~~");
+            
+            byte[] buffer = new byte[DATAGRAM_BUFFER_SIZE];
+            DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
+            socket.receive(packet);
+            
+        ByteArrayInputStream bin = new ByteArrayInputStream(packet.getData(), packet.getOffset(), packet.getLength());
+                    DataInputStream din = new DataInputStream(bin); 
+          
 
+                /* Read in the conversation Id to know which handler to handle this response */
+                int commin = din.readInt();
+                byte messCode = din.readByte();
+
+                Message msgin = messageFactory.createMessage(messCode, din);
+                din.close();
+            
+            System.out.println(msgin);
             /* Lets inform the statistician that we've sent some data */
             this.statistician.sentData(data.length);
         }
