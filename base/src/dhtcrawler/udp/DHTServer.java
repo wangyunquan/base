@@ -191,7 +191,6 @@ public class DHTServer implements Runnable {
         if (Objects.nonNull(map.get("q")) && map.get("q").equals("get_peers")) {
             Map<String, String> subMap = (Map<String, String>) map.get("a");
             String infoHash = subMap.get("info_hash");
-
             int countNumber = count.incrementAndGet();
             System.out.println(countNumber + ":" + infoHash);
 

@@ -1,0 +1,42 @@
+﻿{created by=[B@1578aab, comment.utf-8=[B@51127a, 
+
+nodes=[[[B@94257f, 13390], [[B@29c58e, 48262], [[B@691dee, 54607], [[B@12bf892, 2335], [[B@1cc5069, 62582], [[B@b32ed4, 60218], [[B@1c7980c, 31892], [[B@cf710e, 46274], [[B@1077fc9, 25554], [[B@1568fb5, 21239]],
+
+announce=[B@1f4bcf7, 
+
+encoding=[B@a2220f, 
+
+announce-list=[[[B@6a3960], [[B@1dccedd], [[B@1911540], [[B@a4488], [[B@19762f], [[B@19e215b], [[B@9ff0a8], [[B@70be88], [[B@1ecfe07], [[B@199939], [[B@9a9b65], [[B@502819], [[B@78aa80], [[B@1d98a], [[B@1712651], [[B@18aab40], [[B@f102d3], [[B@f07355], [[B@23f1bb], [[B@1d33a6b], [[B@a0864f], [[B@d1e233], [[B@15983b7], [[B@1d6747b, [B@7976c1, [B@6397eb]],
+
+comment=[B@8aeb74, 
+
+creation date=1254235388, 
+
+info={	pieces=[B@6835fb, <---------> 对应单文件
+	files=[	{path=[[B@1b01afa], length=26314, path.utf-8=[[B@bb494b]}, 
+		{path=[[B@1c8efd1], length=39376, path.utf-8=[[B@f892a4]},
+		{path=[[B@1636e4e], length=59980, path.utf-8=[[B@df0438]}, 
+		{path=[[B@18e261d], length=37579, path.utf-8=[[B@1684706]},
+		{path=[[B@10efd7c], length=38671, path.utf-8=[[B@12412e7]}, 
+		{path=[[B@1552b76], length=70433, path.utf-8=[[B@988707]}, 
+		{path=[[B@1c8ef56], length=50924, path.utf-8=[[B@d90453]}, 
+		{path=[[B@1ab11b0], length=56592, path.utf-8=[[B@165b7e]},
+		{path=[[B@1d0d124], length=488285649, path.utf-8=[[B@52c6b4]}, 
+		{path=[[B@738d08], length=476149635, path.utf-8=[[B@302e67]}, 
+		{path=[[B@136a1a1], length=952, path.utf-8=[[B@1ad6b4b]}, 
+		{path=[[B@5f2db0], length=75, path.utf-8=[[B@b0a3f5]}, 
+		{path=[[B@dc41c5], length=327, path.utf-8=[[B@6214f5]}, 
+		{path=[[B@14e113b], length=132, path.utf-8=[[B@4d76b4]}, 
+		{path=[[B@1ac5f13], length=601, path.utf-8=[[B@195dd5b]},
+		{path=[[B@1f78b68], length=998, path.utf-8=[[B@e183e9]},
+		{path=[[B@19b46dc], length=576, path.utf-8=[[B@1493102]}
+		], 
+	publisher.utf-8=[B@30ae41, 
+	publisher-url.utf-8=[B@4204, 
+	name=[B@ee1ede, 		<---------> 对应单文件	
+	name.utf-8=[B@12c8fa8, 		<---------> 对应单文件
+	publisher-url=[B@8b8a47,
+	piece length=262144,
+	publisher=[B@1236cd5}
+}
+//多文件的结构

@@ -1,19 +1,15 @@
 package com.buswe.dht;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import com.dampcake.bencode.BencodeInputStream;
-
-import kademlia.message.Message;
-import kademlia.message.Receiver;
+import com.dampcake.bencode.BencodeOutputStream;
 
  
 
@@ -26,10 +22,6 @@ public class DhtServer {
     /* Server Objects */
     private final DatagramSocket socket;
     private transient boolean isRunning;
-    private final Map<DhtMessageType, DhtReceiver> receivers;
-    private final Timer timer;      // Schedule future tasks
-    private final Map<Integer, TimerTask> tasks;    // Keep track of scheduled tasks
-
     private final DhtNode localNode;
     
     /* Factories */
@@ -39,9 +31,6 @@ public class DhtServer {
     
     {
         isRunning = true;
-        this.tasks = new HashMap<>();
-        this.receivers = new HashMap<>();
-        this.timer = new Timer(true);
     }
     
     /**
@@ -80,8 +69,38 @@ public class DhtServer {
             }
         }.start();
     }
-    
-    
+
+    /**
+     * Internal sendMessage method called by the public sendMessage method after a communicationId is generated
+     */
+    public void sendMessage(DhtNode to, DhtMessage msg) throws Exception
+    {
+        /* Use a try-with resource to auto-close streams after usage */
+        try  
+        {
+        	ByteArrayOutputStream bout = new ByteArrayOutputStream(); 
+            BencodeOutputStream bencoder = new BencodeOutputStream(bout);
+            bencoder.writeDictionary(msg.getMessageContent());;
+            bencoder.close();
+
+            byte[] data = bout.toByteArray();
+
+            if (data.length > DATAGRAM_BUFFER_SIZE)
+            {
+                throw new IOException("Message is too big");
+            }
+            /* Everything is good, now create the packet and send it */
+            DatagramPacket pkt = new DatagramPacket(data, 0, data.length);
+            pkt.setSocketAddress(to.getSocketAddress());
+            socket.send(pkt);
+            /* Lets inform the statistician that we've sent some data */
+            this.statistician.sentData(data.length);
+        }
+        catch (Exception e)
+        {
+        	e.printStackTrace();
+        }
+    }
     /**
      * Listen for incoming messages in a separate thread
      */
@@ -133,36 +152,18 @@ public class DhtServer {
                     	
                     	DhtMessageType comm=msg.getMessageType();
                         /* Get a receiver for this message */
-                        DhtReceiver receiver;
-                        if (this.receivers.containsKey(comm))
-                        {
-                            /* If there is a reciever in the receivers to handle this */
-                            synchronized (this)
-                            {
-                                receiver = this.receivers.remove(comm);
-                                TimerTask task = (TimerTask) tasks.remove(comm);
-                                if (task != null)
-                                {
-                                    task.cancel();
-                                }
-                            }
-                        }
-                        else
-                        {
-                            /* There is currently no receivers, try to get one */
-                            receiver = messageFactory.createReceiver(comm, this);
-                        }
-
+                        DhtReceiver receiver = messageFactory.createReceiver(comm, this);
                         /* Invoke the receiver */
                         if (receiver != null)
                         {
                             receiver.receive(msg, comm);
+                            //TODO 阻塞线程
                         }
                     }
                 }
-                catch (IOException e)
+                catch (Exception e)
                 {
-                    //this.isRunning = false;
+                    this.isRunning = false;
                     System.err.println("Server ran into a problem in listener method. Message: " + e.getMessage());
                 }
             }
@@ -176,5 +177,5 @@ public class DhtServer {
             this.isRunning = false;
         }
     }
-
+     
 }

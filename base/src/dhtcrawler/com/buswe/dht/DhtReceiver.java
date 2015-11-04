@@ -19,7 +19,7 @@ public interface DhtReceiver {
      *
      * @throws java.io.IOException
      */
-    public void receive(DhtMessage incoming, int conversationId) throws IOException;
+    public void receive(DhtMessage incoming, DhtMessageType comm) throws IOException;
 
     /**
      * If no reply is received in <code>MessageServer.TIMEOUT</code> seconds for the
