@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+	http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+	<display-name></display-name>
+	<servlet>
+		<description>搜索的服务</description>
+		<display-name>This is the display name of my J2EE component</display-name>
+		<servlet-name>SearchServlet</servlet-name>
+		<servlet-class>servlet.SearchServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SearchServlet</servlet-name>
+		<url-pattern>/servlet/SearchServlet</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<description>android搜索的服务</description>
+		<display-name>This is the display name of my J2EE component</display-name>
+		<servlet-name>androidSearchServlet</servlet-name>
+		<servlet-class>android.AndroidSearchServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>androidSearchServlet</servlet-name>
+		<url-pattern>/android/AndroidSearchServlet</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<description>启动服务的servlet</description>
+		<display-name>This is the display name of my J2EE component</display-name>
+		<servlet-name>StartServiceServlet</servlet-name>
+		<servlet-class>servlet.StartServiceServlet</servlet-class>
+
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>StartServiceServlet</servlet-name>
+		<url-pattern>/servlet/StartServiceServlet</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<description>创建索引的servlet</description>
+		<display-name>This is the display name of my J2EE component</display-name>
+		<servlet-name>CreateLuceneServlet</servlet-name>
+		<servlet-class>servlet.CreateLuceneServlet</servlet-class>
+
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>CreateLuceneServlet</servlet-name>
+		<url-pattern>/servlet/CreateLuceneServlet</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<description>Dht详情页码的servlet</description>
+		<display-name>This is the display name of my J2EE component</display-name>
+		<servlet-name>DetailsServlet</servlet-name>
+		<servlet-class>servlet.DetailsServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>DetailsServlet</servlet-name>
+		<url-pattern>/servlet/DetailsServlet</url-pattern>
+	</servlet-mapping>
+	<welcome-file-list>
+		<welcome-file>index.jsp</welcome-file>
+	</welcome-file-list>
+
+
+
+
+</web-app>
