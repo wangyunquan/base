@@ -1,0 +1,15 @@
+﻿{	created by=[B@1578aab, 
+	nodes=[[[B@51127a, 0], [[B@94257f, 0], [[B@29c58e, 0], [[B@691dee, 0], [[B@12bf892, 0], [[B@1cc5069, 0], [[B@b32ed4, 0], [[B@1c7980c, 0], [[B@cf710e, 0], [[B@1077fc9, 0]], 
+	announce=[B@1568fb5, 
+	encoding=[B@1f4bcf7, 
+	announce-list=[[[B@a2220f], [[B@6a3960]],
+	creation date=1422068183, 
+	info={	filehash=[B@1dccedd, 
+		pieces=[B@1911540,  	<---------> 对应多文件
+		name=[B@a4488, 		<---------> 对应多文件
+		name.utf-8=[B@19762f, 	<---------> 对应多文件
+		length=2021633692, 
+		piece length=524288, 
+		ed2k=[B@19e215b}
+}
+//单文件的torrent结构
