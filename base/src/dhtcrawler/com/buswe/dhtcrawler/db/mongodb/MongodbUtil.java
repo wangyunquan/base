@@ -10,6 +10,9 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.buswe.dhtcrawler.db.DbUtil;
 import com.buswe.dhtcrawler.db.models.DhtInfoStateCode;
 import com.buswe.dhtcrawler.db.models.DhtInfo_MongoDbPojo;
@@ -25,6 +28,8 @@ import com.mongodb.DBObject;
  * @author 耳东 (cgp@0731life.com)
  */
 public class MongodbUtil {
+	
+	  protected Logger logger = LoggerFactory.getLogger(getClass());
 	protected final DB db;
 
 	public MongodbUtil(DB db) {
@@ -220,8 +225,6 @@ public class MongodbUtil {
 	public <T> List<T> find(Class<T> clazz, BasicDBObject where, int limit) throws Exception {
 		List<T> objList = new ArrayList<T>();
 		DBCursor curr = findDBCursor(clazz, where, limit);
-
-		System.out.println(curr.count() + "：项");
 		while (curr.hasNext()) {
 			DBObject dbo = curr.next();
 			T o = loadOne(clazz, dbo);

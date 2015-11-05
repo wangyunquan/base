@@ -18,6 +18,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yaircc.torrent.bencoding.BDecodingException;
 import org.yaircc.torrent.bencoding.BEncodedInputStream;
 import org.yaircc.torrent.bencoding.BList;
@@ -46,7 +48,7 @@ import com.buswe.dhtcrawler.util.Util;
  * 
  */
 public class KadReceiveServer implements Runnable, DHTConstant {
-
+	  protected Logger logger = LoggerFactory.getLogger(getClass());
 	private final ExecutorService srvExecutor = new ScheduledThreadPoolExecutor(10);
 	private final AtomicBoolean isActive = new AtomicBoolean(false);
 	private final Thread startThread;
@@ -71,6 +73,8 @@ public class KadReceiveServer implements Runnable, DHTConstant {
 	protected void hanldePingRequest(String transaction, Node src) throws BTypeException, IOException {
 		PingResponse pingResponse = new PingResponse(transaction, src);
 		kadNet.sendMessage(pingResponse);
+		logger.debug(src.getKey()+"ping");
+		logger.debug("Get_Peers返回信息为:"+pingResponse);
 		addNodeToQueue(src);
 	}
 
@@ -85,6 +89,8 @@ public class KadReceiveServer implements Runnable, DHTConstant {
 	protected void handleGet_PeersRequest(String transaction, BMap decodedData, Node src) throws BTypeException, IOException {
 		byte[] bytesFromInfohash = (byte[]) decodedData.getMap(A).get(INFO_HASH);
 		String infoHash = Util.hex(bytesFromInfohash);
+		
+		logger.debug(src.getKey()+"节点getpeers信息:"+infoHash);
 		handleInfoHash(infoHash, src);
 		GetPeersRequest getPeersRequest = new GetPeersRequest(transaction, src);
 		getPeersRequest.setInfo_hash(Util.hex(bytesFromInfohash));
@@ -96,6 +102,7 @@ public class KadReceiveServer implements Runnable, DHTConstant {
 		List<Node> nodes = kadNet.findNode(new Key(bytesFromInfohash));
 		getPeersResponse.setNodes(nodes);
 		addNodeToQueue(src);
+		logger.debug("Get_Peers返回信息为:"+getPeersResponse);
 		kadNet.sendMessage(getPeersResponse);
 	}
 
@@ -106,6 +113,7 @@ public class KadReceiveServer implements Runnable, DHTConstant {
 	 */
 	private void saveInfoHash(String info_hash, Node src) {// TODO 保存磁力连接
 		try {
+			logger.debug("保存了infohash:"+info_hash);
 			DhtInfo_MongoDbPojo dhtInfo_MongoDbPojo = new DhtInfo_MongoDbPojo();
 			dhtInfo_MongoDbPojo.setInfo_hash(info_hash);
 			dhtInfo_MongoDbPojo.setPeerIp(src.getSocketAddress().toString());
@@ -202,9 +210,8 @@ public class KadReceiveServer implements Runnable, DHTConstant {
 		if (decodedData.containsKey(Q)) {
 			String q_value = decodedData.getString(Q);// find_node or
 														// getpeers===
-
 			Key key = new Key((byte[]) decodedData.getMap(A).get(ID));
-
+			logger.debug("收到的"+inetSocketAddress.getHostString()+":"+inetSocketAddress.getPort()+"请求消息类型为:"+q_value+"消息:"+decodedData);
 			final Node to = new Node(key).setSocketAddress(inetSocketAddress);
 			if (q_value.equals(FIND_NODE)) {
 				handleFind_NodeRequest(transaction, decodedData, to);
@@ -241,6 +248,8 @@ public class KadReceiveServer implements Runnable, DHTConstant {
 	private void hanldeAnnounce_PeerRequest(String transaction, BMap decodedData, Node to) throws BTypeException {
 		String info_hash = Util.hex((byte[]) decodedData.getMap(A).get(INFO_HASH));
 		handleInfoHash(info_hash, to);
+		logger.debug("Announce_Peer收到的信息为:"+info_hash+"  ");
+		
 	}
 
 	private void handleInfoHash(String info_hash, Node to) {
@@ -250,8 +259,10 @@ public class KadReceiveServer implements Runnable, DHTConstant {
 			}
 			info_hashset.add(info_hash);
 			// TODO 这里要保存种子
+			
 			saveInfoHash(info_hash, to);
-			System.out.println("种子数=" + info_hashset.size());
+			//System.out.println("种子数=" + info_hashset.size());
+			logger.debug("本次保存到的种子数="+ info_hashset.size());
 		}
 	}
 
@@ -267,6 +278,7 @@ public class KadReceiveServer implements Runnable, DHTConstant {
 		List<Node> lists = kadNet.findNode(new Key(target));
 		FindNodeResponse findNodeResponse = new FindNodeResponse(transaction, src);
 		findNodeResponse.setNodes(lists);
+	//	logger.debug("Find_Node返回信息为:"+findNodeResponse);
 		kadNet.sendMessage(findNodeResponse);
 		addNodeToQueue(src);
 
@@ -324,8 +336,11 @@ public class KadReceiveServer implements Runnable, DHTConstant {
 	 */
 	private void handleResponseMsg(BMap decodedData, String transaction) throws BTypeException, BDecodingException, UnknownHostException {
 
+		
+
 		MessageDispatcher messageDispatcher = MessageDispatcher.findMessageDispatcherByTag(transaction);// 取出之前的请求对象
 		if (messageDispatcher != null) {// 有记录
+			logger.debug("messageDispatcher："+messageDispatcher+"  do with "+transaction);
 			KadRequest kadRequest = messageDispatcher.getKadRequest();
 			messageDispatcher.handle(kadRequest, decodedData);
 			if (kadRequest.getClass() == FindNodeRequest.class) {
@@ -356,7 +371,6 @@ public class KadReceiveServer implements Runnable, DHTConstant {
 			if (respondData.containsKey(NODES)) {
 				byte[] nodesbyteArray = (byte[]) respondData.get(NODES);
 				List<Node> nodes = Util.passNodes(nodesbyteArray);
-
 				nodesbyteArray = null;// 回收
 				addNodesToQueue(nodes);
 			}
@@ -371,6 +385,7 @@ public class KadReceiveServer implements Runnable, DHTConstant {
 
 	private void addNodeToQueue(Node node) {
 		kadNet.addNodeToBuckets(node);
+	//	logger.debug(node.getKey()+"将Node添加到桶中:"+node.getInetAddress()+node.getPort());
 	}
 
 	private void handleIncomingData(final InetSocketAddress target, final byte[] dst) {
@@ -379,8 +394,9 @@ public class KadReceiveServer implements Runnable, DHTConstant {
 					public void run() {
 						try {
 							BMap decodedData = (BMap) BEncodedInputStream.bdecode(dst);
-
+						
 							String transaction = Util.hex((byte[]) (decodedData.get(T)));
+							
 							if (decodedData.containsKey(Y)) {
 								String y = decodedData.getString(Y);
 								if (Q.equals(y)) {// 对方请求

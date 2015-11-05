@@ -4,6 +4,9 @@ import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.buswe.dhtcrawler.db.models.DhtInfo_MongoDbPojo;
 import com.buswe.dhtcrawler.db.mongodb.MongodbUtil;
 import com.buswe.dhtcrawler.db.mongodb.MongodbUtilProvider;
@@ -17,7 +20,7 @@ import com.buswe.dhtcrawler.util.TorrentParser;
  * @author 耳东 (cgp@0731life.com)
  */
 public class KadParserTorrentServer implements Runnable {
-
+	  protected Logger logger = LoggerFactory.getLogger(getClass());
 	private final AtomicBoolean isActive = new AtomicBoolean(false);
 	private final Thread startThread;
 	private final MongodbUtil dhtInfoDao = MongodbUtilProvider.getMongodbUtil();
@@ -42,6 +45,7 @@ public class KadParserTorrentServer implements Runnable {
 			try {
 				System.gc();
 				dhtInfos = dhtInfoDao.getNoAnalyticDhtInfos(50);
+				logger.debug("获取未下载的种子项:"+dhtInfos.size());
 			} catch (Exception e3) {
 				e3.printStackTrace();
 			}

@@ -1,7 +1,6 @@
 package com.buswe.dhtcrawler.bittorrentkad;
 
 import java.io.IOException;
-import java.lang.Thread.UncaughtExceptionHandler;
 import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
@@ -10,9 +9,10 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.buswe.dhtcrawler.AppManager;
 import com.buswe.dhtcrawler.Key;
@@ -34,6 +34,7 @@ import com.buswe.dhtcrawler.util.ThreadUtil;
  * 
  */
 public class KadNet implements KeybasedRouting, Runnable {
+	  protected Logger logger = LoggerFactory.getLogger(getClass());
 	private KadReceiveServer kadReceiveServer;// 接受消息
 	private KadSendMsgServer kadSendMsgServer;// 发生消息
 	private static KadParserTorrentServer kadParserTorrentServer;// = new KadParserTorrentServer();// 解析种子
@@ -45,7 +46,12 @@ public class KadNet implements KeybasedRouting, Runnable {
 	private final DatagramChannel channel;
 	private final Node localnode;
 	private Selector selector;
-
+	
+	
+public Key getKey()
+{
+	return localnode.getKey();
+	}
 	/**
 	 * @param bootstrapNodesSaver
 	 * @param localnode
@@ -82,12 +88,13 @@ public class KadNet implements KeybasedRouting, Runnable {
 			}
 		});
 		kadReceiveServer.start();
+		logger.debug("接收线程启动--本地节点ID "+this.localnode.getKey());
 	}
 
 	private void startKadParserTorrentServer() {
 		kadParserTorrentServer = new KadParserTorrentServer();
- 
 		kadParserTorrentServer.start();
+		logger.debug("种子解析线程启动：节点ID "+this.localnode.getKey());
 	}
 
 	private void startKadSendMsgServer() {
@@ -103,6 +110,7 @@ public class KadNet implements KeybasedRouting, Runnable {
 			}
 		});
 		kadSendMsgServer.start();
+		logger.debug("发送线程启动：节点ID "+this.localnode.getKey());
 	}
 
 	public void addNodeToBuckets(Node node) {

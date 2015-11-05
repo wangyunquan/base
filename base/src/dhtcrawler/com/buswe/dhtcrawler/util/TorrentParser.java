@@ -3,6 +3,9 @@ package com.buswe.dhtcrawler.util;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.buswe.dhtcrawler.db.models.DhtInfoStateCode;
 import com.buswe.dhtcrawler.db.models.DhtInfo_MongoDbPojo;
 import com.buswe.dhtcrawler.db.mongodb.MongodbUtil;
@@ -12,11 +15,17 @@ import com.buswe.dhtcrawler.exception.ParseException;
 import com.buswe.dhtcrawler.parser.TorrentInfo;
 
 public class TorrentParser {
-	private static final String baseurl = "http://bt.box.n0808.com/%1$s/%2$s/%3$s.torrent";
+	
+	/**
+	 * 修改种子，添加网址信息
+	 */
+	  protected static Logger logger = LoggerFactory.getLogger(TorrentParser.class);
+ 	private static final String baseurl = "http://bt.box.n0808.com/%1$s/%2$s/%3$s.torrent";
 	private static final String baseurl_2 = "http://magnet.vuze.com/magnetLookup?hash=%1$s";// base32
 	private static final String baseurl_3 = "http://torrage.com/torrent/%1$s.torrent";//
 	private static final String baseurl_4 = "http://torcache.net/torrent/%1$s.torrent";//
 	private static final String baseurl_5 = "http://zoink.it/torrent/%1$s.torrent";//
+    private static final  String baseurl_6="http://torcache.net/torrent/%1$s.torrent";
 	private static final HttpUrlUtils httpUrlUtils = new HttpUrlUtils();
 	private static final MongodbUtil dhtInfoDao = MongodbUtilProvider.getMongodbUtil();
 
@@ -65,12 +74,13 @@ public class TorrentParser {
 	public static void parseDhtInfo(DhtInfo_MongoDbPojo dhtInfo) {
 		try {
 			parseDhtInfo_1(dhtInfo);
-			System.out.println("下载ok");
+		
 		} catch (Exception e) {
 			try {
+				
 				parseDhtInfo_2(dhtInfo);
 			} catch (Exception e1) {
-				String[] uris = { baseurl_3, baseurl_4, baseurl_5 };
+				String[] uris = { baseurl_3, baseurl_4, baseurl_5 ,baseurl_6};
 				parseDhtInfo_PublicMethod(dhtInfo, uris, uris.length - 1);
 				System.out.println("下载ok");
 			}
@@ -93,24 +103,20 @@ public class TorrentParser {
 
 			dhtInfo.setAnalysised(DhtInfoStateCode.DOWNLOADSUCCESS_AND_PARSING_SUCCESS);
 			dhtInfo.setTorrentInfo(torrentInfo);
-
 			dhtInfoDao.update(dhtInfo);
-			System.out.println("解析成功200");
+			logger.debug("迅雷下载种子成功:"+url);
 		} catch (DownLoadException downLoadException) {
 
 			dhtInfo.setAnalysised(DhtInfoStateCode.DOWNLOAD_FAILED);
 			dhtInfoDao.update(dhtInfo);
-
 			throw new Exception(downLoadException);
 		} catch (ParseException parseException) {
-
 			dhtInfo.setAnalysised(DhtInfoStateCode.DOWNLOAD_SUCCESS_BUT_PARSING_FAILED);
 			dhtInfoDao.update(dhtInfo);
-
 			throw new Exception(parseException);
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("修改数据库失败");
+			logger.debug("修改数据库失败");
 		}
 	}
 
@@ -132,7 +138,7 @@ public class TorrentParser {
 			dhtInfo.setTorrentInfo(torrentInfo);
 
 			dhtInfoDao.update(dhtInfo);
-
+			logger.debug("magnet.vuze.com下载种子成功:"+url);
 		} catch (DownLoadException downLoadException) {
 
 			dhtInfo.setAnalysised(DhtInfoStateCode.DOWNLOAD_FAILED);
@@ -161,12 +167,10 @@ public class TorrentParser {
 		Request request = new Request(url);
 		try {
 			TorrentInfo torrentInfo = parseRequest(request);
-
 			dhtInfo.setAnalysised(DhtInfoStateCode.DOWNLOADSUCCESS_AND_PARSING_SUCCESS);
 			dhtInfo.setTorrentInfo(torrentInfo);
-
 			dhtInfoDao.update(dhtInfo);
-
+			logger.debug("url下载种子成功:"+url);
 		} catch (DownLoadException downLoadException) {
 
 			dhtInfo.setAnalysised(DhtInfoStateCode.DOWNLOAD_FAILED);

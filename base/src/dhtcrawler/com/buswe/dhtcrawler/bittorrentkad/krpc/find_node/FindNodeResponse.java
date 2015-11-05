@@ -69,4 +69,15 @@ public class FindNodeResponse extends KadResponse {
 		// System.out.println("响应findnode-----------"+bMap);
 		return BEncodedOutputStream.bencode(bMap);
 	}
+
+	@Override
+	public String toString() {
+		return "FindNodeResponse [nodes=" + nodes + ", cachedResults=" + cachedResults + ", needed=" + needed
+				+ ", transaction=" + transaction + ", src=" + src + ", getNodes()=" + getNodes()
+				+ ", isCachedResults()=" + isCachedResults() + ", isNeeeded()=" + isNeeeded() + ", getSrc()=" + getSrc()
+				+ ", getTransaction()=" + getTransaction() + ", getClass()=" + getClass() + ", hashCode()=" + hashCode()
+				+ ", toString()=" + super.toString() + "]";
+	}
+	
+	
 }

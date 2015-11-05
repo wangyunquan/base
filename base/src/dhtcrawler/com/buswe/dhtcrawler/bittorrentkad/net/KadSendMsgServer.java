@@ -6,6 +6,9 @@ import java.text.DecimalFormat;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.buswe.dhtcrawler.Node;
 import com.buswe.dhtcrawler.bittorrentkad.KadNet;
 import com.buswe.dhtcrawler.bittorrentkad.KadNode;
@@ -20,7 +23,7 @@ import com.buswe.dhtcrawler.util.ThreadUtil;
  * 
  */
 public class KadSendMsgServer implements Runnable {
-
+	  protected Logger logger = LoggerFactory.getLogger(getClass());
 	private final AtomicBoolean isActive = new AtomicBoolean(false);
 	private final Thread startThread;
 	private final KadNet kadNet;
@@ -52,7 +55,7 @@ public class KadSendMsgServer implements Runnable {
 			try {
 				List<KadNode> nodes = kadNet.getAllNodes();
 
-				System.out.println(nodes.size());
+				logger.debug("本地节点"+kadNet.getKey() +"关联到的节点:"+nodes.size());
 				for (int i = 0; i < nodes.size(); i++) {
 					KadNode node = null;
 					try {
@@ -66,7 +69,6 @@ public class KadSendMsgServer implements Runnable {
 					// System.out.println(node.getNode().getKey().toString()+"--"+node.getNode().getSocketAddress());
 				}
 				nodes.clear();
-				System.out.println(nodes.size());
 				nodes = null;
 				displayAvailableMemory();
 				ThreadUtil.sleep(5000);
@@ -95,7 +97,7 @@ public class KadSendMsgServer implements Runnable {
 		// Runtime.getRuntime().
 		Runtime.getRuntime().gc();
 		long freeMem1 = Runtime.getRuntime().freeMemory();
-		System.out.println("-----" + (df.format(freeMem1 / (1024F * 1024F)) + "MB"));
+		logger.debug("-----空闲内存" + (df.format(freeMem1 / (1024F * 1024F)) + "MB"));
 
 		// int size=Thread.getAllStackTraces().size();
 		// System.out.println("系统中的线程数="+size);
