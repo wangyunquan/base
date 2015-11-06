@@ -3,9 +3,11 @@ package com.buswe.dhtcrawler.bittorrentkad.bucket;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.TreeSet;
 
 import com.buswe.dhtcrawler.Key;
 import com.buswe.dhtcrawler.Node;
+import com.buswe.dhtcrawler.NodeComparator;
 import com.buswe.dhtcrawler.bittorrentkad.KadNode;
 
 /**
@@ -61,17 +63,21 @@ public class SlackBucket implements Bucket {
 		}
 		return allBucket;
 	}
-
 	@Override
-	public List<Node> getClosestNodesByKey(Key key, int i) {
-		List<Node> nodes = new ArrayList<Node>();
-		int j = 0;
-		for (KadNode kadNode : bucket) {
-			if (j >= i)
-				break;
-			nodes.add(kadNode.getNode());
-			j++;
-		}
-		return nodes;
+	public List<Node> getClosestNodesByKey(Key key, int numNodesRequired) {
+		 TreeSet<KadNode> sortedSet = new TreeSet<KadNode>(new NodeComparator(key));
+		 sortedSet.addAll(bucket);
+	       List<Node> closest = new ArrayList<>(numNodesRequired);
+	        /* Now we have the sorted set, lets get the top numRequired */
+	        int count = 0;
+	        for (KadNode n : sortedSet)
+	        {
+	            closest.add(n.getNode());
+	            if (++count == numNodesRequired)
+	            {
+	                break;
+	            }
+	        }
+	        return closest;
 	}
 }

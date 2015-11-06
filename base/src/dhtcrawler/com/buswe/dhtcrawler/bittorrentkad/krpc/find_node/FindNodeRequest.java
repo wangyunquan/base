@@ -26,6 +26,9 @@ public class FindNodeRequest extends KadRequest {
 
 	public static FindNodeRequest creatLocalFindNodeRequest(Node src) {
 
+		/**
+		 * 实际上是向目标节点查询它自己，会返回来8个？还是直接去查询它相邻的8个节点？
+		 */
 		FindNodeRequest findNodeRequest = new FindNodeRequest(Util.random_tranctionId(4), src);
 		return findNodeRequest;
 	}

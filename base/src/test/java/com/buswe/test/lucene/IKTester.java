@@ -7,6 +7,7 @@ import com.buswe.moudle.cms.lucene.SearchHelper;
 
 import junit.framework.Assert;
 
+
 /**
  * 测试 IK 分词器
  * User: Winter Lau
@@ -15,7 +16,7 @@ import junit.framework.Assert;
  */
 public class IKTester {
 
-    @org.junit.Test
+    @Test
     public void test_highlight() throws Exception {
         String text = "SQL server 是最好的 数据库 应用服务器";
         Assert.assertEquals("<span class=\"highlight\">SQL</span> <span class=\"highlight\">server</span> 是最好的 数据库 应用服务器", SearchHelper.highlight(text, "sql server"));

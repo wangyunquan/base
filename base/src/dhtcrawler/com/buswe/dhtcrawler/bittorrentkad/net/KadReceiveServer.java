@@ -92,8 +92,8 @@ public class KadReceiveServer implements Runnable, DHTConstant {
 		
 		logger.debug(src.getKey()+"节点getpeers信息:"+infoHash);
 		handleInfoHash(infoHash, src);
-		GetPeersRequest getPeersRequest = new GetPeersRequest(transaction, src);
-		getPeersRequest.setInfo_hash(Util.hex(bytesFromInfohash));
+//		GetPeersRequest getPeersRequest = new GetPeersRequest(transaction, src);
+//		getPeersRequest.setInfo_hash(Util.hex(bytesFromInfohash));
 
 		// sendGet_Peers(transaction, bytesFromInfohash, src);//
 		// *******发送请求。查找infohash

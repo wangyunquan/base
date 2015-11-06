@@ -54,8 +54,7 @@ public class KadSendMsgServer implements Runnable {
 		while (this.isActive.get()) {
 			try {
 				List<KadNode> nodes = kadNet.getAllNodes();
-
-				logger.debug("本地节点"+kadNet.getKey() +"关联到的节点:"+nodes.size());
+				logger.debug("本地节点"+kadNet.getKey() +"桶内的节点:"+nodes.size());
 				for (int i = 0; i < nodes.size(); i++) {
 					KadNode node = null;
 					try {
@@ -82,11 +81,10 @@ public class KadSendMsgServer implements Runnable {
 		FindNodeRequest msg = FindNodeRequest.creatLocalFindNodeRequest(to);
 		send(msg);
 	}
-
 	public void displayAvailableMemory() {
 		DecimalFormat df = new DecimalFormat("0.00");
 		// 显示JVM总内存
-		// long totalMem = Runtime.getRuntime().totalMemory();
+		//  long totalMem = Runtime.getRuntime().totalMemory();
 		// System.out.println(df.format(totalMem/(1024F*1024F)) + "MB");
 		// 显示JVM尝试使用的最大内存
 		// long maxMem = Runtime.getRuntime().maxMemory();

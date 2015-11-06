@@ -15,8 +15,8 @@ public class Kaoqing {
 
 	public static void main(String[] args) throws Exception {
 
-         System.out.println(stime);
-		}
+         System.out.println("");
+	 
 	}
 
 	public static void worktime() throws Exception {
