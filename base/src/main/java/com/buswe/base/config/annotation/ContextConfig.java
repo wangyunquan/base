@@ -15,7 +15,7 @@ import com.buswe.base.config.ContextHolder;
 
 @Configuration
 @Import({CacheConfig.class, ServiceConfig.class, DaoConfig.class, EventConfig.class,SecurityConfig.class})
-@PropertySource({"classpath:application.properties"})
+
 public class ContextConfig
 {
   @Bean

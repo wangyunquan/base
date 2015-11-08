@@ -9,7 +9,7 @@ import com.buswe.base.dao.jdbc.IDialect;
 public interface JdbcDao {
 	public abstract IDialect getDialect();
 	public boolean showsql();
-   public List<T> queryForList(String sql,);
+   public List<T> queryForList(String sql );
 	
 	
 }

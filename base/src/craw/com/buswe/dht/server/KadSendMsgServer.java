@@ -1,0 +1,124 @@
+package com.buswe.dht.server;
+
+import java.io.IOException;
+import java.lang.Thread.UncaughtExceptionHandler;
+import java.text.DecimalFormat;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.buswe.dht.message.KadMessage;
+import com.buswe.dht.message.reqandres.FindNodeRequest;
+import com.buswe.dht.node.KadNet;
+import com.buswe.dht.node.KadNode;
+import com.buswe.dht.node.Node;
+import com.buswe.dhtcrawler.util.ThreadUtil;
+
+ 
+
+/**
+ * 发送消息查找node
+ * 
+ * 
+ */
+public class KadSendMsgServer implements Runnable {
+	  protected Logger logger = LoggerFactory.getLogger(getClass());
+	private final AtomicBoolean isActive = new AtomicBoolean(false);
+	private final Thread startThread;
+	private final KadNet kadNet;
+
+	public KadSendMsgServer(KadNet kadNet) {
+		startThread = new Thread(this);
+
+		this.kadNet = kadNet;
+	}
+	/**
+	 * 只发送findnode操作，其他请求请使用KadSendMsgServer
+	 * 
+	 * @param msg
+	 *            要发送的消息（一般是具体实现）	
+	 * @throws IOException
+	 *             any socket exception
+	 */
+	public void send(final KadMessage msg) throws IOException {
+		kadNet.sendMessage(msg);
+	}
+
+	/**
+	 * 不停发送消息
+	 */
+	@Override
+	public void run() {
+		this.isActive.set(true);
+		while (this.isActive.get()) {
+			try {
+				List<KadNode> nodes = kadNet.getAllNodes();
+				logger.debug("本地节点"+kadNet.getKey() +"桶内的节点:"+nodes.size());
+				for (int i = 0; i < nodes.size(); i++) {
+					KadNode node = null;
+					try {
+						  node = nodes.get(i);
+						send(node.getNode());
+					} catch (Exception e) {
+						e.printStackTrace();
+						System.out.println(node);
+						System.out.println(node.getNode());
+					}
+					// System.out.println(node.getNode().getKey().toString()+"--"+node.getNode().getSocketAddress());
+				}
+				nodes.clear();
+				nodes = null;
+				displayAvailableMemory();
+				ThreadUtil.sleep(5000);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private void send(Node to) throws IOException {
+		FindNodeRequest msg = FindNodeRequest.creatLocalFindNodeRequest(to);
+		send(msg);
+	}
+	public void displayAvailableMemory() {
+		DecimalFormat df = new DecimalFormat("0.00");
+		// 显示JVM总内存
+		//  long totalMem = Runtime.getRuntime().totalMemory();
+		// System.out.println(df.format(totalMem/(1024F*1024F)) + "MB");
+		// 显示JVM尝试使用的最大内存
+		// long maxMem = Runtime.getRuntime().maxMemory();
+		// System.out.println(df.format(maxMem/(1024F*1024F)) + "MB");
+		// 空闲内存
+		// long freeMem = Runtime.getRuntime().freeMemory();
+		// System.out.println("空闲内存-----"+(df.format(freeMem/(1024F*1024F)) + "MB"));
+		// Runtime.getRuntime().
+		Runtime.getRuntime().gc();
+		long freeMem1 = Runtime.getRuntime().freeMemory();
+		logger.debug("-----空闲内存" + (df.format(freeMem1 / (1024F * 1024F)) + "MB"));
+
+		// int size=Thread.getAllStackTraces().size();
+		// System.out.println("系统中的线程数="+size);
+	}
+
+	/**
+	 * Shutdown the server and closes the socket 关闭服务
+	 * 
+	 * @param kadServerThread
+	 */
+	public void shutdown() {
+		this.isActive.set(false);
+		startThread.interrupt();
+		try {
+			startThread.join();
+		} catch (final InterruptedException e) {
+		}
+	}
+	public void setUncaughtExceptionHandler(UncaughtExceptionHandler eh) {
+		startThread.setUncaughtExceptionHandler(eh);
+	}
+	public void start() {
+		startThread.start();
+	}
+}

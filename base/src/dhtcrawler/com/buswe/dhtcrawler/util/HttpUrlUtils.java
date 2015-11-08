@@ -73,7 +73,6 @@ public class HttpUrlUtils {
 	 */
 	private HttpURLConnection openConnection(URL url, Request request) throws IOException {
 		HttpURLConnection connection = createConnection(url);
-
 		int timeoutMs = request.getTimeoutMs();
 		connection.setConnectTimeout(timeoutMs);
 		connection.setReadTimeout(timeoutMs);

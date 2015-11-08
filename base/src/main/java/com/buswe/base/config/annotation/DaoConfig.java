@@ -3,16 +3,18 @@ package com.buswe.base.config.annotation;
 import java.sql.SQLException;
 import java.util.Properties;
 
-import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.dao.support.PersistenceExceptionTranslator;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.instrument.classloading.InstrumentationLoadTimeWeaver;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.orm.hibernate4.HibernateExceptionTranslator;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
@@ -23,9 +25,9 @@ import com.alibaba.druid.filter.logging.Log4jFilter;
 import com.alibaba.druid.filter.stat.StatFilter;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.buswe.base.dao.springdata.BaseRepositoryFactoryBean;
-
 @Configuration
 @EnableJpaRepositories(basePackages={"com.buswe"}, entityManagerFactoryRef="entityManagerFactory", transactionManagerRef="jpaTransaction", repositoryFactoryBeanClass=BaseRepositoryFactoryBean.class, excludeFilters={@org.springframework.context.annotation.ComponentScan.Filter({org.springframework.stereotype.Controller.class})})
+@PropertySource({"classpath:application.properties"})
 public class DaoConfig
 {
   @Autowired
@@ -66,6 +68,18 @@ public class DaoConfig
     return ds;
   }
   
+  @Bean
+JdbcTemplate  jdbcTemplate(DataSource dataSource)
+{
+	  JdbcTemplate jdbcTemplate =new JdbcTemplate(dataSource);
+	  return jdbcTemplate;
+  }
+  @Bean
+  NamedParameterJdbcTemplate namedParameterJdbcTemplate(JdbcTemplate  jdbcTemplate)
+  {
+	  NamedParameterJdbcTemplate namedParameterJdbcTemplate=new NamedParameterJdbcTemplate(jdbcTemplate);
+	  return namedParameterJdbcTemplate;
+  }
   @Bean
   public LocalContainerEntityManagerFactoryBean entityManagerFactory(JpaVendorAdapter jpaVendorAdapter,DataSource dataSource)
   {

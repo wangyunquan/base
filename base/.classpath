@@ -21,6 +21,7 @@
 	<classpathentry kind="src" path="src/crawler"/>
 	<classpathentry kind="src" path="src/dht"/>
 	<classpathentry kind="src" path="src/dhtcrawler"/>
+	<classpathentry kind="src" path="src/craw"/>
 	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
 		<attributes>
 			<attribute name="maven.pomderived" value="true"/>
@@ -40,8 +41,6 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/openkad-r27.jar"/>
 	<classpathentry kind="lib" path="lib/jsoup-1.8.1.jar"/>
-	<classpathentry kind="lib" path="lib/mongo-java-driver-2.9.3-sources.jar"/>
-	<classpathentry kind="lib" path="lib/mongo-java-driver-2.9.3.jar"/>
 	<classpathentry kind="lib" path="lib/org.yaircc.torrent-0.1.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

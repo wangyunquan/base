@@ -61,6 +61,12 @@ public class MongodbUtil {
 		return collection;
 	}
 
+	
+	public DBCollection getDBCollection(String name)
+	{
+		DBCollection collection = db.getCollection(name);
+		return collection;
+	}
 	public static String getDBCollectionName(Class<?> clazz) {
 		MongoCollection collectionAnno = clazz.getAnnotation(MongoCollection.class);
 		String collectionName;

@@ -9,6 +9,7 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/crawler"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/dht"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/dhtcrawler"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/craw"/>
         <property name="context-root" value="base"/>
         <property name="java-output-path" value="/base/target/classes"/>
     </wb-module>

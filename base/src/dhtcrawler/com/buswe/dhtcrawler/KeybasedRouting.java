@@ -21,8 +21,10 @@ package com.buswe.dhtcrawler;
 import java.io.IOException;
 import java.util.List;
 
-import com.buswe.dhtcrawler.bittorrentkad.KadNode;
-import com.buswe.dhtcrawler.bittorrentkad.krpc.KadMessage;
+import com.buswe.dht.message.KadMessage;
+import com.buswe.dht.node.KadNode;
+
+ 
 
 /**
  * This is the main class of openkad It defines the api of any Keybased Routing network.

@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public interface KeyFactory {
-	
 	/**
 	 * 
 	 * @return Key where all bytes are 0

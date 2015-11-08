@@ -30,7 +30,7 @@ public class MongodbUtilProvider {
 				// Mongo m = new Mongo("198.98.102.169", 27017);
 				MongoOptions options = new MongoOptions();
 				options.setConnectTimeout(20000);
-				options.setAutoConnectRetry(true);
+				//options.setAutoConnectRetry(true);
 				options.setSocketTimeout(15000);
 				options.setMaxWaitTime(5000);
 				options.setThreadsAllowedToBlockForConnectionMultiplier(5000);
@@ -58,7 +58,8 @@ public class MongodbUtilProvider {
 		BasicDBObject basicDBObject2 = new BasicDBObject();
 		basicDBObject2.put("unique", true);
 		basicDBObject2.put("dropDups", true);
-		dbCollection.ensureIndex(basicDBObject1, basicDBObject2);// 创建唯一索引
+//		dbCollection.createIndex(basicDBObject1);
+	//	dbCollection.ensureIndex(basicDBObject1, basicDBObject2);// 创建唯一索引
 
 		// db.Users.ensureIndex({name:1,sex:-1})
 
@@ -74,7 +75,8 @@ public class MongodbUtilProvider {
 		BasicDBObject basicDBObject2 = new BasicDBObject();
 		basicDBObject2.put("unique", true);
 		basicDBObject2.put("dropDups", true);
-		dbCollection.ensureIndex(basicDBObject1, basicDBObject2);// 创建唯一索引
+	//	dbCollection.createIndex(basicDBObject1);
+	//	dbCollection.ensureIndex(basicDBObject1, basicDBObject2);// 创建唯一索引
 
 	}
 }
