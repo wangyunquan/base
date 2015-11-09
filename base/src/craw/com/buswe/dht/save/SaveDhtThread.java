@@ -64,6 +64,7 @@ public class SaveDhtThread implements Runnable {
 				for (Dhtinfo info : dhtinfoList) {
 					dhtinfoService.insertDhtinfo(info);
 				}
+				break;//跳出线程
 			}
 		}
 
