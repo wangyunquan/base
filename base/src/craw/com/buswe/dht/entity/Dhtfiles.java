@@ -1,14 +1,14 @@
 package com.buswe.dht.entity;
 
 public class Dhtfiles {
-private	String info_hash;
+private	String infoHash;
 private  Long singlefilelength; //文件大小
 private String path;//文件名
-public String getInfo_hash() {
-	return info_hash;
+public String getInfoHash() {
+	return infoHash;
 }
-public void setInfo_hash(String info_hash) {
-	this.info_hash = info_hash;
+public void setInfoHash(String infoHash) {
+	this.infoHash = infoHash;
 }
 public Long getSinglefilelength() {
 	return singlefilelength;
@@ -22,7 +22,7 @@ public String getPath() {
 public void setPath(String path) {
 	this.path = path;
 }
-
+ 
   
  
 

@@ -127,7 +127,6 @@ public class TorrentInfo implements TorrentConstantKey {
 							for (byte[] pathbytearray : pathListbytearray) {
 								String path = new String(pathbytearray, StringUtil.isEmpty(encoding) ? UTF_8 : encoding);
 								multiFile.setPath(path);
-								// System.out.println("path=" + path);
 							}
 						}
 						if (multiFilemap.containsKey(LENGTH)) {

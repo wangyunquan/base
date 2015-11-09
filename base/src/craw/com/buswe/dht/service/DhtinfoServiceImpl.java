@@ -4,27 +4,30 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
 import com.buswe.dht.dao.DhtinfoDao;
 import com.buswe.dht.entity.Dhtinfo;
+import com.buswe.dht.entity.DhtinfoState;
 import com.buswe.dhtcrawler.db.mysql.exception.DhtException;
 
+@Service("dhtinfoService")
 public class DhtinfoServiceImpl implements DhtinfoService {
+	  protected Logger logger = LoggerFactory.getLogger(getClass());
 	@Resource
-	DhtinfoDao dhtinfoDao;
-
+	private DhtinfoDao dhtinfoDao;
 	@Override
 	public Boolean insertDhtinfo(Dhtinfo dhtInfo) {
 		return dhtinfoDao.insertDhtinfo(dhtInfo);
 	}
-
 	@Override
 	public Boolean deleteDhtinfo(String info_hash) {
 		return dhtinfoDao.deleteDhtinfo(info_hash);
 	}
-
 	@Override
 	public Dhtinfo loadByInfoHash(String infohash) {
-		// TODO,加载子文件
 		return null;
 	}
 
@@ -67,7 +70,33 @@ public class DhtinfoServiceImpl implements DhtinfoService {
 	}
 
 	@Override
-	public Boolean updateDhtinfoSate(String infohash, Integer state) {
+	public Boolean updateDhtinfoDownLoad(Dhtinfo dhtinfo,Boolean updateDhtFiles){
+		
+		Integer dhtinfoState=dhtinfo.getDhtstate();
+		
+		switch(dhtinfoState)
+		{
+		case DhtinfoState.DHTSTATE_DOWNLOAD_FAIL :
+			dhtinfoDao.updateDhtinfoSate(dhtinfo.getInfoHash(), DhtinfoState.DHTSTATE_DOWNLOAD_FAIL);
+		case DhtinfoState.DHTSTATE_PARSING_FAIL :
+			dhtinfoDao.updateDhtinfoSate(dhtinfo.getInfoHash(), DhtinfoState.DHTSTATE_PARSING_FAIL );
+		case DhtinfoState.DHTSTATE_OK:
+		{
+		Boolean saveinfo=	dhtinfoDao.updateParseSuccess(dhtinfo);
+		Boolean savefile=true;
+			if(updateDhtFiles)
+			{
+				savefile=	dhtinfoDao.updateDhtFiles(dhtinfo);
+			}
+			if(!(saveinfo&&savefile))
+			{
+				logger.error(dhtinfo.getInfoHash()+  "  更新数据失败");
+			}
+		}
+		default :
+			logger.error(dhtinfo.getInfoHash()+  "  状态异常");
+		}
+		
 		return null;
 	}
 

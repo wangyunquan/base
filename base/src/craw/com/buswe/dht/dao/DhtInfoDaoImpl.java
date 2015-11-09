@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 
+import com.buswe.dht.entity.Dhtfiles;
 import com.buswe.dht.entity.Dhtinfo;
 import com.buswe.dhtcrawler.db.mysql.exception.DhtException;
 
@@ -20,7 +21,7 @@ public class DhtInfoDaoImpl implements DhtinfoDao  {
 	JdbcTemplate simpleJdbc;
 	private final String insertDhtinfosql = "INSERT INTO dhtinfo (info_hash,peer_Ipport,lastrequesttime,tag,name,dhtstate,filelength,singerfile,isindex,validstate,successcount) values"
 			+ " ( :infoHash,:peerIpport,:lastrequesttime,:tag,:name,:dhtstate,:filelength,:singerfile,:isindex,:validstate,:successcount)";
-
+   private final String insertDhtFilesSql="insert into dhtfiles (info_hash,singlefilelength,path) values (:infoHash,:singlefilelength,:path)";
 	/* (non-Javadoc)
 	 * @see com.buswe.dht.dao.DhtinfoDao#insertDhtinfo(com.buswe.dht.entity.Dhtinfo)
 	 */
@@ -99,6 +100,34 @@ public class DhtInfoDaoImpl implements DhtinfoDao  {
 	}
 	private SqlParameterSource dhtinfoSqlParam(Dhtinfo dhtInfo) {
 		return new BeanPropertySqlParameterSource(dhtInfo);
+	}
+
+	private SqlParameterSource dhtfilesSqlParam(Dhtfiles dhtfiles)
+	{
+		return new BeanPropertySqlParameterSource(dhtfiles);
+	}
+	@Override
+	public Boolean updateDhtFiles(Dhtinfo dhtinfo) {
+      String deleteSql="delete from dhtfiles where info_hash=?";
+   simpleJdbc.update(deleteSql, dhtinfo.getInfoHash());
+   List<Dhtfiles>  files=  dhtinfo.getDhtfiles();
+   if(files==null||files.size()==0)
+   {return true;}
+   Integer fileSize=files.size();
+   SqlParameterSource [] sqlparam=new SqlParameterSource[fileSize] ;
+      for(int i=0;i<fileSize;i++)
+      {
+    	  sqlparam[i]=dhtfilesSqlParam(files.get(i));
+      }
+   return   namedjdbc.batchUpdate(deleteSql, sqlparam).length>0?true:false;
+	}
+
+	@Override
+	public Boolean updateParseSuccess(Dhtinfo dhtinfo) {
+	 
+		String updateSql=" update Dhtinfo set creattime=:creattime,name=:name,singerfile=:singerfile,filelength=:filelength ,dhtstate=:dhtstate"
+				+ "where info_hash=:infoHash";
+		return namedjdbc.update(updateSql,  dhtinfoSqlParam(dhtinfo))>0?true:false;
 	}
 
 }

@@ -16,5 +16,7 @@ public interface DhtinfoDao {
 	public Boolean dhtinfoExsit(String info_hash);
 	public Boolean updateDhtinfoSate(String infohash,Integer state);
 	public List<String> getDhtinfoHashByState(int state, int limit);
+	public Boolean updateDhtFiles(Dhtinfo dhtinfo);
+	public Boolean updateParseSuccess(Dhtinfo dhtinfo);
 	
 }

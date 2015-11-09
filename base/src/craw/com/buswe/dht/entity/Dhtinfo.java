@@ -1,6 +1,7 @@
 package com.buswe.dht.entity;
 
 import java.util.Date;
+import java.util.List;
 /**
  * 一条DHT信息
  * @author 王云权
@@ -37,8 +38,15 @@ private Boolean isindex=false;//是否已索引
 private Integer validstate=1;
 private Integer successcount=0;// 抓取到的次数，annoucepeer次数，已成功正在下载
 
+private List<Dhtfiles> dhtfiles;//子文件
 
  
+	public List<Dhtfiles> getDhtfiles() {
+	return dhtfiles;
+}
+public void setDhtfiles(List<Dhtfiles> dhtfiles) {
+	this.dhtfiles = dhtfiles;
+}
 	public Integer getSuccesscount() {
 	return successcount;
 }

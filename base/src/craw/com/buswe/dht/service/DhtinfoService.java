@@ -50,12 +50,12 @@ public interface DhtinfoService {
 	public Boolean saveBatchDhtinfo(List<Dhtinfo> dhtinfoList);
 	
 	/**
-	 * 更新状态 
-	 * @param infohash
-	 * @param state
+	 *  下载后更新链接信息 
+	 * @param dhtinfo 
+	 * @param updateDhtFiles 是否更新子文件，如果无效，则删除掉
 	 * @return
 	 */
-	public Boolean updateDhtinfoSate(String infohash,Integer state);
+	public Boolean updateDhtinfoDownLoad(Dhtinfo dhtinfo,Boolean updateDhtFiles);
 	/**
 	 * 根据状态查找indohash
 	 * @param state
