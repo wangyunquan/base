@@ -76,7 +76,7 @@ public class KadReceiveServer implements Runnable, DHTConstant {
 		PingResponse pingResponse = new PingResponse(transaction, src);
 		kadNet.sendMessage(pingResponse);
 		logger.debug(src.getKey()+"ping");
-		logger.debug("Get_Peers返回信息为:"+pingResponse);
+		logger.debug("Ping返回信息为:"+pingResponse);
 		addNodeToQueue(src);
 	}
 
@@ -215,7 +215,7 @@ public class KadReceiveServer implements Runnable, DHTConstant {
 		if (decodedData.containsKey(Q)) {
 			String q_value = decodedData.getString(Q);// find_node or	// getpeers===
 			Key key = new Key((byte[]) decodedData.getMap(A).get(ID));
-			logger.debug("收到的"+inetSocketAddress.getHostString()+":"+inetSocketAddress.getPort()+"请求消息类型为:"+q_value+"消息:"+decodedData);
+	//		logger.debug("收到的"+inetSocketAddress.getHostString()+":"+inetSocketAddress.getPort()+"请求消息类型为:"+q_value+"消息:"+decodedData);
 			final Node to = new Node(key).setSocketAddress(inetSocketAddress);
 			if (q_value.equals(FIND_NODE)) {
 				handleFind_NodeRequest(transaction, decodedData, to);

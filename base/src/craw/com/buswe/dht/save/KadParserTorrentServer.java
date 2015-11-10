@@ -59,7 +59,7 @@ public class KadParserTorrentServer implements Runnable {
 					executorService.execute(parser);
 				}
 			}
-			ThreadUtil.sleep(5 * 1000);
+			ThreadUtil.sleep(60 * 1000);
 		}
 	}
 	public boolean isRunning(){

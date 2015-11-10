@@ -18,14 +18,14 @@ import com.buswe.moudle.cms.statics.VistEventHandler;
 public class EventConfig
 {
   @Bean(name={"applicationEventMulticaster"})
-  ApplicationEventMulticaster applicationEventMulticaster()
+  ApplicationEventMulticaster applicationEventMulticaster(ThreadPoolTaskExecutor taskExecutor)
   {
     SimpleApplicationEventMulticaster simpleApplicationEventMulticaster = new SimpleApplicationEventMulticaster();
-    simpleApplicationEventMulticaster.setTaskExecutor(taskExecutor());
+    simpleApplicationEventMulticaster.setTaskExecutor(taskExecutor);
     return simpleApplicationEventMulticaster;
   }
   
-  @Bean
+  @Bean(name={"taskExecutor"})
   ThreadPoolTaskExecutor taskExecutor()
   {
     ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();

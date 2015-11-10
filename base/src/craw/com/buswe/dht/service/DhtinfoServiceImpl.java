@@ -66,7 +66,7 @@ public class DhtinfoServiceImpl implements DhtinfoService {
 				dhtinfoDao.insertDhtinfo(info);
 			}
 		}
-		return null;
+		return true;
 	}
 
 	@Override

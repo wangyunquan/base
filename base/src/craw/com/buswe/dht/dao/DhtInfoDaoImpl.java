@@ -8,11 +8,12 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.stereotype.Repository;
 
 import com.buswe.dht.entity.Dhtfiles;
 import com.buswe.dht.entity.Dhtinfo;
 import com.buswe.dhtcrawler.db.mysql.exception.DhtException;
-
+@Repository
 public class DhtInfoDaoImpl implements DhtinfoDao  {
 
 	@Resource
@@ -64,8 +65,8 @@ public class DhtInfoDaoImpl implements DhtinfoDao  {
 	 */
 	@Override
 	public List<Dhtinfo> getDhtinfosByState(int state, int limit) throws DhtException {
-	 String findSql="select * from Dhtinfo dhtstate=? limit ?";
-		return simpleJdbc.queryForList(findSql, Dhtinfo.class, limit);
+	 String findSql="select * from Dhtinfo where dhtstate=? limit ?";
+		return simpleJdbc.queryForList(findSql, Dhtinfo.class,state, limit);
 	}
 	@Override
 	public List<String> getDhtinfoHashByState(int state, int limit)

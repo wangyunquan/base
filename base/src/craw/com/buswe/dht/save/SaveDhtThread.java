@@ -22,7 +22,7 @@ import com.buswe.dht.util.context.DhtContextHolder;
 public class SaveDhtThread implements Runnable {
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 	private int icrease = 0;// 本线程内的计数器
-	private int bachnum = 1000;
+	private int bachnum = 100;
 	private List<Dhtinfo> dhtinfoList;
 	private DhtinfoService dhtinfoService;
 	public SaveDhtThread(Integer bachnum) {

@@ -1,7 +1,7 @@
 /**
  *
  */
-package net.oschina.demo;
+package com.buswe.test.lucene;
 
 import java.io.File;
 import java.util.Arrays;
@@ -10,6 +10,7 @@ import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.apache.lucene.search.Query;
 import org.aspectj.lang.annotation.Before;
+import org.junit.Test;
 
 import com.buswe.moudle.cms.lucene.IndexHolder;
 import com.buswe.moudle.cms.lucene.SearchHelper;
@@ -36,7 +37,7 @@ public class LuceneTester {
     Person person3 = new Person(3, "蜘蛛侠", "US");
     IndexHolder holder;
 
-    @Before
+  
     public void setUp() throws Exception {
         String indexFolder = LuceneTester.class.getClassLoader().getResource("./").getFile() + "index";
 

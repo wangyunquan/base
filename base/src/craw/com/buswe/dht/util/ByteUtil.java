@@ -1,7 +1,17 @@
 package com.buswe.dht.util;
 
+import java.util.Random;
+
 public class ByteUtil {
 
+
+	public static String random_tranctionId(int size) {
+		byte[] b = new byte[size];
+		Random rnd = new Random();
+		rnd.nextBytes(b);
+		return hex(b);
+		// return sha(rundom_id(20));
+	}
 	/**
 	 * 将int端口转为2 byte
 	 */

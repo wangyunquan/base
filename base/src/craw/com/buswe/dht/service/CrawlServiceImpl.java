@@ -30,6 +30,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.buswe.base.utils.LuceneUtils;
 import com.buswe.dht.dao.DhtinfoDao;
@@ -42,6 +43,7 @@ import com.buswe.dht.save.SaveDhtThread;
 import com.buswe.dht.search.DhtLuceneHelper;
 
 @Service
+@Transactional (value="dataSouceTransaction")
 public class CrawlServiceImpl implements CrawlService {
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 	@Value("${dht.config.index.dir}")
@@ -63,7 +65,7 @@ public class CrawlServiceImpl implements CrawlService {
 			DhtKeyFactory keyFactory = DhtKeyFactory.getInstance();
 			for (int i = 0; i < size; i++) {
 				Node localNode = new Node(keyFactory.generate()).setInetAddress(InetAddress.getByName("0.0.0.0"))
-						.setPoint(20200 + i);// 这里注意InetAddress.getLocalHost();为空
+						.setPoint(20300 + i);// 这里注意InetAddress.getLocalHost();为空
 				KadNet kadNet = new KadNet(null, localNode);
 				kadNet.join(BOOTSTRAP_NODES).create();
 			}
@@ -78,7 +80,7 @@ public class CrawlServiceImpl implements CrawlService {
 			e.printStackTrace();
 		}
 	}
-	@Scheduled(cron="0 0 5 * * ? *") //每天早上5点运行定时任务建立索引
+	@Scheduled(cron="0 0 5 * * ? ") //每天早上5点运行定时任务建立索引
 	public void creatIndex() throws Exception {
 		Analyzer analyzer = LuceneUtils.analyzer;
 		FSDirectory dir = FSDirectory.open(new File(dhtIndexDir));

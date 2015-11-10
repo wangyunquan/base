@@ -4,6 +4,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
@@ -52,9 +53,12 @@ public class DhtController {
 		model.addAttribute("infohash", service.loadDhtinfo(infohash));
 		return "infohash";
 	}
-	
+	@RequestMapping("/start")
 	public String startService()
 	{
-		
+		//TODO
+		SecurityUtils.getSubject();
+		service.startDhtService(1);//开启三个节点
+		return null;
 	}
 }

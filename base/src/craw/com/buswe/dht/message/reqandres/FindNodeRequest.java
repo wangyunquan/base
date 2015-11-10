@@ -7,6 +7,7 @@ import org.yaircc.torrent.bencoding.HashBMap;
 import com.buswe.dht.message.KadRequest;
 import com.buswe.dht.node.Key;
 import com.buswe.dht.node.Node;
+import com.buswe.dht.util.ByteUtil;
 import com.buswe.dhtcrawler.util.Util;
 
  
@@ -31,7 +32,7 @@ public class FindNodeRequest extends KadRequest {
 		/**
 		 * 实际上是向目标节点查询它自己，会返回来8个？还是直接去查询它相邻的8个节点？
 		 */
-		FindNodeRequest findNodeRequest = new FindNodeRequest(Util.random_tranctionId(4), src);
+		FindNodeRequest findNodeRequest = new FindNodeRequest(ByteUtil.random_tranctionId(4), src);
 		return findNodeRequest;
 	}
 

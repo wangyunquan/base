@@ -8,13 +8,13 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.dao.support.PersistenceExceptionTranslator;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.instrument.classloading.InstrumentationLoadTimeWeaver;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.orm.hibernate4.HibernateExceptionTranslator;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
@@ -117,11 +117,19 @@ JdbcTemplate  jdbcTemplate(DataSource dataSource)
   }
   
   
-  @Bean
+  @Bean(name="jpaTransaction")
   public JpaTransactionManager jpaTransaction(LocalContainerEntityManagerFactoryBean entityManagerFactory )
   {
     JpaTransactionManager manager = new JpaTransactionManager();
     manager.setEntityManagerFactory(entityManagerFactory.getObject());
     return manager;
   }
+  @Bean(name="dataSouceTransaction")
+  DataSourceTransactionManager dataSourceTransactionManager(DataSource dataSource)
+  {
+	  DataSourceTransactionManager transAction=new DataSourceTransactionManager(dataSource);
+	  return transAction;
+  }
+  
+  
 }

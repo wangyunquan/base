@@ -81,6 +81,7 @@ public class KadNet implements KeybasedRouting, Runnable {
 			@Override
 			public void caughtEnd() {
 				System.gc();
+				System.out.println("重启" + kadReceiveServer);
 				ThreadUtil.sleep(1000 * 10);
 				startKadReceiveServer();
 			}

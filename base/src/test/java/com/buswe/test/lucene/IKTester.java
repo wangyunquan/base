@@ -3,6 +3,8 @@ package com.buswe.test.lucene;
 
 import java.util.List;
 
+import org.junit.Test;
+
 import com.buswe.moudle.cms.lucene.SearchHelper;
 
 import junit.framework.Assert;

@@ -12,5 +12,5 @@ public interface CrawlService {
 	Page<Dhtinfo> search(String searchString, Pageable page) throws Exception;
 
 	Dhtinfo loadDhtinfo(String infoHash);
-
+	public void creatIndex() throws Exception;
 }
