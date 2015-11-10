@@ -27,7 +27,6 @@ import com.alibaba.druid.pool.DruidDataSource;
 import com.buswe.base.dao.springdata.BaseRepositoryFactoryBean;
 @Configuration
 @EnableJpaRepositories(basePackages={"com.buswe"}, entityManagerFactoryRef="entityManagerFactory", transactionManagerRef="jpaTransaction", repositoryFactoryBeanClass=BaseRepositoryFactoryBean.class, excludeFilters={@org.springframework.context.annotation.ComponentScan.Filter({org.springframework.stereotype.Controller.class})})
-@PropertySource({"classpath:application.properties"})
 public class DaoConfig
 {
   @Autowired

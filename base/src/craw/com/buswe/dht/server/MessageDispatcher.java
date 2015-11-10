@@ -60,8 +60,6 @@ public class MessageDispatcher {
 	 */
 	public static MessageDispatcher findMessageDispatcherByTag(String tag) {
 		for (MessageDispatcher messageDispatcher : messageDispatchers) {
-			// System.out.println("messageDispatcher.getTag()="+messageDispatcher.getTransactionID());
-			// System.out.println("tag="+tag);
 			if (messageDispatcher.getTransactionID() != null && messageDispatcher.getTransactionID().equals(tag)) {
 				return messageDispatcher;
 			}

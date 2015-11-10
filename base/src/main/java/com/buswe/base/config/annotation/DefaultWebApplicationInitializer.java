@@ -36,7 +36,7 @@ public class DefaultWebApplicationInitializer
   public void onStartup(ServletContext servletContext)
     throws ServletException
   {
-    servletContext.addListener(IntrospectorCleanupListener.class);
+   // servletContext.addListener(IntrospectorCleanupListener.class);
   //  servletContext.addListener(HttpSessionEventPublisher.class);
     servletContext.addListener(WebAppRootListener.class);
     StatViewServlet DruidStatView = new StatViewServlet();

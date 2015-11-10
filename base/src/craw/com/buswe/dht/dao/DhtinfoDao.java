@@ -18,5 +18,11 @@ public interface DhtinfoDao {
 	public List<String> getDhtinfoHashByState(int state, int limit);
 	public Boolean updateDhtFiles(Dhtinfo dhtinfo);
 	public Boolean updateParseSuccess(Dhtinfo dhtinfo);
-	
+	/**
+	 * 
+	 * @param limit
+	 * @return
+	 */
+	public		List<Dhtinfo>  getNotIndexedDhtinfo(Integer limit);
+	public Integer updateDhtinfoIndexed(List<Dhtinfo> dhtinfoList);
 }

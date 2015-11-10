@@ -8,7 +8,7 @@ import java.util.List;
  *
  */
 public class Dhtinfo {
-private	String infoHash;//info_hash
+private	String infohash;//info_hash
 private	String peerIpport;//收到的节点的IP和端口
 private	Date lastrequesttime=new Date();//上次请求时间
 /**
@@ -65,12 +65,13 @@ public Integer getValidstate() {
 public void setValidstate(Integer validstate) {
 	this.validstate = validstate;
 }
-	public String getInfoHash() {
-		return infoHash;
-	}
-	public void setInfoHash(String infoHash) {
-		this.infoHash = infoHash;
-	}
+ 
+	public String getInfohash() {
+	return infohash;
+}
+public void setInfohash(String infohash) {
+	this.infohash = infohash;
+}
 	public String getPeerIpport() {
 		return peerIpport;
 	}

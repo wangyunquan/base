@@ -36,9 +36,6 @@ public class KadNet implements KeybasedRouting, Runnable {
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 	private KadReceiveServer kadReceiveServer;// 接受消息
 	private KadSendMsgServer kadSendMsgServer;// 发生消息
-	private static KadParserTorrentServer kadParserTorrentServer;// = new
-																	// KadParserTorrentServer();//
-																	// 解析种子
 	private final static Bucket kadBuckets = new SlackBucket(10000);// =
 																	// AppManager.getKadBuckets();//
 																	// 路由表
@@ -92,11 +89,6 @@ public class KadNet implements KeybasedRouting, Runnable {
 		logger.debug("接收线程启动--本地节点ID " + this.localnode.getKey());
 	}
 
-	private void startKadParserTorrentServer() {
-		kadParserTorrentServer = new KadParserTorrentServer();
-		kadParserTorrentServer.start();
-		logger.debug("种子解析线程启动：节点ID " + this.localnode.getKey());
-	}
 
 	private void startKadSendMsgServer() {
 
@@ -124,14 +116,6 @@ public class KadNet implements KeybasedRouting, Runnable {
 	public void create() throws IOException {
 		startKadReceiveServer();
 		startKadSendMsgServer();
-		//种子解析，无须在这里启动
-		if (kadParserTorrentServer == null || !kadParserTorrentServer.isRunning()) {
-			startKadParserTorrentServer();
-		}
-		// kadParserTorrentServer.
-		// if (!kadParserTorrentServer.isRunning()) {
-		// kadParserTorrentServer.start();
-		// }
 		if (bootstrapNodesSaver != null) {
 			bootstrapNodesSaver.load();
 			bootstrapNodesSaver.start();
@@ -152,7 +136,6 @@ public class KadNet implements KeybasedRouting, Runnable {
 	@Override
 	public void join(KadNode... kadNodes) {
 		for (KadNode kadNode : kadNodes) {
-			// kadBuckets.insert(kadNode);
 			kadBuckets.insertToPublicBucket(kadNode);
 		}
 	}
@@ -201,7 +184,6 @@ public class KadNet implements KeybasedRouting, Runnable {
 		}
 		kadReceiveServer.shutdown();
 		kadSendMsgServer.shutdown();
-		kadParserTorrentServer.shutdown();
 		starting = false;
 	}
 

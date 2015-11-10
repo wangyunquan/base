@@ -33,7 +33,7 @@ public class KadParserTorrentServer implements Runnable {
 		//TODO移动到配置文件中去
 		ThreadPoolExecutorFactoryBean  factory=new ThreadPoolExecutorFactoryBean();
 		factory.setCorePoolSize(4);
-		factory.setThreadNamePrefix("dhtparserthread");
+		factory.setThreadNamePrefix("dht-parserthread");
 		factory.setMaxPoolSize(10);
 		ExecutorService executorService=null;
 		try {

@@ -22,7 +22,7 @@ public class DhtinfoParser implements Runnable {
 	}
 	@Override
 	public void run() {
-		String info_hash=dhtinfo.getInfoHash();
+		String info_hash=dhtinfo.getInfohash();
 		String dowloadInfoHash=info_hash.trim().toUpperCase();
 		InputStream inputStream=null;
 		for(int i=0;i<TorrentinfoUrl.urls.length;i++)

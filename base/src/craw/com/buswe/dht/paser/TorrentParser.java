@@ -88,7 +88,7 @@ public class TorrentParser implements TorrentConstantKey {
 				}
 
 			} else {
-				logger.debug("种子解析失败：" +dhtinfo.getInfoHash());
+				logger.debug("种子解析失败：" +dhtinfo.getInfohash());
 				dhtinfo.setDhtstate(DhtinfoState.DHTSTATE_PARSING_FAIL);
 				return false;
 			}

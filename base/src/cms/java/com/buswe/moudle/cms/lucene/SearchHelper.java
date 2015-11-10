@@ -1,31 +1,39 @@
 package net.oschina.common.search;
 
-import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.math.NumberUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.apache.lucene.analysis.TokenStream;
-import org.apache.lucene.document.*;
-import org.apache.lucene.index.Term;
-import org.apache.lucene.queryparser.classic.QueryParser;
-import org.apache.lucene.search.BooleanQuery;
-import org.apache.lucene.search.PhraseQuery;
-import org.apache.lucene.search.Query;
-import org.apache.lucene.search.TermQuery;
-import org.apache.lucene.search.highlight.*;
-import org.apache.lucene.util.Version;
-import org.wltea.analyzer.core.IKSegmenter;
-import org.wltea.analyzer.core.Lexeme;
-import org.wltea.analyzer.lucene.IKAnalyzer;
-
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.lucene.analysis.TokenStream;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
+import org.apache.lucene.document.LongField;
+import org.apache.lucene.document.StoredField;
+import org.apache.lucene.document.StringField;
+import org.apache.lucene.document.TextField;
+import org.apache.lucene.index.Term;
+import org.apache.lucene.queryparser.classic.QueryParser;
+import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.PhraseQuery;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.search.TermQuery;
+import org.apache.lucene.search.highlight.Formatter;
+import org.apache.lucene.search.highlight.Highlighter;
+import org.apache.lucene.search.highlight.QueryScorer;
+import org.apache.lucene.search.highlight.SimpleHTMLFormatter;
+import org.apache.lucene.util.Version;
+import org.wltea.analyzer.core.IKSegmenter;
+import org.wltea.analyzer.core.Lexeme;
+import org.wltea.analyzer.lucene.IKAnalyzer;
 
 /**
  * 搜索工具类
@@ -92,7 +100,7 @@ public class SearchHelper {
     public static Query makeQuery(String field, String q, float boost) {
         if (StringUtils.isBlank(q) || StringUtils.isBlank(field))
             return nullQuery;
-        QueryParser parser = new QueryParser(Version.LUCENE_40, field, analyzer);
+        QueryParser parser = new QueryParser( field, analyzer);
         parser.setDefaultOperator(QueryParser.AND_OPERATOR);
         try {
             Query querySinger = parser.parse(q);
@@ -102,7 +110,6 @@ public class SearchHelper {
         } catch (Exception e) {
             TermQuery queryTerm = new TermQuery(new Term(field, q));
             queryTerm.setBoost(boost);
-            //System.out.println(queryTerm.toString());
             return queryTerm;
         }
     }

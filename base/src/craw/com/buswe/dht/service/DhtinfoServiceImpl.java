@@ -45,7 +45,7 @@ public class DhtinfoServiceImpl implements DhtinfoService {
 	@Override
 	public Boolean saveBatchDhtinfo(List<Dhtinfo> dhtinfoList) {
 		for (Dhtinfo info : dhtinfoList) {
-			String infohash=info.getInfoHash();
+			String infohash=info.getInfohash();
 			Boolean exsit = dhtinfoDao.dhtinfoExsit(infohash);
 			if(exsit)
 			{
@@ -77,9 +77,9 @@ public class DhtinfoServiceImpl implements DhtinfoService {
 		switch(dhtinfoState)
 		{
 		case DhtinfoState.DHTSTATE_DOWNLOAD_FAIL :
-			dhtinfoDao.updateDhtinfoSate(dhtinfo.getInfoHash(), DhtinfoState.DHTSTATE_DOWNLOAD_FAIL);
+			dhtinfoDao.updateDhtinfoSate(dhtinfo.getInfohash(), DhtinfoState.DHTSTATE_DOWNLOAD_FAIL);
 		case DhtinfoState.DHTSTATE_PARSING_FAIL :
-			dhtinfoDao.updateDhtinfoSate(dhtinfo.getInfoHash(), DhtinfoState.DHTSTATE_PARSING_FAIL );
+			dhtinfoDao.updateDhtinfoSate(dhtinfo.getInfohash(), DhtinfoState.DHTSTATE_PARSING_FAIL );
 		case DhtinfoState.DHTSTATE_OK:
 		{
 		Boolean saveinfo=	dhtinfoDao.updateParseSuccess(dhtinfo);
@@ -90,11 +90,11 @@ public class DhtinfoServiceImpl implements DhtinfoService {
 			}
 			if(!(saveinfo&&savefile))
 			{
-				logger.error(dhtinfo.getInfoHash()+  "  更新数据失败");
+				logger.error(dhtinfo.getInfohash()+  "  更新数据失败");
 			}
 		}
 		default :
-			logger.error(dhtinfo.getInfoHash()+  "  状态异常");
+			logger.error(dhtinfo.getInfohash()+  "  状态异常");
 		}
 		
 		return null;
