@@ -2,6 +2,7 @@ package com.buswe.dht.save;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,8 +22,10 @@ import com.buswe.dht.util.context.DhtContextHolder;
  */
 public class SaveDhtThread implements Runnable {
 	protected Logger logger = LoggerFactory.getLogger(getClass());
+	private final AtomicBoolean isActive = new AtomicBoolean(false);
+	private final Thread startThread;
 	private int icrease = 0;// 本线程内的计数器
-	private int bachnum = 100;
+	private int bachnum = 5;
 	private List<Dhtinfo> dhtinfoList;
 	private DhtinfoService dhtinfoService;
 	public SaveDhtThread(Integer bachnum) {
@@ -30,6 +33,7 @@ public class SaveDhtThread implements Runnable {
 			this.bachnum = bachnum;
 		}
 		dhtinfoList = new ArrayList<Dhtinfo>(bachnum);
+		startThread = new Thread(this);
 	}
 	@Override
 	public void run() {
@@ -70,4 +74,15 @@ public class SaveDhtThread implements Runnable {
 
 	}
 
+	public void shutdown() {
+		this.isActive.set(false);
+		startThread.interrupt();
+		try {
+			startThread.join();
+		} catch (final InterruptedException e) {
+		}
+	}
+	public void start() {
+		startThread.start();
+	}
 }

@@ -62,25 +62,26 @@ public class CrawlServiceImpl implements CrawlService {
 					new InetSocketAddress("router.bittorrent.com", 6881), //
 					new InetSocketAddress("dht.transmissionbt.com", 6881), //
 					new InetSocketAddress("router.utorrent.com", 6881), };
-			DhtKeyFactory keyFactory = DhtKeyFactory.getInstance();
-			for (int i = 0; i < size; i++) {
-				Node localNode = new Node(keyFactory.generate()).setInetAddress(InetAddress.getByName("0.0.0.0"))
-						.setPoint(20300 + i);// 这里注意InetAddress.getLocalHost();为空
-				KadNet kadNet = new KadNet(null, localNode);
-				kadNet.join(BOOTSTRAP_NODES).create();
-			}
-			Integer batch = 500;
-			Thread saveToDbThread = new Thread(new SaveDhtThread(batch)); // 保存到数据库的线程
+//			DhtKeyFactory keyFactory = DhtKeyFactory.getInstance();
+//			for (int i = 0; i < size; i++) {
+//				Node localNode = new Node(keyFactory.generate()).setInetAddress(InetAddress.getByName("0.0.0.0"))
+//						.setPoint(20300 + i);// 这里注意InetAddress.getLocalHost();为空
+//				KadNet kadNet = new KadNet(null, localNode);
+//				kadNet.join(BOOTSTRAP_NODES).create();
+//			}
+//			Integer batch = 5;
+//			SaveDhtThread saveToDbThread =  new SaveDhtThread(batch); // 保存到数据库的线程
+//			saveToDbThread.start();
 			// 解析 dhtinfo的线程
-			Thread parseServer = new Thread(new KadParserTorrentServer());
-			saveToDbThread.start();
+			KadParserTorrentServer parseServer = new KadParserTorrentServer();
 			parseServer.start();
+		 
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	@Scheduled(cron="0 0 5 * * ? ") //每天早上5点运行定时任务建立索引
+//	@Scheduled(cron="0 0 5 * * ? ") //每天早上5点运行定时任务建立索引
 	public void creatIndex() throws Exception {
 		Analyzer analyzer = LuceneUtils.analyzer;
 		FSDirectory dir = FSDirectory.open(new File(dhtIndexDir));

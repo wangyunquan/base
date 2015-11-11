@@ -5,17 +5,17 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.hibernate.search.util.impl.Executors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.scheduling.concurrent.ThreadPoolExecutorFactoryBean;
 
 import com.buswe.base.config.ContextHolder;
+import com.buswe.base.utils.Threads;
 import com.buswe.dht.entity.Dhtinfo;
 import com.buswe.dht.entity.DhtinfoState;
 import com.buswe.dht.paser.DhtinfoParser;
 import com.buswe.dht.service.DhtinfoService;
 import com.buswe.dhtcrawler.util.ArrayUtils;
-import com.buswe.dhtcrawler.util.ThreadUtil;
 
 /**
 根据dhtinfo去下载种子的线程类
@@ -31,16 +31,7 @@ public class KadParserTorrentServer implements Runnable {
 	@Override
 	public void run() {
 		//TODO移动到配置文件中去
-		ThreadPoolExecutorFactoryBean  factory=new ThreadPoolExecutorFactoryBean();
-		factory.setCorePoolSize(4);
-		factory.setThreadNamePrefix("dht-parserthread");
-		factory.setMaxPoolSize(10);
-		ExecutorService executorService=null;
-		try {
-			executorService=		factory.getObject();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		 ExecutorService excutorService = Executors.newFixedThreadPool(5,"parseTorrent");
 		this.isActive.set(true);
 		DhtinfoService service=ContextHolder.getBean("dhtinfoService");
 		while (this.isActive.get()) {
@@ -56,10 +47,10 @@ public class KadParserTorrentServer implements Runnable {
 			if (!ArrayUtils.isEmpty(dhtInfos)) {
 				for (Dhtinfo dhtInfo : dhtInfos) {
 					DhtinfoParser parser=new DhtinfoParser(dhtInfo,service);
-					executorService.execute(parser);
+					excutorService.execute(parser);
 				}
 			}
-			ThreadUtil.sleep(60 * 1000);
+			Threads.sleep(60 * 1000);
 		}
 	}
 	public boolean isRunning(){

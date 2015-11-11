@@ -36,7 +36,8 @@ public class DhtinfoParser implements Runnable {
 			} else
 			{
 			Boolean result=	 TorrentParser.parse(inputStream, dhtinfo);
-			if(result) break ;//如果解析成功，则不再执行下一个地址去解析了
+			if(result) 
+				break ;//如果解析成功，则不再执行下一个地址去解析了
 			}
 		}
 		service.updateDhtinfoDownLoad(dhtinfo, true);

@@ -21,7 +21,8 @@ import org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver;
 @Configuration
 @EnableWebMvc
 @EnableSpringDataWebSupport
-@ComponentScan(basePackages={"com.buswe.**.controller**"}, includeFilters={@org.springframework.context.annotation.ComponentScan.Filter({org.springframework.stereotype.Controller.class})})
+ @ComponentScan(basePackages={"com.buswe.**.controller**"},
+ includeFilters={@org.springframework.context.annotation.ComponentScan.Filter({org.springframework.stereotype.Controller.class})})
 public class MvcConfig
   extends WebMvcConfigurerAdapter
 {

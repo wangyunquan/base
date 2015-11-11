@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -66,7 +67,8 @@ public class DhtInfoDaoImpl implements DhtinfoDao  {
 	@Override
 	public List<Dhtinfo> getDhtinfosByState(int state, int limit) throws DhtException {
 	 String findSql="select * from Dhtinfo where dhtstate=? limit ?";
-		return simpleJdbc.queryForList(findSql, Dhtinfo.class,state, limit);
+	 BeanPropertyRowMapper infoRowMaper=new BeanPropertyRowMapper(Dhtinfo.class);
+		return simpleJdbc.query(findSql, infoRowMaper,state, limit);
 	}
 	@Override
 	public List<String> getDhtinfoHashByState(int state, int limit)

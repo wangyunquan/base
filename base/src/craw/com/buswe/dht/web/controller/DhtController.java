@@ -53,6 +53,19 @@ public class DhtController {
 		model.addAttribute("infohash", service.loadDhtinfo(infohash));
 		return "infohash";
 	}
+	
+	@RequestMapping("/creatIndex")
+	public String creatindex()
+	{
+		try {
+			service.creatIndex();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 	@RequestMapping("/start")
 	public String startService()
 	{
