@@ -77,9 +77,10 @@ public class DhtinfoServiceImpl implements DhtinfoService {
 		switch(dhtinfoState)
 		{
 		case DhtinfoState.DHTSTATE_DOWNLOAD_FAIL :
-			dhtinfoDao.updateDhtinfoSate(dhtinfo.getInfohash(), DhtinfoState.DHTSTATE_DOWNLOAD_FAIL);
+			return			dhtinfoDao.updateDhtinfoSate(dhtinfo.getInfohash(), DhtinfoState.DHTSTATE_DOWNLOAD_FAIL);
+			 
 		case DhtinfoState.DHTSTATE_PARSING_FAIL :
-			dhtinfoDao.updateDhtinfoSate(dhtinfo.getInfohash(), DhtinfoState.DHTSTATE_PARSING_FAIL );
+	return		dhtinfoDao.updateDhtinfoSate(dhtinfo.getInfohash(), DhtinfoState.DHTSTATE_PARSING_FAIL );
 		case DhtinfoState.DHTSTATE_OK:
 		{
 		Boolean saveinfo=	dhtinfoDao.updateParseSuccess(dhtinfo);
@@ -91,13 +92,15 @@ public class DhtinfoServiceImpl implements DhtinfoService {
 			if(!(saveinfo&&savefile))
 			{
 				logger.error(dhtinfo.getInfohash()+  "  更新数据失败");
+				return	 false;
 			}
+			return	 true;
 		}
 		default :
 			logger.error(dhtinfo.getInfohash()+  "  状态异常");
+			return false;
 		}
 		
-		return null;
 	}
 
 	@Override

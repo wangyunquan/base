@@ -32,6 +32,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.buswe.base.config.SystemEnvy;
 import com.buswe.base.utils.LuceneUtils;
 import com.buswe.dht.dao.DhtinfoDao;
 import com.buswe.dht.entity.Dhtinfo;
@@ -46,8 +47,8 @@ import com.buswe.dht.search.DhtLuceneHelper;
 @Transactional (value="dataSouceTransaction")
 public class CrawlServiceImpl implements CrawlService {
 	protected Logger logger = LoggerFactory.getLogger(getClass());
-	@Value("${dht.config.index.dir}")
-	private String dhtIndexDir;
+ 
+	private String dhtIndexDir=SystemEnvy.WEBROOT + File.separator +"dhtIndex";
 	@Resource
 	DhtinfoDao dhtinfoDao;
 
@@ -84,13 +85,18 @@ public class CrawlServiceImpl implements CrawlService {
 //	@Scheduled(cron="0 0 5 * * ? ") //每天早上5点运行定时任务建立索引
 	public void creatIndex() throws Exception {
 		Analyzer analyzer = LuceneUtils.analyzer;
+		File indexFolder=new File(dhtIndexDir);
+		if(!indexFolder.exists())
+		{
+			indexFolder.mkdirs();
+		}
 		FSDirectory dir = FSDirectory.open(new File(dhtIndexDir));
 		dir.setReadChunkSize(104857600);// 100兆//TODO
 		IndexWriterConfig config = new IndexWriterConfig(Version.LATEST, analyzer);
 		config.setOpenMode(OpenMode.CREATE);
 		IndexWriter writer = new IndexWriter(dir, config);
 		int doc_count = 0;
-		List<Dhtinfo> dhtinfoList = dhtinfoDao.getNotIndexedDhtinfo(100000);
+		List<Dhtinfo> dhtinfoList = dhtinfoDao.getNotIndexedDhtinfo(500);
 		try {
 			for (Dhtinfo dhtinfo : dhtinfoList) {
 				Document doc = DhtLuceneHelper.convertDocument(dhtinfo);

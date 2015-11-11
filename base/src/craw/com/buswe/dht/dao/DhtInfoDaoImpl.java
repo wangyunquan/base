@@ -67,7 +67,7 @@ public class DhtInfoDaoImpl implements DhtinfoDao  {
 	@Override
 	public List<Dhtinfo> getDhtinfosByState(int state, int limit) throws DhtException {
 	 String findSql="select * from Dhtinfo where dhtstate=? limit ?";
-	 BeanPropertyRowMapper infoRowMaper=new BeanPropertyRowMapper(Dhtinfo.class);
+	 BeanPropertyRowMapper<Dhtinfo> infoRowMaper=new BeanPropertyRowMapper<Dhtinfo>(Dhtinfo.class);
 		return simpleJdbc.query(findSql, infoRowMaper,state, limit);
 	}
 	@Override
@@ -139,8 +139,9 @@ public class DhtInfoDaoImpl implements DhtinfoDao  {
 
 	@Override
 	public List<Dhtinfo> getNotIndexedDhtinfo(Integer limit) {
-		 String findSql="select * from Dhtinfo where isindex=1 limit ? ";
-		 List<Dhtinfo> list = simpleJdbc.queryForList(findSql, Dhtinfo.class,limit);
+		 String findSql="select * from Dhtinfo where isindex=0 and dhtstate=0 limit ? ";
+		 BeanPropertyRowMapper<Dhtinfo> infoRowMaper=new BeanPropertyRowMapper<Dhtinfo>(Dhtinfo.class);
+		 List<Dhtinfo> list = simpleJdbc.query(findSql, infoRowMaper,limit);
 		 for(Dhtinfo info:list)
 		 {
 			 info.setDhtfiles(getDhtFilesByinfohash(info.getInfohash()));
@@ -150,7 +151,8 @@ public class DhtInfoDaoImpl implements DhtinfoDao  {
 
 	private List<Dhtfiles> getDhtFilesByinfohash(String infohash){
 		String sql="select * from Dhtfiles where infohash=?";
-		return simpleJdbc.queryForList(sql, Dhtfiles.class, infohash);
+		 BeanPropertyRowMapper<Dhtfiles> rowMaper=new BeanPropertyRowMapper<Dhtfiles>(Dhtfiles.class);
+		return simpleJdbc.query(sql, rowMaper, infohash);
 	}
 	
 	

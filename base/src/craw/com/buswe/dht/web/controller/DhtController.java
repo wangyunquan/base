@@ -54,24 +54,5 @@ public class DhtController {
 		return "infohash";
 	}
 	
-	@RequestMapping("/creatIndex")
-	public String creatindex()
-	{
-		try {
-			service.creatIndex();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
-	@RequestMapping("/start")
-	public String startService()
-	{
-		//TODO
-		SecurityUtils.getSubject();
-		service.startDhtService(1);//开启三个节点
-		return null;
-	}
+
 }
