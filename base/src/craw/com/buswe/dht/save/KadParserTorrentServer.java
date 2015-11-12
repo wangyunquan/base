@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.hibernate.search.util.impl.Executors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +16,6 @@ import com.buswe.dht.entity.Dhtinfo;
 import com.buswe.dht.entity.DhtinfoState;
 import com.buswe.dht.paser.DhtinfoParser;
 import com.buswe.dht.service.DhtinfoService;
-import com.buswe.dhtcrawler.util.ArrayUtils;
 
 /**
 根据dhtinfo去下载种子的线程类
@@ -44,7 +44,7 @@ public class KadParserTorrentServer implements Runnable {
 				e3.printStackTrace();
 			}
 			//TODO 启动多个线程去下载，会更快
-			if (!ArrayUtils.isEmpty(dhtInfos)) {
+			if (dhtInfos!=null&&dhtInfos.size()>0) {
 				for (Dhtinfo dhtInfo : dhtInfos) {
 					DhtinfoParser parser=new DhtinfoParser(dhtInfo,service);
 					excutorService.execute(parser);

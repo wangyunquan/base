@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import com.buswe.dht.dao.DhtinfoDao;
 import com.buswe.dht.entity.Dhtinfo;
 import com.buswe.dht.entity.DhtinfoState;
-import com.buswe.dhtcrawler.db.mysql.exception.DhtException;
 
 @Service("dhtinfoService")
 public class DhtinfoServiceImpl implements DhtinfoService {
@@ -38,7 +37,7 @@ public class DhtinfoServiceImpl implements DhtinfoService {
 	}
 
 	@Override
-	public List<Dhtinfo> getDhtinfosByState(int state, int limit) throws DhtException {
+	public List<Dhtinfo> getDhtinfosByState(int state, int limit)  {
 		return dhtinfoDao.getDhtinfosByState(state, limit);
 	}
 

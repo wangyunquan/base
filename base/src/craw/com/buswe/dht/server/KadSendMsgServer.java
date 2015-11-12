@@ -9,12 +9,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.buswe.base.utils.Threads;
 import com.buswe.dht.message.KadMessage;
 import com.buswe.dht.message.reqandres.FindNodeRequest;
 import com.buswe.dht.node.KadNet;
 import com.buswe.dht.node.KadNode;
 import com.buswe.dht.node.Node;
-import com.buswe.dhtcrawler.util.ThreadUtil;
 
  
 
@@ -71,7 +71,7 @@ public class KadSendMsgServer implements Runnable {
 				nodes.clear();
 				nodes = null;
 				displayAvailableMemory();
-				ThreadUtil.sleep(5000);
+				Threads.sleep(5000);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

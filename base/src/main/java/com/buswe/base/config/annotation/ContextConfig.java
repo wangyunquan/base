@@ -14,8 +14,8 @@ import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 import com.buswe.base.config.ContextHolder;
 
 @Configuration
-@PropertySource({"classpath:application.properties"})
 @Import({CacheConfig.class, ServiceConfig.class, DaoConfig.class, EventConfig.class,SecurityConfig.class})
+@PropertySource({"classpath:application.properties"})
 public class ContextConfig
 {
   @Bean

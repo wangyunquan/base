@@ -8,7 +8,6 @@ import com.buswe.dht.message.KadRequest;
 import com.buswe.dht.node.Key;
 import com.buswe.dht.node.Node;
 import com.buswe.dht.util.ByteUtil;
-import com.buswe.dhtcrawler.util.Util;
 
  
 
@@ -65,7 +64,7 @@ public class FindNodeRequest extends KadRequest {
 	@Override
 	public byte[] getBencodeData(Node localNode) {
 		BMap bMap = new HashBMap();
-		bMap.put(TRANSACTION, Util.HexString2Bytes(transaction));
+		bMap.put(TRANSACTION, ByteUtil.HexString2Bytes(transaction));
 		bMap.put(Y, Q);
 		bMap.put(Q, FIND_NODE);
 		// ----------------------------------

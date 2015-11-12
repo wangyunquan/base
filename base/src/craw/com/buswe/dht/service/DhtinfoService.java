@@ -3,7 +3,7 @@ package com.buswe.dht.service;
 import java.util.List;
 
 import com.buswe.dht.entity.Dhtinfo;
-import com.buswe.dhtcrawler.db.mysql.exception.DhtException;
+ 
 
 public interface DhtinfoService {
 
@@ -35,7 +35,7 @@ public interface DhtinfoService {
 	 * @return
 	 * @throws DhtException
 	 */
-	public List<Dhtinfo> getDhtinfosByState(int state,int limit) throws DhtException;
+	public List<Dhtinfo> getDhtinfosByState(int state,int limit) ;
 /**
  * 
  * 批量添加,逐个根据infohash进行检查。

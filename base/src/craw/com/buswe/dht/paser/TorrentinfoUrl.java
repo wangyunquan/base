@@ -1,7 +1,7 @@
 package com.buswe.dht.paser;
 
+import com.buswe.dht.util.Base32;
 import com.buswe.dht.util.ByteUtil;
-import com.buswe.dhtcrawler.util.Base32;
 
 /**
  * 
@@ -15,8 +15,7 @@ public class TorrentinfoUrl {
 			 "http://torrage.com/torrent/%1$s.torrent",
 			 "http://torcache.net/torrent/%1$s.torrent",
 			 "http://zoink.it/torrent/%1$s.torrent",
-			 "http://torcache.net/torrent/%1$s.torrent",
-			 "https://torcache.net/torrent/%1$s.torrent"
+			 "http://torcache.net/torrent/%1$s.torrent"
 	};
  /**
   * 根据infohash返回种子的下载地址

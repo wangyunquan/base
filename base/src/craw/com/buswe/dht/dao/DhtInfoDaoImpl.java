@@ -13,7 +13,6 @@ import org.springframework.stereotype.Repository;
 
 import com.buswe.dht.entity.Dhtfiles;
 import com.buswe.dht.entity.Dhtinfo;
-import com.buswe.dhtcrawler.db.mysql.exception.DhtException;
 @Repository
 public class DhtInfoDaoImpl implements DhtinfoDao  {
 
@@ -65,7 +64,7 @@ public class DhtInfoDaoImpl implements DhtinfoDao  {
 	 * @see com.buswe.dht.dao.DhtinfoDao#getDhtinfosByState(int, int)
 	 */
 	@Override
-	public List<Dhtinfo> getDhtinfosByState(int state, int limit) throws DhtException {
+	public List<Dhtinfo> getDhtinfosByState(int state, int limit)   {
 	 String findSql="select * from Dhtinfo where dhtstate=? limit ?";
 	 BeanPropertyRowMapper<Dhtinfo> infoRowMaper=new BeanPropertyRowMapper<Dhtinfo>(Dhtinfo.class);
 		return simpleJdbc.query(findSql, infoRowMaper,state, limit);

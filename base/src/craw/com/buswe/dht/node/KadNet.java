@@ -14,16 +14,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.buswe.base.utils.Threads;
+import com.buswe.dht.exception.ErrHandler;
 import com.buswe.dht.message.KadMessage;
 import com.buswe.dht.node.bucket.Bucket;
 import com.buswe.dht.node.bucket.SlackBucket;
-import com.buswe.dht.save.KadParserTorrentServer;
 import com.buswe.dht.server.BootstrapNodesSaver;
 import com.buswe.dht.server.KadReceiveServer;
 import com.buswe.dht.server.KadSendMsgServer;
-import com.buswe.dhtcrawler.AppManager;
-import com.buswe.dhtcrawler.exception.ErrHandler;
-import com.buswe.dhtcrawler.util.ThreadUtil;
+ 
 
  
 
@@ -82,7 +80,7 @@ public class KadNet implements KeybasedRouting, Runnable {
 			public void caughtEnd() {
 				System.gc();
 				System.out.println("重启" + kadReceiveServer);
-				ThreadUtil.sleep(1000 * 10);
+				Threads.sleep(1000 * 10);
 				startKadReceiveServer();
 			}
 		});
