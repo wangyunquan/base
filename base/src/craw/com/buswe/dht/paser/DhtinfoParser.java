@@ -35,6 +35,7 @@ public class DhtinfoParser implements Runnable {
 				continue ;
 			} else
 			{
+				
 			Boolean result=	 TorrentParser.parse(inputStream, dhtinfo);
 			if(result) 
 				break ;//如果解析成功，则不再执行下一个地址去解析了
@@ -52,19 +53,38 @@ public class DhtinfoParser implements Runnable {
 			connection.setConnectTimeout( 5 * 1000);
 			connection.setReadTimeout( 5 * 1000);
 			connection.setUseCaches(false);
-			connection.setDoInput(true);
+			connection.setDoInput(false);
 			connection.setRequestMethod("GET");
 			int responseCode = connection.getResponseCode();
 			if (responseCode ==HttpURLConnection.HTTP_OK) {
 			inputStream =connection.getInputStream();
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
-			logger.debug("下载失败："+url);
+		
+		//	e.printStackTrace(); nothing todo 
+			//logger.debug("下载失败："+url);
 		}
 		return inputStream;
 		
 		}
  
+	public static void main(String aa [])
+	{
+		DhtinfoParser paser=new DhtinfoParser(null,null);
+		InputStream inputStream=null;
+		String dowloadInfoHash="1AB00671E2D76CDA7ED625AB5A2491352F821F39";
+		Dhtinfo dhtinfo =new Dhtinfo ();
+		dhtinfo.setInfohash(dowloadInfoHash);
+		for(int i=0;i<TorrentinfoUrl.urls.length;i++)
+		{
+			String url=TorrentinfoUrl.formatUrl(dowloadInfoHash, i);
+			   inputStream=paser.openConnection(url);
+			   if(inputStream!=null)
+			   {
+				Boolean result=	 TorrentParser.parse(inputStream, dhtinfo);
+				System.out.println(result);
+			   }
+		}
+	}
 }
 

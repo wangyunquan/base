@@ -18,40 +18,45 @@ import com.buswe.moudle.core.service.MenuService;
 
 @Service("menuServiceImpl")
 @Transactional("jpaTransaction")
-public class MenuServiceImpl
-  extends BaseServiceImpl<Menu>
-  implements MenuService
-{
-  static List<Menu> tmenu = null;
-  @Resource
-  MenuDao menuDao;
-  
-  public BaseRepository<Menu, String> getDao()
-  {
-    return this.menuDao;
-  }
-  
-  public Menu getMenu(String id)
-  {
-    return this.menuDao.getInitParent(id);
-  }
-  @Cacheable(value={SytemConstants.CACHE_ALL_MENU})
-  public List<Menu> getAllMenu()
-  {
-    List<Menu> topMenu = this.menuDao.findByLevel(1);
-    Iterator localIterator2;
-    for (Iterator localIterator1 = topMenu.iterator(); localIterator1.hasNext(); localIterator2.hasNext())
-    {
-      Menu top = (Menu)localIterator1.next();
-      localIterator2 = top.getChildren().iterator();  
-      Menu sec = (Menu)localIterator2.next();
-      for (Menu left : sec.getChildren()) {
-        left.getAuthority();
-      }
-      sec.getAuthority();
-    }
-    tmenu = topMenu;
-    
-    return tmenu;
-  }
+public class MenuServiceImpl extends BaseServiceImpl<Menu> implements MenuService {
+ 
+	@Resource
+	MenuDao menuDao;
+
+	public BaseRepository<Menu, String> getDao() {
+		return this.menuDao;
+	}
+
+	public Menu getMenu(String id) {
+		return this.menuDao.getInitParent(id);
+	}
+
+	@Cacheable(value = { SytemConstants.CACHE_ALL_MENU })
+	public List<Menu> getAllMenu() {
+		List<Menu> topMenuList = this.menuDao.findByLevel(1);
+		for(Menu topMenu:topMenuList)
+		{
+			for(Menu second:topMenu.getChildren())
+			{
+				second.getAuthority();
+				for(Menu  three:second.getChildren())
+				{
+					three.getAuthority();
+				}
+			}
+		}
+//		Iterator localIterator2;
+//		for (Iterator localIterator1 = topMenu.iterator(); localIterator1.hasNext(); localIterator2.hasNext()) {
+//			Menu top = (Menu) localIterator1.next();
+//			localIterator2 = top.getChildren().iterator();
+//			Menu sec = (Menu) localIterator2.next();
+//			for (Menu left : sec.getChildren()) {
+//				left.getAuthority();
+//			}
+//			sec.getAuthority();
+//		}
+//		tmenu = topMenu;
+
+		return topMenuList;
+	}
 }

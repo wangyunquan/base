@@ -49,8 +49,10 @@ public class TorrentParser implements TorrentConstantKey {
 						name = new String(namearray, encoding);
 					}
 					dhtinfo.setName(name); //
+					Long filelenth =0L;
 					if (infoMap.containsKey(LENGTH)) {
-						Long filelenth = infoMap.getLong(LENGTH);
+						  filelenth = infoMap.getLong(LENGTH);
+					}
 						if (infoMap.containsKey(FILES)) { // 如果有子文件
 							List<Object> filesMap = infoMap.getList(FILES);
 							List<Dhtfiles> multiFiles = new ArrayList<Dhtfiles>(filesMap.size());
@@ -58,6 +60,7 @@ public class TorrentParser implements TorrentConstantKey {
 							for (Object multiFileobObject : filesMap) {
 								BMap multiFilemap = (BMap) multiFileobObject;
 								multiFile = new Dhtfiles();
+								multiFile.setInfohash(dhtinfo.getInfohash());
 								if (multiFilemap.containsKey(PATH_UTF_8)) {
 									List<byte[]> utf8_Path_Bytes_List = (List<byte[]>) multiFilemap.get(PATH_UTF_8);
 									for (byte[] utf8_Path_Bytes : utf8_Path_Bytes_List) {
@@ -78,21 +81,21 @@ public class TorrentParser implements TorrentConstantKey {
 								}
 								multiFiles.add(multiFile);
 							}
-						
+							dhtinfo.setDhtfiles(multiFiles);
 							dhtinfo.setSingerfile(false);
 						} // 子文件解析完毕
+						else
+						{
+							dhtinfo.setSingerfile(true);
+						}
 						dhtinfo.setFilelength(filelenth);
 						dhtinfo.setDhtstate(DhtinfoState.DHTSTATE_OK);
-						dhtinfo.setSingerfile(true);
-					}
 				}
-
 			} else {
 				logger.debug("种子解析失败：" +dhtinfo.getInfohash());
 				dhtinfo.setDhtstate(DhtinfoState.DHTSTATE_PARSING_FAIL);
 				return false;
 			}
-
 		} catch (Exception e) {
 			dhtinfo.setDhtstate(DhtinfoState.DHTSTATE_PARSING_FAIL);
 			return false;

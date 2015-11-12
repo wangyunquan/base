@@ -30,7 +30,7 @@ public class Menu
   private Menu parent;
   @OneToMany(cascade={javax.persistence.CascadeType.ALL}, fetch=FetchType.LAZY, mappedBy="parent")
   @OrderBy("orderNo DESC")
-  private Set<Menu> children = new HashSet();
+  private Set<Menu> children = new HashSet<Menu>();
   
   public Integer getLevel()
   {

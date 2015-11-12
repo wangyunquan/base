@@ -23,7 +23,6 @@ import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -34,7 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.buswe.base.config.SystemEnvy;
 import com.buswe.base.utils.LuceneUtils;
-import com.buswe.dht.dao.DhtinfoDao;
+import com.buswe.base.utils.Threads;
 import com.buswe.dht.entity.Dhtinfo;
 import com.buswe.dht.node.DhtKeyFactory;
 import com.buswe.dht.node.KadNet;
@@ -44,50 +43,70 @@ import com.buswe.dht.save.SaveDhtThread;
 import com.buswe.dht.search.DhtLuceneHelper;
 
 @Service
-@Transactional (value="dataSouceTransaction")
+
 public class CrawlServiceImpl implements CrawlService {
 	protected Logger logger = LoggerFactory.getLogger(getClass());
- 
-	private String dhtIndexDir=SystemEnvy.WEBROOT + File.separator +"dhtIndex";
+	private String dhtIndexDir = SystemEnvy.WEBROOT + File.separator + "dhtIndex";
 	@Resource
-	DhtinfoDao dhtinfoDao;
+	DhtinfoService dhtinfoService;
+	private KadParserTorrentServer parseServer;
+	private SaveDhtThread saveToDbThread;
+	private List<KadNet> kadnetList;
 
-	/* (non-Javadoc)
-	 * @see com.buswe.dht.service.CrawlService#startDhtService(java.lang.Integer)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.buswe.dht.service.CrawlService#startDhtService(java.lang.Integer)
 	 */
 	@Override
-	@Async //异步执行
+	@Async // 异步执行
 	public void startDhtService(Integer size) {
 		try {
 			InetSocketAddress[] BOOTSTRAP_NODES = { //
 					new InetSocketAddress("router.bittorrent.com", 6881), //
 					new InetSocketAddress("dht.transmissionbt.com", 6881), //
 					new InetSocketAddress("router.utorrent.com", 6881), };
-//			DhtKeyFactory keyFactory = DhtKeyFactory.getInstance();
-//			for (int i = 0; i < size; i++) {
-//				Node localNode = new Node(keyFactory.generate()).setInetAddress(InetAddress.getByName("0.0.0.0"))
-//						.setPoint(20300 + i);// 这里注意InetAddress.getLocalHost();为空
-//				KadNet kadNet = new KadNet(null, localNode);
-//				kadNet.join(BOOTSTRAP_NODES).create();
-//			}
-//			Integer batch = 5;
-//			SaveDhtThread saveToDbThread =  new SaveDhtThread(batch); // 保存到数据库的线程
-//			saveToDbThread.start();
+
+			kadnetList = new ArrayList<KadNet>();
+			DhtKeyFactory keyFactory = DhtKeyFactory.getInstance();
+			for (int i = 0; i < size; i++) {
+				Node localNode = new Node(keyFactory.generate()).setInetAddress(InetAddress.getByName("0.0.0.0"))
+						.setPoint(20300 + i);// 这里注意InetAddress.getLocalHost();为空
+				KadNet kadNet = new KadNet(null, localNode);
+				kadNet.join(BOOTSTRAP_NODES).create();
+				kadnetList.add(kadNet);
+			}
+			Integer batch = 100;
+			saveToDbThread = new SaveDhtThread(batch); // 保存到数据库的线程
+			saveToDbThread.start();
 			// 解析 dhtinfo的线程
-			KadParserTorrentServer parseServer = new KadParserTorrentServer();
+			parseServer = new KadParserTorrentServer();
 			parseServer.start();
-		 
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-//	@Scheduled(cron="0 0 5 * * ? ") //每天早上5点运行定时任务建立索引
+	
+	public void stopDhtService()
+	{
+		for(KadNet kadnet:kadnetList)
+		{
+			kadnet.shutdown();
+			kadnet=null;
+		}
+		saveToDbThread.shutdown();
+		parseServer.shutdown();
+		
+	}
+
+  @Scheduled(cron="0 0 5 * * ? ") //每天早上5点运行定时任务建立索引
+	@Transactional(value = "dataSouceTransaction")
 	public void creatIndex() throws Exception {
 		Analyzer analyzer = LuceneUtils.analyzer;
-		File indexFolder=new File(dhtIndexDir);
-		if(!indexFolder.exists())
-		{
+		File indexFolder = new File(dhtIndexDir);
+		if (!indexFolder.exists()) {
 			indexFolder.mkdirs();
 		}
 		FSDirectory dir = FSDirectory.open(new File(dhtIndexDir));
@@ -96,7 +115,7 @@ public class CrawlServiceImpl implements CrawlService {
 		config.setOpenMode(OpenMode.CREATE);
 		IndexWriter writer = new IndexWriter(dir, config);
 		int doc_count = 0;
-		List<Dhtinfo> dhtinfoList = dhtinfoDao.getNotIndexedDhtinfo(500);
+		List<Dhtinfo> dhtinfoList = dhtinfoService.getNotIndexedDhtinfo(2000);
 		try {
 			for (Dhtinfo dhtinfo : dhtinfoList) {
 				Document doc = DhtLuceneHelper.convertDocument(dhtinfo);
@@ -104,7 +123,7 @@ public class CrawlServiceImpl implements CrawlService {
 				doc_count++;
 			}
 			writer.commit();
-			dhtinfoDao.updateDhtinfoIndexed(dhtinfoList);
+			dhtinfoService.updateDhtinfoIndexed(dhtinfoList);
 			logger.debug("批量添加索引成功:" + doc_count);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -121,43 +140,45 @@ public class CrawlServiceImpl implements CrawlService {
 
 	}
 
-	/* (non-Javadoc)
-	 * @see com.buswe.dht.service.CrawlService#search(java.lang.String, org.springframework.data.domain.Pageable)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.buswe.dht.service.CrawlService#search(java.lang.String,
+	 * org.springframework.data.domain.Pageable)
 	 */
 	@Override
-	public  Page<Dhtinfo> search(String searchString, Pageable page) throws Exception {
-		Integer pageNumber=page.getPageNumber();
-		Integer pageSize=page.getPageSize();
+	public Page<Dhtinfo> search(String searchString, Pageable page) throws Exception {
+		Integer pageNumber = page.getPageNumber();
+		Integer pageSize = page.getPageSize();
 		FSDirectory index = FSDirectory.open(new File(dhtIndexDir));
 		index.setReadChunkSize(104857600);// 100兆
 		IndexReader reader = DirectoryReader.open(index);
 		IndexSearcher searcher = new IndexSearcher(reader);
 		TopScoreDocCollector collector = TopScoreDocCollector.create(20000, true);
-		Query query=		DhtLuceneHelper.generateQuery(searchString);
+		Query query = DhtLuceneHelper.generateQuery(searchString);
 		searcher.search(query, collector);
-		Integer total=collector.getTotalHits();//总数
-		ScoreDoc[] hits = collector.topDocs(pageNumber* pageSize, pageSize).scoreDocs; // 进行分页过滤
-		 List<Dhtinfo>  list=new ArrayList<>();
+		Integer total = collector.getTotalHits();// 总数
+		ScoreDoc[] hits = collector.topDocs(pageNumber * pageSize, pageSize).scoreDocs; // 进行分页过滤
+		List<Dhtinfo> list = new ArrayList<>();
 		for (int i = 0; i < hits.length; ++i) {
 			Document document = searcher.doc(hits[i].doc);
-		String infohash=	document.get(DhtLuceneHelper.INFO_HASH_FIELD);
-		Dhtinfo info=	dhtinfoDao.loadByInfoHash(infohash);
-		list.add(info);
+			String infohash = document.get(DhtLuceneHelper.INFO_HASH_FIELD);
+			Dhtinfo info = dhtinfoService.loadByInfoHash(infohash);
+			list.add(info);
 		}
-		PageImpl<Dhtinfo> result=new PageImpl<Dhtinfo>(list,page,total);
+		PageImpl<Dhtinfo> result = new PageImpl<Dhtinfo>(list, page, total);
 		return result;
 	}
 
-	
-	
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.buswe.dht.service.CrawlService#loadDhtinfo(java.lang.String)
 	 */
 	@Override
-	public Dhtinfo loadDhtinfo(String infoHash)
-	{
-		//TODO 查看一次，增加一次点击
-		return dhtinfoDao.loadByInfoHash(infoHash);
-		
+	public Dhtinfo loadDhtinfo(String infoHash) {
+		// TODO 查看一次，增加一次点击
+		return dhtinfoService.loadByInfoHash(infoHash);
+
 	}
 }

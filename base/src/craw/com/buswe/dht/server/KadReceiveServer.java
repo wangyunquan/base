@@ -406,10 +406,6 @@ public class KadReceiveServer implements Runnable, DHTConstant {
 	public void shutdown() {
 		this.isActive.set(false);
 		startThread.interrupt();
-		try {
-			startThread.join();
-		} catch (final InterruptedException e) {
-		}
 	}
 
 	public void setUncaughtExceptionHandler(UncaughtExceptionHandler eh) {

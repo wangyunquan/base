@@ -183,6 +183,8 @@ public class KadNet implements KeybasedRouting, Runnable {
 		}
 		kadReceiveServer.shutdown();
 		kadSendMsgServer.shutdown();
+		kadReceiveServer=null;
+		kadSendMsgServer=null;
 		starting = false;
 	}
 

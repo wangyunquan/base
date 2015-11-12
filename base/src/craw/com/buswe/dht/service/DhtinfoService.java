@@ -63,4 +63,8 @@ public interface DhtinfoService {
 	 * @return
 	 */
 	public List<String> getDhtinfoHashByState(int state, int limit);
+	
+	
+	public		List<Dhtinfo>  getNotIndexedDhtinfo(Integer limit);
+	public Integer updateDhtinfoIndexed(List<Dhtinfo> dhtinfoList);
 }

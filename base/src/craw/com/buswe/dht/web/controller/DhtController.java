@@ -15,7 +15,7 @@ import com.buswe.dht.entity.Dhtinfo;
 import com.buswe.dht.service.CrawlService;
 
 @Controller
-@RequestMapping({ "/search" })
+@RequestMapping({ "/" })
 public class DhtController {
 
 	private static final Integer pageSize = 20;

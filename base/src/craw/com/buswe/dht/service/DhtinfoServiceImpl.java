@@ -7,12 +7,14 @@ import javax.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.buswe.dht.dao.DhtinfoDao;
 import com.buswe.dht.entity.Dhtinfo;
 import com.buswe.dht.entity.DhtinfoState;
 
 @Service("dhtinfoService")
+@Transactional("dataSouceTransaction")
 public class DhtinfoServiceImpl implements DhtinfoService {
 	  protected Logger logger = LoggerFactory.getLogger(getClass());
 	@Resource
@@ -27,7 +29,7 @@ public class DhtinfoServiceImpl implements DhtinfoService {
 	}
 	@Override
 	public Dhtinfo loadByInfoHash(String infohash) {
-		return null;
+		return dhtinfoDao.loadByInfoHash(infohash);
 	}
 
 	@Override
@@ -104,8 +106,15 @@ public class DhtinfoServiceImpl implements DhtinfoService {
 
 	@Override
 	public List<String> getDhtinfoHashByState(int state, int limit) {
-		// TODO Auto-generated method stub
-		return null;
+		return dhtinfoDao.getDhtinfoHashByState(state, limit);
+	}
+	@Override
+	public List<Dhtinfo> getNotIndexedDhtinfo(Integer limit) {
+		return dhtinfoDao.getNotIndexedDhtinfo(limit);
+	}
+	@Override
+	public Integer updateDhtinfoIndexed(List<Dhtinfo> dhtinfoList) {
+		return dhtinfoDao.updateDhtinfoIndexed(dhtinfoList);
 	}
 
 }

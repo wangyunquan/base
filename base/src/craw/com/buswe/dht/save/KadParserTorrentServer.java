@@ -31,7 +31,7 @@ public class KadParserTorrentServer implements Runnable {
 	@Override
 	public void run() {
 		//TODO移动到配置文件中去
-		 ExecutorService excutorService = Executors.newFixedThreadPool(5,"parseTorrent");
+		 ExecutorService excutorService = Executors.newFixedThreadPool(5,"parseTorrent"); //同时启动5个线程去下载
 		this.isActive.set(true);
 		DhtinfoService service=ContextHolder.getBean("dhtinfoService");
 		while (this.isActive.get()) {

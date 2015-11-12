@@ -46,8 +46,6 @@
           <ul class="nav navbar-nav navbar-right">
                    <w:topMenu></w:topMenu>
             <li><a href="#">Dashboard</a></li>
-            <li><a href="#">Settings</a></li>
-            <li><a href="#">Profile</a></li>
             <li><a href="#">Help</a></li>
           </ul>
           <form class="navbar-form navbar-right">

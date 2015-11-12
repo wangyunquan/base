@@ -1,14 +1,15 @@
 package com.buswe.dht.entity;
 
 public class Dhtfiles {
-private	String infoHash;
+private	String infohash;
 private  Long singlefilelength; //文件大小
 private String path;//文件名
-public String getInfoHash() {
-	return infoHash;
+ 
+public String getInfohash() {
+	return infohash;
 }
-public void setInfoHash(String infoHash) {
-	this.infoHash = infoHash;
+public void setInfohash(String infohash) {
+	this.infohash = infohash;
 }
 public Long getSinglefilelength() {
 	return singlefilelength;

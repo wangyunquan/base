@@ -132,7 +132,7 @@ public class DhtInfoDaoImpl implements DhtinfoDao  {
 	public Boolean updateParseSuccess(Dhtinfo dhtinfo) {
 	 
 		String updateSql=" update Dhtinfo set creattime=:creattime,name=:name,singerfile=:singerfile,filelength=:filelength ,dhtstate=:dhtstate"
-				+ "where infohash=:infohash";
+				+ " where infohash=:infohash";
 		return namedjdbc.update(updateSql,  dhtinfoSqlParam(dhtinfo))>0?true:false;
 	}
 
@@ -157,7 +157,7 @@ public class DhtInfoDaoImpl implements DhtinfoDao  {
 	
 	@Override
 	public Integer updateDhtinfoIndexed(List<Dhtinfo> dhtinfoList) {
-	 String sql="update Dhtinfo set isindex=:isindex where infohash=:infohash ";
+	 String sql="update Dhtinfo set isindex=1 where infohash=:infohash ";
 	   Integer fileSize=dhtinfoList.size();
 	   SqlParameterSource [] sqlparam=new SqlParameterSource[fileSize] ;
 	      for(int i=0;i<fileSize;i++)

@@ -25,7 +25,7 @@ public class SaveDhtThread implements Runnable {
 	private final AtomicBoolean isActive = new AtomicBoolean(false);
 	private final Thread startThread;
 	private int icrease = 0;// 本线程内的计数器
-	private int bachnum = 5;
+	private int bachnum = 100;
 	private List<Dhtinfo> dhtinfoList;
 	private DhtinfoService dhtinfoService;
 	public SaveDhtThread(Integer bachnum) {
@@ -39,7 +39,7 @@ public class SaveDhtThread implements Runnable {
 	public void run() {
 		dhtinfoService=ContextHolder.getBean(DhtinfoService.class);
 		while (true) {
-			if (DhtContextHolder.SAVEDHT_THREAD_RUNNING) { //TODO 这种启停线程的方式存在问题的
+		 //TODO 这种启停线程的方式存在问题的
 				try {
 					// 阻塞，一直等到获取到
 					Dhtinfo info = DhtContextHolder.PUBLIC_DHTINFO_QUEUE.take();
@@ -63,24 +63,19 @@ public class SaveDhtThread implements Runnable {
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-			} else// 线程要停止，将剩下的不到批量的数都保存起来
-			{
-				for (Dhtinfo info : dhtinfoList) {
-					dhtinfoService.insertDhtinfo(info);
-				}
-				break;//跳出线程
-			}
+		 
 		}
 
 	}
 
 	public void shutdown() {
+		{
+			for (Dhtinfo info : dhtinfoList) {
+				dhtinfoService.insertDhtinfo(info);
+			}
+		}
 		this.isActive.set(false);
 		startThread.interrupt();
-		try {
-			startThread.join();
-		} catch (final InterruptedException e) {
-		}
 	}
 	public void start() {
 		startThread.start();
