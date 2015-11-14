@@ -17,6 +17,26 @@
 		<function-class>com.buswe.base.web.taglib.WebFunctions</function-class>
 		<function-signature>java.util.Iterator iterableChange(java.lang.Iterable)</function-signature>
 	</function>
+	
+		<function>
+		<description>
+     将文件大小进行格式化
+    </description>
+		<name>fileSize</name>
+		<function-class>com.buswe.base.web.taglib.WebFunctions</function-class>
+		<function-signature>java.lang.String  getFormatFileSize(java.lang.Long)</function-signature>
+	</function>
+	
+	
+			<function>
+		<description>
+     日期格式化
+    </description>
+		<name>cndate</name>
+		<function-class>com.buswe.base.web.taglib.WebFunctions</function-class>
+		<function-signature>java.lang.String  getFormatDate(java.lang.Long)</function-signature>
+	</function>
+	
 	<function>
 		<description>
      获取第一个排序

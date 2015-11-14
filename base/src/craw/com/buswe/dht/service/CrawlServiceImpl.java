@@ -43,7 +43,6 @@ import com.buswe.dht.save.SaveDhtThread;
 import com.buswe.dht.search.DhtLuceneHelper;
 
 @Service
-
 public class CrawlServiceImpl implements CrawlService {
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 	private String dhtIndexDir = SystemEnvy.WEBROOT + File.separator + "dhtIndex";
@@ -67,12 +66,11 @@ public class CrawlServiceImpl implements CrawlService {
 					new InetSocketAddress("router.bittorrent.com", 6881), //
 					new InetSocketAddress("dht.transmissionbt.com", 6881), //
 					new InetSocketAddress("router.utorrent.com", 6881), };
-
 			kadnetList = new ArrayList<KadNet>();
 			DhtKeyFactory keyFactory = DhtKeyFactory.getInstance();
 			for (int i = 0; i < size; i++) {
 				Node localNode = new Node(keyFactory.generate()).setInetAddress(InetAddress.getByName("0.0.0.0"))
-						.setPoint(20300 + i);// 这里注意InetAddress.getLocalHost();为空
+						.setPoint(1139 + i);// 这里注意InetAddress.getLocalHost();为空
 				KadNet kadNet = new KadNet(null, localNode);
 				kadNet.join(BOOTSTRAP_NODES).create();
 				kadnetList.add(kadNet);
@@ -101,9 +99,12 @@ public class CrawlServiceImpl implements CrawlService {
 		
 	}
 
-  @Scheduled(cron="0 0 5 * * ? ") //每天早上5点运行定时任务建立索引
-	@Transactional(value = "dataSouceTransaction")
-	public void creatIndex() throws Exception {
+  @Scheduled(cron="0 10 * * * ? ") //每天早上5点运行定时任务建立索引
+  public void creatIndex() throws Exception
+  {
+		  creatIndex(1000);
+  }
+	public void creatIndex(Integer total) throws Exception {
 		Analyzer analyzer = LuceneUtils.analyzer;
 		File indexFolder = new File(dhtIndexDir);
 		if (!indexFolder.exists()) {
@@ -112,10 +113,14 @@ public class CrawlServiceImpl implements CrawlService {
 		FSDirectory dir = FSDirectory.open(new File(dhtIndexDir));
 		dir.setReadChunkSize(104857600);// 100兆//TODO
 		IndexWriterConfig config = new IndexWriterConfig(Version.LATEST, analyzer);
-		config.setOpenMode(OpenMode.CREATE);
+		config.setOpenMode(OpenMode.CREATE_OR_APPEND);
 		IndexWriter writer = new IndexWriter(dir, config);
 		int doc_count = 0;
-		List<Dhtinfo> dhtinfoList = dhtinfoService.getNotIndexedDhtinfo(2000);
+		List<Dhtinfo> dhtinfoList = dhtinfoService.getNotIndexedDhtinfo(total);
+		if(dhtinfoList==null||dhtinfoList.size()==0)
+		{
+			Threads.sleep(1000*60*60);
+		}
 		try {
 			for (Dhtinfo dhtinfo : dhtinfoList) {
 				Document doc = DhtLuceneHelper.convertDocument(dhtinfo);

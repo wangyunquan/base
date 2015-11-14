@@ -35,7 +35,6 @@ public class FrontController
   @RequestMapping({""})
   public String index(Model model,Pageable page)
   {
- 
     model.addAttribute("page", this.siteService.getArtiClePage(page.getPageNumber(), CmsConstants.BLOG_SITE_ID));
     model.addAllAttributes(CmsUtil.CmsPublic());
     return "blogindex";

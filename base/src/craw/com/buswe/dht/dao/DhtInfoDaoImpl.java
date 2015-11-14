@@ -46,10 +46,17 @@ public class DhtInfoDaoImpl implements DhtinfoDao  {
 	@Override
 	public Dhtinfo loadByInfoHash(String infohash) {
 		
-		String sql="select * from Dhtinfo where infohash=?";
-		Dhtinfo dhtinfo=	simpleJdbc.queryForObject(sql, Dhtinfo.class, infohash);
+		String sql="select * from dhtinfo where infohash=?";
+		 BeanPropertyRowMapper<Dhtinfo> infoRowMaper=new BeanPropertyRowMapper<Dhtinfo>(Dhtinfo.class);
+		List<Dhtinfo> dhtinfos=	simpleJdbc.query(sql, infoRowMaper,infohash);
+		if(dhtinfos==null||dhtinfos.size()==0)
+			return null;
+		else
+		{
+			Dhtinfo dhtinfo=dhtinfos.get(0);
 		dhtinfo.setDhtfiles(getDhtFilesByinfohash(dhtinfo.getInfohash()));
 		return dhtinfo;
+		}
 	}
 
 	/* (non-Javadoc)
@@ -65,20 +72,20 @@ public class DhtInfoDaoImpl implements DhtinfoDao  {
 	 */
 	@Override
 	public List<Dhtinfo> getDhtinfosByState(int state, int limit)   {
-	 String findSql="select * from Dhtinfo where dhtstate=? limit ?";
+	 String findSql="select * from dhtinfo where dhtstate=? limit ?";
 	 BeanPropertyRowMapper<Dhtinfo> infoRowMaper=new BeanPropertyRowMapper<Dhtinfo>(Dhtinfo.class);
 		return simpleJdbc.query(findSql, infoRowMaper,state, limit);
 	}
 	@Override
 	public List<String> getDhtinfoHashByState(int state, int limit)
 	{
-		 String findSql="select infohash from Dhtinfo where dhtstate=? limit ?";
+		 String findSql="select infohash from dhtinfo where dhtstate=? limit ?";
 			return simpleJdbc.queryForList(findSql, String.class, state,limit);
 	}
 	
 	public Boolean updateDhtinfoSate(String infohash,Integer state)
 	{
-		return simpleJdbc.update("update Dhtinfo set dhtstate=? where  infohash=?",state, infohash)>0?true:false;
+		return simpleJdbc.update("update dhtinfo set dhtstate=? where  infohash=?",state, infohash)>0?true:false;
 	}
 	
 	
@@ -87,14 +94,14 @@ public class DhtInfoDaoImpl implements DhtinfoDao  {
 	 */
 	@Override
 	public Boolean addDhtInfoCrawcount(String infohash){
-		return simpleJdbc.update("update Dhtinfo set crawcount=crawcount+1 where  infohash=?", infohash)>0?true:false;
+		return simpleJdbc.update("update dhtinfo set crawcount=crawcount+1 where  infohash=?", infohash)>0?true:false;
 	}
 	/* (non-Javadoc)
 	 * @see com.buswe.dht.dao.DhtinfoDao#addDhtInfoSuccesscount(java.lang.String, java.lang.Integer)
 	 */
 	@Override
 	public Boolean addDhtInfoSuccesscount(String infohash){
-		return simpleJdbc.update("update Dhtinfo set successcount=successcount+1 where  infohash=?", infohash)>0?true:false;
+		return simpleJdbc.update("update dhtinfo set successcount=successcount+1 where  infohash=?", infohash)>0?true:false;
 	}
 	/* (non-Javadoc)
 	 * @see com.buswe.dht.dao.DhtinfoDao#dhtinfoExsit(java.lang.String)
@@ -102,7 +109,7 @@ public class DhtInfoDaoImpl implements DhtinfoDao  {
 	@Override
 	public Boolean dhtinfoExsit(String infohash)
 	{
-		return simpleJdbc.queryForInt("select count(1) from Dhtinfo where infohash=?",infohash)>0?true:false ;
+		return simpleJdbc.queryForInt("select count(1) from dhtinfo where infohash=?",infohash)>0?true:false ;
 	}
 	private SqlParameterSource dhtinfoSqlParam(Dhtinfo dhtInfo) {
 		return new BeanPropertySqlParameterSource(dhtInfo);
@@ -131,14 +138,14 @@ public class DhtInfoDaoImpl implements DhtinfoDao  {
 	@Override
 	public Boolean updateParseSuccess(Dhtinfo dhtinfo) {
 	 
-		String updateSql=" update Dhtinfo set creattime=:creattime,name=:name,singerfile=:singerfile,filelength=:filelength ,dhtstate=:dhtstate"
+		String updateSql=" update dhtinfo set creattime=:creattime,name=:name,singerfile=:singerfile,filelength=:filelength ,dhtstate=:dhtstate"
 				+ " where infohash=:infohash";
 		return namedjdbc.update(updateSql,  dhtinfoSqlParam(dhtinfo))>0?true:false;
 	}
 
 	@Override
 	public List<Dhtinfo> getNotIndexedDhtinfo(Integer limit) {
-		 String findSql="select * from Dhtinfo where isindex=0 and dhtstate=0 limit ? ";
+		 String findSql="select * from dhtinfo where isindex=0 and dhtstate=0 limit ? ";
 		 BeanPropertyRowMapper<Dhtinfo> infoRowMaper=new BeanPropertyRowMapper<Dhtinfo>(Dhtinfo.class);
 		 List<Dhtinfo> list = simpleJdbc.query(findSql, infoRowMaper,limit);
 		 for(Dhtinfo info:list)
@@ -149,7 +156,7 @@ public class DhtInfoDaoImpl implements DhtinfoDao  {
 	}
 
 	private List<Dhtfiles> getDhtFilesByinfohash(String infohash){
-		String sql="select * from Dhtfiles where infohash=?";
+		String sql="select * from dhtfiles where infohash=?";
 		 BeanPropertyRowMapper<Dhtfiles> rowMaper=new BeanPropertyRowMapper<Dhtfiles>(Dhtfiles.class);
 		return simpleJdbc.query(sql, rowMaper, infohash);
 	}
@@ -157,7 +164,7 @@ public class DhtInfoDaoImpl implements DhtinfoDao  {
 	
 	@Override
 	public Integer updateDhtinfoIndexed(List<Dhtinfo> dhtinfoList) {
-	 String sql="update Dhtinfo set isindex=1 where infohash=:infohash ";
+	 String sql="update dhtinfo set isindex=1 where infohash=:infohash ";
 	   Integer fileSize=dhtinfoList.size();
 	   SqlParameterSource [] sqlparam=new SqlParameterSource[fileSize] ;
 	      for(int i=0;i<fileSize;i++)

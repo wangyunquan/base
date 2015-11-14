@@ -70,7 +70,6 @@ public class SlackBucket implements Bucket {
 		 TreeSet<KadNode> sortedSet = new TreeSet<KadNode>(new NodeComparator(key));
 		 sortedSet.addAll(bucket);
 	       List<Node> closest = new ArrayList<>(numNodesRequired);
-	        /* Now we have the sorted set, lets get the top numRequired */
 	        int count = 0;
 	        for (KadNode n : sortedSet)
 	        {

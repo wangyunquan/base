@@ -52,7 +52,7 @@ import com.buswe.dht.util.context.DhtContextHolder;
  */
 public class KadReceiveServer implements Runnable, DHTConstant {
 	  protected Logger logger = LoggerFactory.getLogger(getClass());
-	private final ExecutorService srvExecutor = new ScheduledThreadPoolExecutor(10);
+	private final ExecutorService srvExecutor = new ScheduledThreadPoolExecutor(5);
 	private final AtomicBoolean isActive = new AtomicBoolean(false);
 	private final Thread startThread;
 	private final static Set<String> info_hashset = new HashSet<String>();
@@ -75,8 +75,8 @@ public class KadReceiveServer implements Runnable, DHTConstant {
 	protected void hanldePingRequest(String transaction, Node src) throws BTypeException, IOException {
 		PingResponse pingResponse = new PingResponse(transaction, src);
 		kadNet.sendMessage(pingResponse);
-		logger.debug(src.getKey()+"ping");
-		logger.debug("Ping返回信息为:"+pingResponse);
+	//	logger.debug(src.getKey()+"ping");
+//		logger.debug("Ping返回信息为:"+pingResponse);
 		addNodeToQueue(src);
 	}
 
@@ -101,7 +101,7 @@ public class KadReceiveServer implements Runnable, DHTConstant {
 		List<Node> nodes = kadNet.findNode(new Key(bytesFromInfohash));
 		getPeersResponse.setNodes(nodes);
 		addNodeToQueue(src);
-		logger.debug("Get_Peers返回信息为:"+getPeersResponse);
+//		logger.debug("Get_Peers返回信息为:"+getPeersResponse);
 		kadNet.sendMessage(getPeersResponse);
 	}
 
@@ -264,6 +264,7 @@ public class KadReceiveServer implements Runnable, DHTConstant {
 		findNodeResponse.setNodes(lists);
 	//	logger.debug("Find_Node返回信息为:"+findNodeResponse);
 		kadNet.sendMessage(findNodeResponse);
+		
 		addNodeToQueue(src);
 
 	}

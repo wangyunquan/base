@@ -157,7 +157,6 @@ public class KadNet implements KeybasedRouting, Runnable {
 		List<Node> result = kadBuckets.getClosestNodesByKey(k, BUCKETSIZE);
 		return result;
 	}
-
 	@Override
 	public void sendMessage(KadMessage msg) throws IOException {
 		if (msg.getSrc().equals(localnode)) {

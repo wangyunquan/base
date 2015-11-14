@@ -69,16 +69,11 @@ public class FindNodeRequest extends KadRequest {
 		bMap.put(Q, FIND_NODE);
 		// ----------------------------------
 		BMap a = new HashBMap();
-		// a.put("id", Util.random_tranctionId());// 自己的节点id
-		// a.put("id", AppManager.getKeyFactory().generate().getBytes());// 自己的节点id
 		a.put(ID, localNode.getKey().getBytes());// 自己的节点id
-		// a.put("target", getSrc().getKey().getBytes());// 对方的节点id **这里应该是你要查询的id
-		// System.out.println("空吗="+getKey());
-		a.put(TARGET, getSrc().getKey().getBytes());// 对方的节点id **这里应该是你要查询的id
+	//	a.put(TARGET, getSrc().getKey().getBytes());// 对方的节点id **这里应该是你要查询的id
+		a.put(TARGET, localNode.getKey().getBytes());
+		//不停的查询自己，理论上就会返回离自己越来越近的节点,上面的方法是参照别人的实现
 		bMap.put(A, a);
-		// ----------------------------------
-		// System.out.println("发送findnode请求-----------"+bMap);
-		// System.out.println("findnode请求的编码字符串="+new String(new BEncoder().bencode(bMap)));
 		byte[] bb = BEncodedOutputStream.bencode(bMap);
 		return bb;
 	}

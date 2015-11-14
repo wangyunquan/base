@@ -9,35 +9,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Blog Home - Start Bootstrap Template</title>
-    <!-- Bootstrap Core CSS -->
+    <title>博客空间</title>
     <link href="${contextPath}/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Custom CSS -->
     <link href="${contextPath}/static/theme/default/css/post.css" rel="stylesheet">
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<!--[if lt IE 9]>
+      <script src="${ctx}/static/bootstrap/js/html5shiv.min.js"></script>
+      <script src="${ctx}/static/bootstrap/js/respond.min.js"></script>
     <![endif]-->
 </head>
 <body>
 
 <#include "./header.html">
-    <!-- Page Content -->
     <div class="container">
-
         <div class="row">
-
-            <!-- Blog Entries Column -->
             <div class="col-md-8">
-
                 <h1 class="page-header">
                    首页
                     <small> </small>
                 </h1>
-
-                <!-- First Blog Post -->
                 <#list page.content as item>
                 <h2>
                     <a href="${contextPath}/blog/${item.id}.html">${item.title}  </a>
@@ -47,12 +36,9 @@
            
                 <p>${item.outline}
                 </p>
-                
                 <a class="btn btn-primary" href="${contextPath}/blog/${item.id}.html">Read More<span class="glyphicon glyphicon-chevron-right"></span></a>
                 <hr>
              </#list>
-       
-                <!-- Pager -->
                 <ul class="pager">
                     <li class="previous">
                         <a href="#">&larr; Older</a>
@@ -61,21 +47,13 @@
                         <a href="#">Newer &rarr;</a>
                     </li>
                 </ul>
-
             </div>
     <#include "./sidebar.html">
         </div>
-        <!-- /.row -->
         <hr>
-
-        <!-- Footer -->
  <#include "./footer.html">
-
     </div>
-    <!-- /.container -->
-    <!-- jQuery -->
     <script src="${contextPath}/static/js/jquery/jquery.js"></script>
-    <!-- Bootstrap Core JavaScript -->
     <script src="${contextPath}/static/bootstrap/js/bootstrap.min.js"></script>
 </body>
 

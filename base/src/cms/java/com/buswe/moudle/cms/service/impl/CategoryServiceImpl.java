@@ -35,7 +35,6 @@ public class CategoryServiceImpl
   {
     return this.categoryDao;
   }
-  
   @Cacheable(value={"CMC_CACHE_PUBLIC"}, key="#siteId + 'catCache'")
   public List<Category> findBySiteId(String siteId)
   {

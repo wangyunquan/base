@@ -3,10 +3,9 @@ package com.buswe.dht.save;
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import org.apache.commons.lang3.ArrayUtils;
-import org.hibernate.search.util.impl.Executors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,7 +30,7 @@ public class KadParserTorrentServer implements Runnable {
 	@Override
 	public void run() {
 		//TODO移动到配置文件中去
-		 ExecutorService excutorService = Executors.newFixedThreadPool(5,"parseTorrent"); //同时启动5个线程去下载
+		 ExecutorService excutorService = Executors.newFixedThreadPool(5); //同时启动5个线程去下载
 		this.isActive.set(true);
 		DhtinfoService service=ContextHolder.getBean("dhtinfoService");
 		while (this.isActive.get()) {

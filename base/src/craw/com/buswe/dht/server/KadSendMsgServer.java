@@ -71,7 +71,7 @@ public class KadSendMsgServer implements Runnable {
 				nodes.clear();
 				nodes = null;
 				displayAvailableMemory();
-				Threads.sleep(5000);
+				Threads.sleep(30000);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -84,24 +84,17 @@ public class KadSendMsgServer implements Runnable {
 	}
 	public void displayAvailableMemory() {
 		DecimalFormat df = new DecimalFormat("0.00");
-		// 显示JVM总内存
-		//  long totalMem = Runtime.getRuntime().totalMemory();
-		// System.out.println(df.format(totalMem/(1024F*1024F)) + "MB");
-		// 显示JVM尝试使用的最大内存
-		// long maxMem = Runtime.getRuntime().maxMemory();
-		// System.out.println(df.format(maxMem/(1024F*1024F)) + "MB");
-		// 空闲内存
-		// long freeMem = Runtime.getRuntime().freeMemory();
-		// System.out.println("空闲内存-----"+(df.format(freeMem/(1024F*1024F)) + "MB"));
-		// Runtime.getRuntime().
 		Runtime.getRuntime().gc();
 		long freeMem1 = Runtime.getRuntime().freeMemory();
 		logger.debug("-----空闲内存" + (df.format(freeMem1 / (1024F * 1024F)) + "MB"));
-
-		// int size=Thread.getAllStackTraces().size();
-		// System.out.println("系统中的线程数="+size);
+	  int size=Thread.getAllStackTraces().size();
+	  System.out.println("系统中的线程数="+size);
 	}
+/**
+ * 用于查找某个节点，以获得其地址信息。当某个节点接收到该请求后，如果目标节点不在自己的路由表里，那么就返回离目标节点较近的K个节点。这个消息可用于节点启动时构建路由表。通过find_node方式构建路由表，其实现方式为向DHT网络查询自己。那么，接收该查询的节点就会一直返回其他节点了列表，查询者递归查询，直到无法查询为止。那么，什么时候无法继续查询呢？这一点我也不太清楚。每一次查询得到的都是离目标节点更接近的节点集，那么理论上经过若干次递归查询后，就无法找到离目标节点更近的节点了，因为最近的节点是自己，但自己还未完全加入网络。这意味着最后所有节点都会返回空的节点集合，这样就算查询结束？
 
+实际上，通过find_node来构建路由表，以及顺带加入DHT网络，这种方式什么时候停止在我看来并不重要。路由表的构建并不需要在启动时构建完成，在以后与其他节点的交互过程中，路由表本身就会慢慢地得到构建。在初始阶段尽可能地通过find_node去与其他节点交互，最大的好处无非就是尽早地让网络中的其他节点认识自己。
+ */
 	/**
 	 * Shutdown the server and closes the socket 关闭服务
 	 * 

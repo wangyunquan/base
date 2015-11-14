@@ -1,81 +1,59 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<c:set var="ctx" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
 <html lang="zh-CN">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="../../favicon.ico">
-
-    <title>Cover Template for Bootstrap</title>
-
-    <!-- Bootstrap core CSS -->
-    <link href="http://cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
-    <link href="cover.css" rel="stylesheet">
-
-    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
-    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
-    <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
-
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+<meta name="description" content="">
+<meta name="author" content="">
+<title>磁力搜索,种子搜索</title>
+<link href="${ctx}/static/bootstrap/css/bootstrap.min.css"
+	rel="stylesheet">
+<!--[if lt IE 9]>
+      <script src="${ctx}/static/bootstrap/js/html5shiv.min.js"></script>
+      <script src="${ctx}/static/bootstrap/js/respond.min.js"></script>
     <![endif]-->
-  </head>
+ <link href="${ctx}/static/css/dht.css" rel="stylesheet">
+</head>
+<body>
+ <%@ include file="/WEB-INF/layouts/frontHeader.jsp"%>
+	<div class="container">
+		<div class="row">
+			<div align="center">
+				<h1>磁 力 搜 索</h1>
+			</div>
+			<div align="center">
+				<h5>
+					已收集种子信息xxx个
+					</h3>
+			</div>
+			<p></p>
+			<br />
 
-  <body>
-
-    <div class="site-wrapper">
-
-      <div class="site-wrapper-inner">
-
-        <div class="cover-container">
-
-          <div class="masthead clearfix">
-            <div class="inner">
-              <h3 class="masthead-brand">Cover</h3>
-              <nav>
-                <ul class="nav masthead-nav">
-                  <li class="active"><a href="#">Home</a></li>
-                  <li><a href="#">Features</a></li>
-                  <li><a href="#">Contact</a></li>
-                </ul>
-              </nav>
-            </div>
-          </div>
-
-          <div class="inner cover">
-            <h1 class="cover-heading">Cover your page.</h1>
-            <p class="lead">Cover is a one-page template for building simple and beautiful home pages. Download, edit the text, and add your own fullscreen background photo to make it your own.</p>
-            <p class="lead">
-              <a href="#" class="btn btn-lg btn-default">Learn more</a>
-            </p>
-          </div>
-
-          <div class="mastfoot">
-            <div class="inner">
-              <p>Cover template for <a href="http://getbootstrap.com">Bootstrap</a>, by <a href="https://twitter.com/mdo">@mdo</a>.</p>
-            </div>
-          </div>
-
-        </div>
-
-      </div>
-
-    </div>
-
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="http://cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
-    <script src="http://cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
-  </body>
+			<form class="form-horizontal" action="./search.htm">
+				<div class="form-group">
+					<div class="col-sm-5  col-md-offset-3">
+						<input type="text" class="form-control" id="q" name="q"
+							placeholder="输入关键字">
+					</div>
+					<div class="col-sm-1">
+						<button type="submit" class="btn btn-primary">
+							<span class="glyphicon glyphicon-search"></span> 查询
+						</button>
+					</div>
+					<div class="col-sm-3"></div>
+				</div>
+			</form>
+		</div>
+	</div>
+	<script src="${ctx}/static/js/jquery/jquery.js"></script>
+	<script src="${ctx}/static/bootstrap/js/bootstrap.min.js"></script>
+	
+		 <%@ include file="/WEB-INF/layouts/frontFooter.jsp"%>
+</body>
 </html>
