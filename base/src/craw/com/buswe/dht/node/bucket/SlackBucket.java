@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeSet;
 
+import com.buswe.base.config.ContextHolder;
 import com.buswe.dht.node.KadNode;
 import com.buswe.dht.node.Key;
 import com.buswe.dht.node.Node;
@@ -22,11 +23,36 @@ public class SlackBucket implements Bucket {
 	private final int maxSize;
 	private final List<KadNode> publicBucket;
 
-	public SlackBucket(int maxSize) {
-		this.maxSize = maxSize;
+	public SlackBucket() {
+	 String buckSize=       ContextHolder.getProperty("dht.craw.config.node.buckSize");
+	 this.maxSize=Integer.valueOf(buckSize);
 		bucket = new LinkedList<KadNode>();
 		publicBucket = new LinkedList<KadNode>();
 	}
+	
+	public List<Node> getRandomCosetNode(Integer size)
+	{
+		List<Node> list =new ArrayList<Node>();
+		if(bucket.size()<=size)
+		{
+			for(KadNode kadNode:bucket)
+			{
+				list.add(kadNode.getNode());
+			}
+			
+		}
+		else
+		{
+			for(int i=0;i<size;i++)
+			{
+				list.add(bucket.get(i).getNode());
+			}
+		}
+		
+		
+		return list;
+	}
+	
 	@Override
 	public void insertToPublicBucket(KadNode n) {
 		synchronized (publicBucket) {

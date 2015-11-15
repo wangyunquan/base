@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.buswe.dht.dao.DhtinfoDao;
 import com.buswe.dht.entity.Dhtinfo;
 import com.buswe.dht.entity.DhtinfoState;
+import com.buswe.dht.util.context.DhtContextHolder;
 
 @Service("dhtinfoService")
 @Transactional("dataSouceTransaction")
@@ -44,8 +45,7 @@ public class DhtinfoServiceImpl implements DhtinfoService {
 	}
 
 	@Override
-	public Boolean saveBatchDhtinfo(List<Dhtinfo> dhtinfoList) {
-		for (Dhtinfo info : dhtinfoList) {
+	public Boolean saveDhtinfo(Dhtinfo info) {
 			String infohash=info.getInfohash();
 			Boolean exsit = dhtinfoDao.dhtinfoExsit(infohash);
 			if(exsit)
@@ -66,7 +66,7 @@ public class DhtinfoServiceImpl implements DhtinfoService {
 			{
 				dhtinfoDao.insertDhtinfo(info);
 			}
-		}
+	 
 		return true;
 	}
 
@@ -88,7 +88,14 @@ public class DhtinfoServiceImpl implements DhtinfoService {
 		Boolean savefile=true;
 			if(updateDhtFiles)
 			{
-				savefile=	dhtinfoDao.updateDhtFiles(dhtinfo);
+				try {
+					DhtContextHolder.PUBLIC_DHTFILEINSERT_QUEUE.put(dhtinfo);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+					return false;
+				}
+			//	savefile=	dhtinfoDao.updateDhtFiles(dhtinfo);
+				return true;
 			}
 			if(!(saveinfo&&savefile))
 			{
@@ -115,6 +122,11 @@ public class DhtinfoServiceImpl implements DhtinfoService {
 	@Override
 	public Integer updateDhtinfoIndexed(List<Dhtinfo> dhtinfoList) {
 		return dhtinfoDao.updateDhtinfoIndexed(dhtinfoList);
+	}
+	@Override
+	public Boolean updateDhtFiles(Dhtinfo info) {
+		 
+		return dhtinfoDao.updateDhtFiles(info);
 	}
 
 }

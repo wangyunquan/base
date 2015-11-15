@@ -47,7 +47,7 @@ public interface DhtinfoService {
  * @param dhtinfoList
  * @return
  */
-	public Boolean saveBatchDhtinfo(List<Dhtinfo> dhtinfoList);
+	public Boolean saveDhtinfo(Dhtinfo dhtinfo);
 	
 	/**
 	 *  下载后更新链接信息 
@@ -67,4 +67,6 @@ public interface DhtinfoService {
 	
 	public		List<Dhtinfo>  getNotIndexedDhtinfo(Integer limit);
 	public Integer updateDhtinfoIndexed(List<Dhtinfo> dhtinfoList);
+
+	public Boolean updateDhtFiles(Dhtinfo info);
 }

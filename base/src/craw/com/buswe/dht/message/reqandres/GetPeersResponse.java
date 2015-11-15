@@ -56,9 +56,11 @@ public class GetPeersResponse extends KadResponse {
 		// ----------------------------------
 		BMap a = new HashBMap();
 		a.put(ID, localNode.getKey().getBytes());// 自己的节点id
-
 		byte[] nodesbyte = BencodUtil.nodesToBytes(getNodes());
-		a.put("token", "cgpddd".getBytes());// 对方要查找的节点id
+		/**
+		 * get_peer的回应消息里，不论是peer还是node，都会携带一个token，这样在将来收到对方的announce_peer时，就可以验证该token
+		 */
+		a.put("token", "buswecom".getBytes());// 对方要查找的节点id
 		a.put(NODES, nodesbyte);// 对方要查找的节点id
 		bMap.put("r", a);
 		// ----------------------------------

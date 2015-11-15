@@ -132,6 +132,29 @@ public void setInfohash(String infohash) {
 	public void setSingerfile(Boolean singerfile) {
 		this.singerfile = singerfile;
 	}
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((infohash == null) ? 0 : infohash.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Dhtinfo other = (Dhtinfo) obj;
+		if (infohash == null) {
+			if (other.infohash != null)
+				return false;
+		} else if (!infohash.equals(other.infohash))
+			return false;
+		return true;
+	}
 	 
 	 
 	

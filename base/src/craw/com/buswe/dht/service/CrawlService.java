@@ -7,7 +7,7 @@ import com.buswe.dht.entity.Dhtinfo;
 
 public interface CrawlService {
 
-	public		void startDhtService(Integer size);
+	public		void startDhtService();
 	public void stopDhtService();
 	public		Dhtinfo loadDhtinfo(String infoHash);
 	public	Page<Dhtinfo> search(String searchString, Pageable page) throws Exception;

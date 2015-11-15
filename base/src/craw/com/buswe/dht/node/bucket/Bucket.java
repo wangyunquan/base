@@ -39,4 +39,5 @@ public interface Bucket {
 	public List<KadNode> getAllNodes();
 
 	public List<Node> getClosestNodesByKey(Key key, int i);
+	public List<Node> getRandomCosetNode(Integer size);
 }

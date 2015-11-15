@@ -14,19 +14,18 @@ import com.buswe.dht.util.context.DhtContextHolder;
  
 
 /**
- * 将抓取到的DHTinfo放入到数据库中的线程 只需要启动一个线程去操作，采用批量 ， 从队列中获取待保存的信息，异步操作
+	 * 专门用来更新dhtFile的队列，避免锁表，因为需要删除掉原有的，再重新插入，所以锁表。改为依次执行
  * 全局就此一个线程
  * 
  * @author 王云权
  *
  */
-public class SaveDhtThread implements Runnable {
+public class InsertDhtfilesThread implements Runnable {
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 	private final AtomicBoolean isActive = new AtomicBoolean(false);
 	private final Thread startThread;
-	private int icrease = 0;// 本线程内的计数器
 	private DhtinfoService dhtinfoService;
-	public SaveDhtThread() {
+	public InsertDhtfilesThread() {
 		startThread = new Thread(this);
 	}
 	@Override
@@ -35,35 +34,27 @@ public class SaveDhtThread implements Runnable {
 		while (true) {
 				try {
 					// 阻塞，一直等到获取到
-					Dhtinfo info = DhtContextHolder.PUBLIC_DHTINFO_QUEUE.take();
+					Dhtinfo info = DhtContextHolder.PUBLIC_DHTFILEINSERT_QUEUE.take();
+			 
 						Boolean saveSuccess = false;
 						try {
-							saveSuccess = dhtinfoService.saveDhtinfo(info);
+							saveSuccess = dhtinfoService.updateDhtFiles(info);
 						} catch (Exception e) {
 							e.printStackTrace();
-							logger.error("保存信息失败", e);
-							logger.debug("保存dhtinfo信息失败，数量：" + icrease + "infohash :" + info.getInfohash());
-						}
-						if (!saveSuccess)
-							logger.debug("保存dhtinfo信息失败，数量：" + icrease + "infohash :" + info.getInfohash());
-						else {
-						}
+							logger.error(info.getInfohash()+ "     保存dhtfiles失败", e);
+					}
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-		 
 		}
-
 	}
 
 	public void shutdown() {
-		{
-			this.isActive.set(false);
-			startThread.interrupt();
-		}
-	
+		this.isActive.set(false);
+		startThread.interrupt();
 	}
 	public void start() {
 		startThread.start();
+		logger.debug("插入dhfiles的线程启动！");
 	}
 }

@@ -49,6 +49,12 @@ public class ContextHolder
     ContextHolder.applicationContext = applicationContext;
   }
   
+  
+  public static String getProperty(String key)
+  {
+	return   applicationContext.getEnvironment().getProperty(key);
+  }
+  
   public static String getMessage(String code)
   {
     checkApplication();

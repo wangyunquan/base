@@ -23,33 +23,44 @@ public class KadParserTorrentServer implements Runnable {
 	  protected Logger logger = LoggerFactory.getLogger(getClass());
 	private final AtomicBoolean isActive = new AtomicBoolean(false);
 	private final Thread startThread;
- 
+	private final  ExecutorService excutorService;
+	private Integer everyFetchSleep;
 	public KadParserTorrentServer() {
 		startThread = new Thread(this);
+		String downloadThread=ContextHolder.getProperty("dht.craw.config.downloadThread");
+		excutorService = Executors.newFixedThreadPool(Integer.valueOf(downloadThread)); //同时启动多个线程去下载
+		everyFetchSleep=Integer.valueOf(ContextHolder.getProperty("dht.craw.config.everyFetchSleep"));
 	}
 	@Override
 	public void run() {
-		//TODO移动到配置文件中去
-		 ExecutorService excutorService = Executors.newFixedThreadPool(5); //同时启动5个线程去下载
 		this.isActive.set(true);
 		DhtinfoService service=ContextHolder.getBean("dhtinfoService");
+		 List<Dhtinfo>dhtInfos = null;
 		while (this.isActive.get()) {
-			 List<Dhtinfo>dhtInfos = null;
+	
 			try {
 				System.gc();
-				dhtInfos =service.getDhtinfosByState(DhtinfoState.DHTSTATE_NOT_DOWNLOAD, 100);
+				if(dhtInfos==null||dhtInfos.size()==0)
+				{
+				dhtInfos =service.getDhtinfosByState(DhtinfoState.DHTSTATE_NOT_DOWNLOAD, 1000);
 				logger.debug("获取未下载的种子项:"+dhtInfos.size());
+				}
+				else
+				{
+					Threads.sleep(everyFetchSleep * 1000);
+				}
+				
 			} catch (Exception e3) {
 				e3.printStackTrace();
 			}
-			//TODO 启动多个线程去下载，会更快
 			if (dhtInfos!=null&&dhtInfos.size()>0) {
 				for (Dhtinfo dhtInfo : dhtInfos) {
-					DhtinfoParser parser=new DhtinfoParser(dhtInfo,service);
+					DhtinfoParser parser=new DhtinfoParser(dhtInfo,service,dhtInfos );
 					excutorService.execute(parser);
 				}
 			}
-			Threads.sleep(60 * 1000);
+			
+		
 		}
 	}
 	public boolean isRunning(){

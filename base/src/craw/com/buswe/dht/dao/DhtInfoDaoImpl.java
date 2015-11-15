@@ -94,14 +94,15 @@ public class DhtInfoDaoImpl implements DhtinfoDao  {
 	 */
 	@Override
 	public Boolean addDhtInfoCrawcount(String infohash){
-		return simpleJdbc.update("update dhtinfo set crawcount=crawcount+1 where  infohash=?", infohash)>0?true:false;
+		return simpleJdbc.update("update dhtinfo set crawcount=crawcount+1,lastrequesttime=CURRENT_TIMESTAMP "
+				+ "where  infohash=?", infohash)>0?true:false;
 	}
 	/* (non-Javadoc)
 	 * @see com.buswe.dht.dao.DhtinfoDao#addDhtInfoSuccesscount(java.lang.String, java.lang.Integer)
 	 */
 	@Override
 	public Boolean addDhtInfoSuccesscount(String infohash){
-		return simpleJdbc.update("update dhtinfo set successcount=successcount+1 where  infohash=?", infohash)>0?true:false;
+		return simpleJdbc.update("update dhtinfo set successcount=successcount+1,lastrequesttime=CURRENT_TIMESTAMP where  infohash=?", infohash)>0?true:false;
 	}
 	/* (non-Javadoc)
 	 * @see com.buswe.dht.dao.DhtinfoDao#dhtinfoExsit(java.lang.String)

@@ -25,7 +25,6 @@ public class FindNodeRequest extends KadRequest {
 	public FindNodeRequest(String transaction, Node src) {
 		super(transaction, src);
 	}
-
 	public static FindNodeRequest creatLocalFindNodeRequest(Node src) {
 
 		/**

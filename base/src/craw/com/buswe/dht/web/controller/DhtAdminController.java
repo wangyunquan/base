@@ -46,8 +46,8 @@ public class DhtAdminController {
 	public @ResponseBody String startService()
 	{
 		//TODO
-		SecurityUtils.getSubject();
-		service.startDhtService(3);//开启三个节点
+		//SecurityUtils.getSubject();
+		service.startDhtService();//开启三个节点
 		return "success";
 	}
 	

@@ -17,6 +17,11 @@ public class DhtContextHolder {
 	public static 	LinkedBlockingQueue<Dhtinfo> PUBLIC_DHTINFO_QUEUE=new LinkedBlockingQueue<Dhtinfo>();
  
 	/**
+	 * 专门用来更新dhtFile的队列，避免锁表，因为需要删除掉原有的，再重新插入，所以锁表。改为依次执行
+	 */
+	public static LinkedBlockingQueue<Dhtinfo> PUBLIC_DHTFILEINSERT_QUEUE=new LinkedBlockingQueue<Dhtinfo>();
+	
+	/**
 	 * 控制保存DHT信息的线程启停的标识。
 	 */
 	public static Boolean SAVEDHT_THREAD_RUNNING=true;

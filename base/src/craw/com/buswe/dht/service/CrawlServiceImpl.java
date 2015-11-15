@@ -23,14 +23,15 @@ import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+import com.buswe.base.config.ContextHolder;
 import com.buswe.base.config.SystemEnvy;
 import com.buswe.base.utils.LuceneUtils;
 import com.buswe.base.utils.Threads;
@@ -38,6 +39,7 @@ import com.buswe.dht.entity.Dhtinfo;
 import com.buswe.dht.node.DhtKeyFactory;
 import com.buswe.dht.node.KadNet;
 import com.buswe.dht.node.Node;
+import com.buswe.dht.save.InsertDhtfilesThread;
 import com.buswe.dht.save.KadParserTorrentServer;
 import com.buswe.dht.save.SaveDhtThread;
 import com.buswe.dht.search.DhtLuceneHelper;
@@ -51,7 +53,6 @@ public class CrawlServiceImpl implements CrawlService {
 	private KadParserTorrentServer parseServer;
 	private SaveDhtThread saveToDbThread;
 	private List<KadNet> kadnetList;
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -60,27 +61,31 @@ public class CrawlServiceImpl implements CrawlService {
 	 */
 	@Override
 	@Async // 异步执行
-	public void startDhtService(Integer size) {
+	public void startDhtService() {
 		try {
 			InetSocketAddress[] BOOTSTRAP_NODES = { //
 					new InetSocketAddress("router.bittorrent.com", 6881), //
 					new InetSocketAddress("dht.transmissionbt.com", 6881), //
 					new InetSocketAddress("router.utorrent.com", 6881), };
+			String  nodeport=ContextHolder.getProperty("dht.craw.config.node.nodeport");
+			String totalNode=ContextHolder.getProperty("dht.craw.config.node.totalNode");
 			kadnetList = new ArrayList<KadNet>();
 			DhtKeyFactory keyFactory = DhtKeyFactory.getInstance();
-			for (int i = 0; i < size; i++) {
+			for (int i = 0; i < Integer.valueOf(totalNode); i++) {
 				Node localNode = new Node(keyFactory.generate()).setInetAddress(InetAddress.getByName("0.0.0.0"))
-						.setPoint(1139 + i);// 这里注意InetAddress.getLocalHost();为空
+						.setPoint(Integer.valueOf(nodeport) + i);// 这里注意InetAddress.getLocalHost();为空
 				KadNet kadNet = new KadNet(null, localNode);
 				kadNet.join(BOOTSTRAP_NODES).create();
 				kadnetList.add(kadNet);
 			}
-			Integer batch = 100;
-			saveToDbThread = new SaveDhtThread(batch); // 保存到数据库的线程
+			saveToDbThread = new SaveDhtThread(); // 保存到数据库的线程
 			saveToDbThread.start();
 			// 解析 dhtinfo的线程
 			parseServer = new KadParserTorrentServer();
 			parseServer.start();
+			
+			InsertDhtfilesThread insertFileThread=new InsertDhtfilesThread();
+			insertFileThread.start();
 
 		} catch (Exception e) {
 			e.printStackTrace();

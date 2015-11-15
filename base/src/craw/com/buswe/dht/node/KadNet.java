@@ -34,8 +34,7 @@ public class KadNet implements KeybasedRouting, Runnable {
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 	private KadReceiveServer kadReceiveServer;// 接受消息
 	private KadSendMsgServer kadSendMsgServer;// 发生消息
-	private final static Bucket kadBuckets = new SlackBucket(10000);// =
-																	// AppManager.getKadBuckets();//
+	private   Bucket kadBuckets = new SlackBucket();// =启动500个节点，删掉static ,自己维护的
 																	// 路由表
 	private final int BUCKETSIZE = 8;// 一个k桶大小
 	private final BootstrapNodesSaver bootstrapNodesSaver;// 关机后保存到本地，启动时候从本地文件中加载
@@ -57,7 +56,6 @@ public class KadNet implements KeybasedRouting, Runnable {
 			throws NoSuchAlgorithmException, IOException {
 		this.bootstrapNodesSaver = bootstrapNodesSaver;
 		DatagramSocket socket = null;
-
 		this.localnode = localnode;
 		// -----------------------------------------------------------------------
 		channel = DatagramChannel.open();
@@ -153,9 +151,14 @@ public class KadNet implements KeybasedRouting, Runnable {
 	}
 
 	@Override
-	public List<Node> findNode(Key k) {// 根据k返回相似节点
-		List<Node> result = kadBuckets.getClosestNodesByKey(k, BUCKETSIZE);
-		return result;
+	public List<Node> findNode(Key k) {
+		// 根据k返回相似节点，我返回随机的8个节点
+//		if(kadBuckets.getAllNodes().size()<=8)
+//		{
+//			return kadBuckets.getAllNodes();
+//		}
+//		List<Node> result = kadBuckets.getClosestNodesByKey(k, BUCKETSIZE);
+		return kadBuckets.getRandomCosetNode(8);
 	}
 	@Override
 	public void sendMessage(KadMessage msg) throws IOException {

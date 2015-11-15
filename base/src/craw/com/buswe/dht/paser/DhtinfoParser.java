@@ -3,6 +3,7 @@ package com.buswe.dht.paser;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,10 +16,12 @@ public class DhtinfoParser implements Runnable {
 	  protected Logger logger = LoggerFactory.getLogger(getClass());
 	private Dhtinfo dhtinfo;
 	private DhtinfoService service;
-	public DhtinfoParser (Dhtinfo dhtinfo,DhtinfoService service)
+private List<Dhtinfo>dhtInfos;
+	public DhtinfoParser (Dhtinfo dhtinfo,DhtinfoService service,	 List<Dhtinfo>dhtInfos)
 	{
 		this.dhtinfo=dhtinfo;
 		this.service=service;
+		this.dhtInfos=dhtInfos;
 	}
 	@Override
 	public void run() {
@@ -35,13 +38,13 @@ public class DhtinfoParser implements Runnable {
 				continue ;
 			} else
 			{
-				
 			Boolean result=	 TorrentParser.parse(inputStream, dhtinfo);
 			if(result) 
 				break ;//如果解析成功，则不再执行下一个地址去解析了
 			}
 		}
 		service.updateDhtinfoDownLoad(dhtinfo, true);
+		dhtInfos.remove(dhtinfo);
 		
 	}
 	private  InputStream  openConnection(String url)
@@ -50,10 +53,10 @@ public class DhtinfoParser implements Runnable {
 		try {
 			URL parsedUrl = new URL(url);
 			HttpURLConnection connection=(HttpURLConnection)parsedUrl.openConnection();
-			connection.setConnectTimeout( 5 * 1000);
-			connection.setReadTimeout( 5 * 1000);
+			connection.setConnectTimeout( 3 * 1000);
+			connection.setReadTimeout( 3* 1000);
 			connection.setUseCaches(false);
-			connection.setDoInput(false);
+			connection.setDoInput(true);//重要
 			connection.setRequestMethod("GET");
 			int responseCode = connection.getResponseCode();
 			if (responseCode ==HttpURLConnection.HTTP_OK) {
@@ -70,9 +73,9 @@ public class DhtinfoParser implements Runnable {
  
 	public static void main(String aa [])
 	{
-		DhtinfoParser paser=new DhtinfoParser(null,null);
+		DhtinfoParser paser=new DhtinfoParser(null,null,null);
 		InputStream inputStream=null;
-		String dowloadInfoHash="1AB00671E2D76CDA7ED625AB5A2491352F821F39";
+		String dowloadInfoHash="8761e9485d810059bdd07bccc1a635aa8212497b";
 		Dhtinfo dhtinfo =new Dhtinfo ();
 		dhtinfo.setInfohash(dowloadInfoHash);
 		for(int i=0;i<TorrentinfoUrl.urls.length;i++)
