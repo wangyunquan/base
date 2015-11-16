@@ -43,23 +43,23 @@ public class KadParserTorrentServer implements Runnable {
 				if(dhtInfos==null||dhtInfos.size()==0)
 				{
 				dhtInfos =service.getDhtinfosByState(DhtinfoState.DHTSTATE_NOT_DOWNLOAD, 1000);
-				logger.debug("获取未下载的种子项:"+dhtInfos.size());
+				logger.info("获取未下载的种子项:"+dhtInfos.size());
 				}
 				else
 				{
 					Threads.sleep(everyFetchSleep * 1000);
 				}
 				
+				if (dhtInfos!=null&&dhtInfos.size()>0) {
+					for (Dhtinfo dhtInfo : dhtInfos) {
+						DhtinfoParser parser=new DhtinfoParser(dhtInfo,service,dhtInfos );
+						excutorService.execute(parser);
+					}
+				}
+				
 			} catch (Exception e3) {
 				e3.printStackTrace();
 			}
-			if (dhtInfos!=null&&dhtInfos.size()>0) {
-				for (Dhtinfo dhtInfo : dhtInfos) {
-					DhtinfoParser parser=new DhtinfoParser(dhtInfo,service,dhtInfos );
-					excutorService.execute(parser);
-				}
-			}
-			
 		
 		}
 	}

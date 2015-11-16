@@ -103,8 +103,8 @@ public class CrawlServiceImpl implements CrawlService {
 		parseServer.shutdown();
 		
 	}
-
-  @Scheduled(cron="0 10 * * * ? ") //每天早上5点运行定时任务建立索引
+//正式的时候，必须打开这个，TODO
+ // @Scheduled(cron="0 10 * * * ? ") //每天早上5点运行定时任务建立索引
   public void creatIndex() throws Exception
   {
 		  creatIndex(1000);

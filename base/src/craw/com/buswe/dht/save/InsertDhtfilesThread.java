@@ -35,7 +35,6 @@ public class InsertDhtfilesThread implements Runnable {
 				try {
 					// 阻塞，一直等到获取到
 					Dhtinfo info = DhtContextHolder.PUBLIC_DHTFILEINSERT_QUEUE.take();
-			 
 						Boolean saveSuccess = false;
 						try {
 							saveSuccess = dhtinfoService.updateDhtFiles(info);
@@ -55,6 +54,6 @@ public class InsertDhtfilesThread implements Runnable {
 	}
 	public void start() {
 		startThread.start();
-		logger.debug("插入dhfiles的线程启动！");
+		logger.info("插入dhfiles的线程启动！");
 	}
 }

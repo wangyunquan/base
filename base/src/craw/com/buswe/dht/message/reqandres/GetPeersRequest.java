@@ -18,6 +18,15 @@ public class GetPeersRequest extends KadRequest {
 
 	private static final long serialVersionUID = 918433377540165654L;
 
+	
+	public static GetPeersRequest creatGetPeersRequest(Node src,String infohash)
+	{
+		GetPeersRequest request=new GetPeersRequest(ByteUtil.random_tranctionId(4),src);
+		request.setInfo_hash(infohash);
+		return request;
+	}
+	
+	
 	private String info_hash;
 
 	public GetPeersRequest(String transaction, Node src) {

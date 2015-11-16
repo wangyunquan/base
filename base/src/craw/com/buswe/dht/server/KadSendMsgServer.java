@@ -13,6 +13,8 @@ import com.buswe.base.config.ContextHolder;
 import com.buswe.base.utils.Threads;
 import com.buswe.dht.message.KadMessage;
 import com.buswe.dht.message.reqandres.FindNodeRequest;
+import com.buswe.dht.message.reqandres.GetPeersRequest;
+import com.buswe.dht.node.DhtKeyFactory;
 import com.buswe.dht.node.KadNet;
 import com.buswe.dht.node.KadNode;
 import com.buswe.dht.node.Node;
@@ -28,12 +30,14 @@ public class KadSendMsgServer implements Runnable {
 	private final Thread startThread;
 	private final KadNet kadNet;
 	private final Integer eachSendTime;
-
+	private int  everyTimetoGepeer;
+    
 	public KadSendMsgServer(KadNet kadNet) {
 		startThread = new Thread(this);
 		this.kadNet = kadNet;
 		String sendTime = ContextHolder.getProperty("dht.craw.config.sendFindNodeTime");
 		eachSendTime = Integer.valueOf(sendTime);
+		everyTimetoGepeer=	 Integer.valueOf(ContextHolder.getProperty("dht.craw.config.sendGetpeer.everyTime"));
 	}
 	/**
 	 * 只发送findnode操作，其他请求请使用KadSendMsgServer
@@ -57,12 +61,20 @@ public class KadSendMsgServer implements Runnable {
 		while (this.isActive.get()) {
 			try {
 				List<KadNode> nodes = kadNet.getAllNodes();
-				logger.debug("本地节点" + kadNet.getKey() + "桶内的节点:" + nodes.size());
+				logger.info("本地节点" + kadNet.getKey() + "桶内的节点:" + nodes.size());
 				for (int i = 0; i < nodes.size(); i++) { //每次全部发送？，还是只发送一部分？
 					KadNode node = null;
 					try {
 						node = nodes.get(i);
+						if(i%everyTimetoGepeer==0)
+						{
+							GetPeersRequest request=	getpeerRequest(node.getNode());
+							send(request);
+						}
+						else
+						{
 						send(node.getNode());
+						}
 					} catch (Exception e) {
 						e.printStackTrace();
 						System.out.println(node);
@@ -79,6 +91,11 @@ public class KadSendMsgServer implements Runnable {
 		}
 	}
 
+	private GetPeersRequest getpeerRequest( Node to )
+	{
+		GetPeersRequest request=GetPeersRequest.creatGetPeersRequest(to, DhtKeyFactory.getInstance().generate().toString());
+		return request;
+	}
 	private void send(Node to) throws IOException {
 		FindNodeRequest msg = FindNodeRequest.creatLocalFindNodeRequest(to);
 		send(msg);
@@ -88,9 +105,9 @@ public class KadSendMsgServer implements Runnable {
 		DecimalFormat df = new DecimalFormat("0.00");
 		Runtime.getRuntime().gc();
 		long freeMem1 = Runtime.getRuntime().freeMemory();
-		logger.debug("-----空闲内存" + (df.format(freeMem1 / (1024F * 1024F)) + "MB"));
+		logger.info("-----空闲内存" + (df.format(freeMem1 / (1024F * 1024F)) + "MB"));
 		int size = Thread.getAllStackTraces().size();
-		System.out.println("系统中的线程数=" + size);
+		logger.info("系统中的线程数=" + size);
 	}
 
 	/**

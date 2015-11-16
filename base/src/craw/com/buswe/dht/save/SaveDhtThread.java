@@ -1,7 +1,5 @@
 package com.buswe.dht.save;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.slf4j.Logger;
@@ -39,19 +37,23 @@ public class SaveDhtThread implements Runnable {
 						Boolean saveSuccess = false;
 						try {
 							saveSuccess = dhtinfoService.saveDhtinfo(info);
+							icrease++;
 						} catch (Exception e) {
 							e.printStackTrace();
 							logger.error("保存信息失败", e);
-							logger.debug("保存dhtinfo信息失败，数量：" + icrease + "infohash :" + info.getInfohash());
+							logger.error("保存dhtinfo信息失败，数量：" + icrease + "infohash :" + info.getInfohash());
 						}
 						if (!saveSuccess)
-							logger.debug("保存dhtinfo信息失败，数量：" + icrease + "infohash :" + info.getInfohash());
+							logger.error("保存dhtinfo信息失败，数量：" + icrease + "infohash :" + info.getInfohash());
 						else {
 						}
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-		 
+		   if(icrease%100==0)
+		   {
+			   logger.info("本次已抓取到信息："+icrease);
+		   }
 		}
 
 	}

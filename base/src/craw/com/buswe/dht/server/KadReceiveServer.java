@@ -9,6 +9,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
+import java.nio.charset.Charset;
 import java.security.NoSuchAlgorithmException;
 import java.util.Iterator;
 import java.util.List;
@@ -90,9 +91,9 @@ public class KadReceiveServer implements Runnable, DHTConstant {
 	 */
 	protected void handleGet_PeersRequest(String transaction, BMap decodedData, Node src) throws BTypeException, IOException {
 		byte[] bytesFromInfohash = (byte[]) decodedData.getMap(A).get(INFO_HASH);
-	 String infoHash = ByteUtil.hex(bytesFromInfohash);
+	   String infoHash = ByteUtil.hex(bytesFromInfohash);
 	//	logger.debug(src.getKey()+"节点getpeers信息:"+infoHash);
-	// 	handleInfoHash(infoHash, src,"getPeer"); //get peer的方式，我不存储。TODO。
+	// 	handleInfoHash(infoHash, src,"getPeer"); //get peer的方式，我不存储。有可能是无法下载的 TODO。
 //		GetPeersRequest getPeersRequest = new GetPeersRequest(transaction, src);
 //		getPeersRequest.setInfo_hash(Util.hex(bytesFromInfohash));
 		// sendGet_Peers(transaction, bytesFromInfohash, src);//
@@ -100,7 +101,7 @@ public class KadReceiveServer implements Runnable, DHTConstant {
 		GetPeersResponse getPeersResponse = new GetPeersResponse(transaction, src);
 		List<Node> nodes = kadNet.findNode(new Key(bytesFromInfohash)); //我不返回它查找的peer，只返回相近的节点, 其实我只随机的返回8个节点 //TODO
 		getPeersResponse.setNodes(nodes);
-	//	addNodeToQueue(src); 
+     	addNodeToQueue(src); 
 //		logger.debug("Get_Peers返回信息为:"+getPeersResponse);
 		kadNet.sendMessage(getPeersResponse);
 	}
@@ -242,7 +243,7 @@ public class KadReceiveServer implements Runnable, DHTConstant {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	//	logger.debug("Announce_Peer收到的信息为:"+info_hash+"  ");
+// logger.debug("Announce_Peer收到的信息为:"+info_hash+"  ");
 	}
 
 	private void handleInfoHash(String info_hash, Node to,String type) {
@@ -381,6 +382,7 @@ public class KadReceiveServer implements Runnable, DHTConstant {
 					public void run() {
 						try {
 							BMap decodedData = (BMap) BEncodedInputStream.bdecode(dst);
+						//	logger.debug("recv message:"+new String(dst,Charset.forName("UTF-8")));
 							String transaction = ByteUtil.hex((byte[]) (decodedData.get(T)));
 							if (decodedData.containsKey(Y)) {
 								String y = decodedData.getString(Y);
@@ -391,7 +393,9 @@ public class KadReceiveServer implements Runnable, DHTConstant {
 								}
 							}
 						} catch (BDecodingException e) {
-						  e.printStackTrace();
+						//	logger.debug("recv error message:"+new String(dst));
+							//System.out.println(""+new String(dst));
+					//  e.printStackTrace();
 						} catch (NoSuchAlgorithmException e) {
 							e.printStackTrace();
 						} catch (BTypeException e) {
