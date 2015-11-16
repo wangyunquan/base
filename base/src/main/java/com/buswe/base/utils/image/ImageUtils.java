@@ -22,10 +22,10 @@ public class ImageUtils
     return false;
   }
   
-  public static boolean isImage(InputStream in)
-  {
-    ImageInfo ii = new ImageInfo();
-    ii.setInput(in);
-    return ii.check();
-  }
+//  public static boolean isImage(InputStream in)
+//  {
+////    ImageInfo ii = new ImageInfo();
+////    ii.setInput(in);
+////    return ii.check();
+//  }
 }
