@@ -175,6 +175,12 @@ public class DhtInfoDaoImpl implements DhtinfoDao  {
 return	 namedjdbc.batchUpdate(sql, sqlparam).length;
 	}
 
+	@Override
+	public Integer getTotalDhtinfo() {
+	 
+		return simpleJdbc.queryForInt("select count(1) from dhtinfo where dhtstate=0");
+	}
+
  
 
 }

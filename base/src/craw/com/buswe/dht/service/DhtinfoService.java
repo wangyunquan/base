@@ -67,6 +67,6 @@ public interface DhtinfoService {
 	
 	public		List<Dhtinfo>  getNotIndexedDhtinfo(Integer limit);
 	public Integer updateDhtinfoIndexed(List<Dhtinfo> dhtinfoList);
-
 	public Boolean updateDhtFiles(Dhtinfo info);
+	public Integer getTotalDhtinfo();
 }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.buswe.dht.entity.Dhtinfo;
 import com.buswe.dht.service.CrawlService;
+import com.buswe.dht.service.CrawlServiceImpl;
 
 @Controller
 @RequestMapping({ "/" })
@@ -24,6 +25,7 @@ public class DhtController {
 
 	@RequestMapping("/index.htm")
 	public String index(HttpServletRequest request, Model model) {
+		model.addAttribute("tatalDhtinfo", CrawlServiceImpl.tatalDhtinfo);
 		return "/dht/index";
 	}
 	@RequestMapping("/search.htm")

@@ -18,12 +18,13 @@ import org.apache.lucene.index.IndexWriterConfig.OpenMode;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
-import org.apache.lucene.search.TopScoreDocCollector;
+import org.apache.lucene.search.Sort;
+import org.apache.lucene.search.SortField;
+import org.apache.lucene.search.TopFieldCollector;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -34,7 +35,6 @@ import org.springframework.stereotype.Service;
 import com.buswe.base.config.ContextHolder;
 import com.buswe.base.config.SystemEnvy;
 import com.buswe.base.utils.LuceneUtils;
-import com.buswe.base.utils.Threads;
 import com.buswe.dht.entity.Dhtinfo;
 import com.buswe.dht.node.DhtKeyFactory;
 import com.buswe.dht.node.KadNet;
@@ -48,6 +48,7 @@ import com.buswe.dht.search.DhtLuceneHelper;
 public class CrawlServiceImpl implements CrawlService {
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 	private String dhtIndexDir = SystemEnvy.WEBROOT + File.separator + "dhtIndex";
+	public static Integer tatalDhtinfo=198206;
 	@Resource
 	DhtinfoService dhtinfoService;
 	private KadParserTorrentServer parseServer;
@@ -83,7 +84,6 @@ public class CrawlServiceImpl implements CrawlService {
 			// 解析 dhtinfo的线程
 			parseServer = new KadParserTorrentServer();
 			parseServer.start();
-			
 			InsertDhtfilesThread insertFileThread=new InsertDhtfilesThread();
 			insertFileThread.start();
 
@@ -104,10 +104,11 @@ public class CrawlServiceImpl implements CrawlService {
 		
 	}
 //正式的时候，必须打开这个，TODO
- // @Scheduled(cron="0 10 * * * ? ") //每天早上5点运行定时任务建立索引
+ @Scheduled(cron="0 0/10 * * * ?  ") //每10分钟执行一次
   public void creatIndex() throws Exception
   {
 		  creatIndex(1000);
+		  tatalDhtinfo=dhtinfoService.getTotalDhtinfo();
   }
 	public void creatIndex(Integer total) throws Exception {
 		Analyzer analyzer = LuceneUtils.analyzer;
@@ -122,10 +123,6 @@ public class CrawlServiceImpl implements CrawlService {
 		IndexWriter writer = new IndexWriter(dir, config);
 		int doc_count = 0;
 		List<Dhtinfo> dhtinfoList = dhtinfoService.getNotIndexedDhtinfo(total);
-		if(dhtinfoList==null||dhtinfoList.size()==0)
-		{
-			Threads.sleep(1000*60*60);
-		}
 		try {
 			for (Dhtinfo dhtinfo : dhtinfoList) {
 				Document doc = DhtLuceneHelper.convertDocument(dhtinfo);
@@ -162,9 +159,17 @@ public class CrawlServiceImpl implements CrawlService {
 		Integer pageSize = page.getPageSize();
 		FSDirectory index = FSDirectory.open(new File(dhtIndexDir));
 		index.setReadChunkSize(104857600);// 100兆
+		
+	//	  TopDocs topDocs;
+ 
 		IndexReader reader = DirectoryReader.open(index);
 		IndexSearcher searcher = new IndexSearcher(reader);
-		TopScoreDocCollector collector = TopScoreDocCollector.create(20000, true);
+		
+		
+	       Sort sort = new Sort(new SortField[]{new SortField(null,SortField.Type.SCORE,false),new SortField("Time", SortField.INT,true)}); 
+	//	TopFieldCollector  collector= TopFieldCollector.c
+	//	TopScoreDocCollector collector = TopScoreDocCollector.create(20000, true);
+	       TopFieldCollector collector = TopFieldCollector.create(sort , 10  ,  false , true ,  false ,  false);  
 		Query query = DhtLuceneHelper.generateQuery(searchString);
 		searcher.search(query, collector);
 		Integer total = collector.getTotalHits();// 总数

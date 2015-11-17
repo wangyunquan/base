@@ -44,11 +44,12 @@ public class KadParserTorrentServer implements Runnable {
 				{
 				dhtInfos =service.getDhtinfosByState(DhtinfoState.DHTSTATE_NOT_DOWNLOAD, 1000);
 				logger.info("获取未下载的种子项:"+dhtInfos.size());
-				}
-				else
+				if(dhtInfos.size()==0)
 				{
 					Threads.sleep(everyFetchSleep * 1000);
 				}
+				}
+
 				
 				if (dhtInfos!=null&&dhtInfos.size()>0) {
 					for (Dhtinfo dhtInfo : dhtInfos) {

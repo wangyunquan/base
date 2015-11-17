@@ -119,6 +119,11 @@ public class DhtinfoServiceImpl implements DhtinfoService {
 	public List<Dhtinfo> getNotIndexedDhtinfo(Integer limit) {
 		return dhtinfoDao.getNotIndexedDhtinfo(limit);
 	}
+	
+	public Integer getTotalDhtinfo()
+	{
+		return dhtinfoDao.getTotalDhtinfo();
+	}
 	@Override
 	public Integer updateDhtinfoIndexed(List<Dhtinfo> dhtinfoList) {
 		return dhtinfoDao.updateDhtinfoIndexed(dhtinfoList);

@@ -2,6 +2,9 @@ package com.buswe.dht.server;
 
 import java.io.IOException;
 import java.lang.Thread.UncaughtExceptionHandler;
+import java.lang.management.ManagementFactory;
+import java.lang.management.OperatingSystemMXBean;
+import java.lang.management.ThreadMXBean;
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -104,6 +107,8 @@ public class KadSendMsgServer implements Runnable {
 	public void displayAvailableMemory() {
 		DecimalFormat df = new DecimalFormat("0.00");
 		Runtime.getRuntime().gc();
+		OperatingSystemMXBean osBean = ManagementFactory.getOperatingSystemMXBean();
+		logger.info("CPUT使用率："+osBean.getSystemLoadAverage());
 		long freeMem1 = Runtime.getRuntime().freeMemory();
 		logger.info("-----空闲内存" + (df.format(freeMem1 / (1024F * 1024F)) + "MB"));
 		int size = Thread.getAllStackTraces().size();

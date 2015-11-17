@@ -34,7 +34,7 @@
     </description>
 		<name>cndate</name>
 		<function-class>com.buswe.base.web.taglib.WebFunctions</function-class>
-		<function-signature>java.lang.String  getFormatDate(java.lang.Long)</function-signature>
+		<function-signature>java.lang.String  getFormatDate(java.util.Date)</function-signature>
 	</function>
 	
 	<function>

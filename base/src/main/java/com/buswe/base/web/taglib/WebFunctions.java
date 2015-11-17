@@ -51,9 +51,10 @@ public class WebFunctions
 			return "未知";
 		}
 	}
-
-	public static String getFormatDate(Long time) {
-		if(time==null||time==0) return "";
+	
+	
+	public static String getFormatDate(java.util.Date time) {
+		if(time==null) return "";
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.SIMPLIFIED_CHINESE);
 		String ctime = formatter.format(time);
 		return ctime;

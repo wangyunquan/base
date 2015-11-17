@@ -24,4 +24,5 @@ public interface DhtinfoDao {
 	 */
 	public		List<Dhtinfo>  getNotIndexedDhtinfo(Integer limit);
 	public Integer updateDhtinfoIndexed(List<Dhtinfo> dhtinfoList);
+	public Integer getTotalDhtinfo();
 }
