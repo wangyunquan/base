@@ -53,7 +53,7 @@ public class CrawlServiceImpl implements CrawlService {
 	DhtinfoService dhtinfoService;
 	private KadParserTorrentServer parseServer;
 	private SaveDhtThread saveToDbThread;
-	private List<KadNet> kadnetList;
+	public  List<KadNet> kadnetList;
 	InsertDhtfilesThread insertFileThread;
 	/*
 	 * (non-Javadoc)
@@ -82,7 +82,7 @@ public class CrawlServiceImpl implements CrawlService {
 			DhtKeyFactory keyFactory = DhtKeyFactory.getInstance();
 			for (int i = 0; i < Integer.valueOf(totalNode); i++) {
 				Node localNode = new Node(keyFactory.generate()).setInetAddress(InetAddress.getByName("0.0.0.0"))
-						.setPoint(Integer.valueOf(nodeport) + i);// 这里注意InetAddress.getLocalHost();为空
+						.setPoint(Integer.valueOf(nodeport) + i*10);// 这里注意InetAddress.getLocalHost();为空
 				KadNet kadNet = new KadNet(null, localNode);
 				kadNet.join(BOOTSTRAP_NODES).create();
 				kadnetList.add(kadNet);
