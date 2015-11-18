@@ -29,7 +29,7 @@
 			</div>
 			<div align="center">
 				<h5>
-					已收集种子信息xxx个
+					已收集种子信息${tatalDhtinfo}个
 					</h3>
 			</div>
 			<p></p>

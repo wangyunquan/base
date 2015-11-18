@@ -1,11 +1,12 @@
 package com.buswe.dht.search;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
+import org.apache.lucene.document.Field.Store;
 import org.apache.lucene.document.LongField;
-import org.apache.lucene.document.StoredField;
 import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
 import org.apache.lucene.queryparser.classic.QueryParser;
@@ -18,7 +19,7 @@ import com.buswe.dht.entity.Dhtfiles;
 import com.buswe.dht.entity.Dhtinfo;
 
 public class DhtLuceneHelper {
-	private static final String NAME_FIELD = "name";
+	public static final String NAME_FIELD = "name";
 	public static final String INFO_HASH_FIELD = "infohash";
 	// 分词的字段
 	public static final String FILELIST = "filelist";
@@ -30,13 +31,20 @@ public class DhtLuceneHelper {
 		Document doc = new Document();
 		doc.add(new StringField(INFO_HASH_FIELD, dhtinfo.getInfohash(), Field.Store.YES));// StringField不参加分词
 		TextField nameFiled =  new TextField(NAME_FIELD, dhtinfo.getName(), Field.Store.NO);
-		nameFiled.setBoost(2);//提高优先级
+		nameFiled.setBoost(100);//提高优先级
 		doc.add(nameFiled); 
 		//doc.add(new StoredField(TORRENTINFO_FIELD, object.get(TORRENTINFO_FIELD).toString()));//  
 		doc.add(new TextField(FILELIST, getSegmentString(dhtinfo), Field.Store.NO));// 多文件的文件名
-		
-		LongField field = new LongField(CREATTIME, dhtinfo.getCreattime().getTime(), Field.Store.NO);
-		doc.add(field);
+		if(dhtinfo.getCreattime()!=null)
+		{
+			LongField timeField = new LongField(CREATTIME, dhtinfo.getCreattime().getTime(),  Store.NO);
+			doc.add(timeField);
+		}
+		else
+		{
+			LongField timeField = new LongField(CREATTIME, 0,  Store.NO);
+			doc.add(timeField);
+		}
 		return doc;
 	}
 	
@@ -46,8 +54,8 @@ public class DhtLuceneHelper {
 	 BooleanQuery bq = new BooleanQuery();
 	 try{
 	 QueryParser nameQp = new QueryParser(NAME_FIELD, LuceneUtils.analyzer);
-	Query nameQuery=nameQp.parse(searchString);
-	nameQuery.setBoost(2);
+	 Query nameQuery=nameQp.parse(searchString);
+	 nameQuery.setBoost(100);
 		QueryParser fileQp = new QueryParser(FILELIST, LuceneUtils.analyzer);
 		Query  fileQuery=fileQp.parse(searchString);
 		 bq.add(nameQuery,BooleanClause.Occur.SHOULD);
@@ -83,6 +91,6 @@ public class DhtLuceneHelper {
 		return builder.toString();
 	}
 	
-	
+
 	
 }

@@ -46,6 +46,7 @@ public class SaveDhtThread implements Runnable {
 						if (!saveSuccess)
 							logger.error("保存dhtinfo信息失败，数量：" + icrease + "infohash :" + info.getInfohash());
 						else {
+							   logger.info("本次已抓取到信息："+icrease);
 						}
 				} catch (InterruptedException e) {
 					e.printStackTrace();

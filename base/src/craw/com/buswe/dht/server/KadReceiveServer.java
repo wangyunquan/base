@@ -237,12 +237,12 @@ public class KadReceiveServer implements Runnable, DHTConstant {
 		String info_hash = ByteUtil.hex((byte[]) decodedData.getMap(A).get(INFO_HASH));
 		handleInfoHash(info_hash, to,"announcePeer");
 		addNodeToQueue(to);//这种节点是健康节点，可以加到桶中
-		AnnouncePeerResponse response=new AnnouncePeerResponse(transaction,to);
-		try {
-			kadNet.sendMessage(response);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+//		AnnouncePeerResponse response=new AnnouncePeerResponse(transaction,to);
+//		try {
+//			kadNet.sendMessage(response);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 // logger.debug("Announce_Peer收到的信息为:"+info_hash+"  ");
 	}
 
