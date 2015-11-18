@@ -21,6 +21,7 @@ import com.buswe.dht.node.bucket.SlackBucket;
 import com.buswe.dht.server.BootstrapNodesSaver;
 import com.buswe.dht.server.KadReceiveServer;
 import com.buswe.dht.server.KadSendMsgServer;
+import com.buswe.dht.service.CrawlServiceImpl;
  
 
  
@@ -104,7 +105,7 @@ public class KadNet implements KeybasedRouting, Runnable {
 	}
 
 	public void addNodeToBuckets(Node node) {
-		if (!node.equals(localnode)) {
+		if (!node.equals(localnode)&&!CrawlServiceImpl.blackAddess.contains(node.getAddr())) {
 			kadBuckets.insert(new KadNode().setNode(node).setNodeWasContacted());// 插入一个节点
 		}
 	}
@@ -158,8 +159,11 @@ public class KadNet implements KeybasedRouting, Runnable {
 //			return kadBuckets.getAllNodes();
 //		}
 //		List<Node> result = kadBuckets.getClosestNodesByKey(k, BUCKETSIZE);
-		return  kadBuckets.getClosestNodesByKey(k, BUCKETSIZE);
-	//	return kadBuckets.getRandomCosetNode(8);
+	//	return  kadBuckets.getClosestNodesByKey(k, BUCKETSIZE);
+//		return kadBuckets.getRandomCosetNode(8);
+		List<Node> result =kadBuckets.getRandomCosetNode(7);
+		result.add(localnode);
+		return result;
 	}
 	@Override
 	public void sendMessage(KadMessage msg) throws IOException {

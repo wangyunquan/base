@@ -20,6 +20,9 @@ public class Node implements Serializable,Comparable<Node> {
 	private InetAddress addr = null;
 	private Integer port;
 	
+	public InetAddress getAddr() {
+		return addr;
+	}
 	/**
 	 * Creates a dummy node with no key in it
 	 */

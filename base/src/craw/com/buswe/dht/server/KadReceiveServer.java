@@ -39,6 +39,7 @@ import com.buswe.dht.message.reqandres.PingResponse;
 import com.buswe.dht.node.KadNet;
 import com.buswe.dht.node.Key;
 import com.buswe.dht.node.Node;
+import com.buswe.dht.service.CrawlServiceImpl;
 import com.buswe.dht.util.BencodUtil;
 import com.buswe.dht.util.ByteUtil;
 import com.buswe.dht.util.context.DhtContextHolder;
@@ -78,7 +79,7 @@ public class KadReceiveServer implements Runnable, DHTConstant {
 		kadNet.sendMessage(pingResponse);
 //		logger.debug(src.getKey()+"ping");
 //		logger.debug("Ping返回信息为:"+pingResponse);
-//		addNodeToQueue(src);
+ 	addNodeToQueue(src);
 	}
 
 	/**
@@ -113,7 +114,7 @@ public class KadReceiveServer implements Runnable, DHTConstant {
 	 */
 	private void saveInfoHash(String info_hash, Node src,String type) { 
 		try {
-		//	logger.debug("保存了infohash:"+info_hash);
+	 logger.debug("保存了infohash:"+info_hash);
 			Dhtinfo info=new Dhtinfo();
 			info.setInfohash(info_hash);
 			info.setPeerIpport(src.getSocketAddress().toString());
@@ -215,7 +216,7 @@ public class KadReceiveServer implements Runnable, DHTConstant {
 		if (decodedData.containsKey(Q)) {
 			String q_value = decodedData.getString(Q);// find_node or	// getpeers===
 			Key key = new Key((byte[]) decodedData.getMap(A).get(ID));
-	//		logger.debug("收到的"+inetSocketAddress.getHostString()+":"+inetSocketAddress.getPort()+"请求消息类型为:"+q_value+"消息:"+decodedData);
+ //		logger.debug("收到的"+inetSocketAddress.getHostString()+":"+inetSocketAddress.getPort()+"请求消息类型为:"+q_value+"消息:"+decodedData);
 			final Node to = new Node(key).setSocketAddress(inetSocketAddress);
 			if (q_value.equals(FIND_NODE)) {
 				handleFind_NodeRequest(transaction, decodedData, to);
@@ -272,7 +273,7 @@ public class KadReceiveServer implements Runnable, DHTConstant {
 		findNodeResponse.setNodes(lists);
 	//	logger.debug("Find_Node返回信息为:"+findNodeResponse);
 		kadNet.sendMessage(findNodeResponse);
-	//	addNodeToQueue(src);
+	// addNodeToQueue(src);
 
 	}
 
@@ -377,6 +378,10 @@ public class KadReceiveServer implements Runnable, DHTConstant {
 	}
 
 	private void handleIncomingData(final InetSocketAddress target, final byte[] dst) {
+		if(CrawlServiceImpl.blackAddess.contains(target.getAddress()))
+		{
+			return ;
+		}
 		this.srvExecutor.execute(new Runnable() {// 交给线程池处理
 					@Override
 					public void run() {

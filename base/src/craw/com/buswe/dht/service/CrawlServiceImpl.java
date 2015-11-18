@@ -29,7 +29,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.buswe.base.config.ContextHolder;
@@ -49,11 +48,13 @@ public class CrawlServiceImpl implements CrawlService {
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 	private String dhtIndexDir = SystemEnvy.WEBROOT + File.separator + "dhtIndex";
 	public static Integer tatalDhtinfo=198206;
+	public static  List<InetAddress>  blackAddess=new ArrayList<InetAddress>();
 	@Resource
 	DhtinfoService dhtinfoService;
 	private KadParserTorrentServer parseServer;
 	private SaveDhtThread saveToDbThread;
 	private List<KadNet> kadnetList;
+	InsertDhtfilesThread insertFileThread;
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -64,6 +65,13 @@ public class CrawlServiceImpl implements CrawlService {
 	@Async // 异步执行
 	public void startDhtService() {
 		try {
+			
+			String bkackString []=ContextHolder.getProperty("dht.craw.config.blacknode").split(",");
+			 for(String str:bkackString)
+			 {
+				 blackAddess.add(InetAddress.getByName(str));
+			 }
+			
 			InetSocketAddress[] BOOTSTRAP_NODES = { //
 					new InetSocketAddress("router.bittorrent.com", 6881), //
 					new InetSocketAddress("dht.transmissionbt.com", 6881), //
@@ -84,7 +92,7 @@ public class CrawlServiceImpl implements CrawlService {
 			// 解析 dhtinfo的线程
 			parseServer = new KadParserTorrentServer();
 			parseServer.start();
-			InsertDhtfilesThread insertFileThread=new InsertDhtfilesThread();
+		 insertFileThread=new InsertDhtfilesThread();
 			insertFileThread.start();
 
 		} catch (Exception e) {
@@ -101,6 +109,7 @@ public class CrawlServiceImpl implements CrawlService {
 		}
 		saveToDbThread.shutdown();
 		parseServer.shutdown();
+		insertFileThread.shutdown();
 		
 	}
 //正式的时候，必须打开这个，TODO
