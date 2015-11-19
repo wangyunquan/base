@@ -139,7 +139,7 @@ public class DhtInfoDaoImpl implements DhtinfoDao  {
 	@Override
 	public Boolean updateParseSuccess(Dhtinfo dhtinfo) {
 	 
-		String updateSql=" update dhtinfo set creattime=:creattime,name=:name,singerfile=:singerfile,filelength=:filelength ,dhtstate=:dhtstate"
+		String updateSql=" update dhtinfo set creattime=:creattime,name=:name,singerfile=:singerfile,filelength=:filelength ,dhtstate=0"
 				+ " where infohash=:infohash";
 		return namedjdbc.update(updateSql,  dhtinfoSqlParam(dhtinfo))>0?true:false;
 	}

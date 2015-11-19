@@ -27,14 +27,14 @@ public class KadNode {
 	
 	@Override
 	public int hashCode() {
-		return getNode().hashCode();
+		return getNode().getInetAddress().hashCode();
 	}
 	
 	@Override
 	public boolean equals(Object obj) {
 		if (obj == null || !getClass().equals(obj.getClass()))
 			return false;
-		return getNode().equals(((KadNode)obj).getNode());
+		return getNode().getInetAddress().equals(((KadNode)obj).getNode().getInetAddress());
 	}
 	
 	/**

@@ -88,13 +88,13 @@ public class DhtinfoServiceImpl implements DhtinfoService {
 		Boolean savefile=true;
 			if(updateDhtFiles)
 			{
-				try {
-					DhtContextHolder.PUBLIC_DHTFILEINSERT_QUEUE.put(dhtinfo);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-					return false;
-				}
-			//	savefile=	dhtinfoDao.updateDhtFiles(dhtinfo);
+//				try {
+//					DhtContextHolder.PUBLIC_DHTFILEINSERT_QUEUE.put(dhtinfo);
+//				} catch (InterruptedException e) {
+//					e.printStackTrace();
+//					return false;
+//				}
+			 savefile=	dhtinfoDao.updateDhtFiles(dhtinfo);
 				return true;
 			}
 			if(!(saveinfo&&savefile))

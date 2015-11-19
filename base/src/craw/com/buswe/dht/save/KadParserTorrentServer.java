@@ -57,6 +57,10 @@ public class KadParserTorrentServer implements Runnable {
 						excutorService.execute(parser);
 					}
 				}
+				else
+				{
+					
+				}
 				
 			} catch (Exception e3) {
 				e3.printStackTrace();

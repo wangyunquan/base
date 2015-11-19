@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.buswe.base.config.ContextHolder;
+import com.buswe.base.utils.Threads;
 import com.buswe.dht.entity.Dhtinfo;
 import com.buswe.dht.service.DhtinfoService;
 import com.buswe.dht.util.context.DhtContextHolder;
@@ -51,10 +52,7 @@ public class SaveDhtThread implements Runnable {
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-		   if(icrease%100==0)
-		   {
-			   logger.info("本次已抓取到信息："+icrease);
-		   }
+	     Threads.sleep(60*1000);
 		}
 
 	}

@@ -87,13 +87,13 @@ public class CrawlServiceImpl implements CrawlService {
 				kadNet.join(BOOTSTRAP_NODES).create();
 				kadnetList.add(kadNet);
 			}
-			saveToDbThread = new SaveDhtThread(); // 保存到数据库的线程
-			saveToDbThread.start();
-			// 解析 dhtinfo的线程
-			parseServer = new KadParserTorrentServer();
-			parseServer.start();
-		 insertFileThread=new InsertDhtfilesThread();
-			insertFileThread.start();
+//			saveToDbThread = new SaveDhtThread(); // 保存到数据库的线程
+//			saveToDbThread.start();
+//			// 解析 dhtinfo的线程
+//			parseServer = new KadParserTorrentServer();
+//			parseServer.start();
+//		 insertFileThread=new InsertDhtfilesThread();
+//			insertFileThread.start();
 
 		} catch (Exception e) {
 			e.printStackTrace();

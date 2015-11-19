@@ -1,15 +1,17 @@
 package com.buswe.dht.server;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.Thread.UncaughtExceptionHandler;
+import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
+import java.net.URL;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
-import java.nio.charset.Charset;
 import java.security.NoSuchAlgorithmException;
 import java.util.Iterator;
 import java.util.List;
@@ -28,8 +30,8 @@ import org.yaircc.torrent.bencoding.BTypeException;
 import com.buswe.base.config.ContextHolder;
 import com.buswe.dht.DHTConstant;
 import com.buswe.dht.entity.Dhtinfo;
+import com.buswe.dht.entity.DhtinfoState;
 import com.buswe.dht.message.KadRequest;
-import com.buswe.dht.message.reqandres.AnnouncePeerResponse;
 import com.buswe.dht.message.reqandres.FindNodeRequest;
 import com.buswe.dht.message.reqandres.FindNodeResponse;
 import com.buswe.dht.message.reqandres.GetPeersRequest;
@@ -39,10 +41,12 @@ import com.buswe.dht.message.reqandres.PingResponse;
 import com.buswe.dht.node.KadNet;
 import com.buswe.dht.node.Key;
 import com.buswe.dht.node.Node;
+import com.buswe.dht.paser.TorrentParser;
+import com.buswe.dht.paser.TorrentinfoUrl;
 import com.buswe.dht.service.CrawlServiceImpl;
+import com.buswe.dht.service.DhtinfoService;
 import com.buswe.dht.util.BencodUtil;
 import com.buswe.dht.util.ByteUtil;
-import com.buswe.dht.util.context.DhtContextHolder;
 
  
 
@@ -79,7 +83,7 @@ public class KadReceiveServer implements Runnable, DHTConstant {
 		kadNet.sendMessage(pingResponse);
 //		logger.debug(src.getKey()+"ping");
 //		logger.debug("Ping返回信息为:"+pingResponse);
- 	addNodeToQueue(src);
+// 	addNodeToQueue(src);
 	}
 
 	/**
@@ -126,82 +130,70 @@ public class KadReceiveServer implements Runnable, DHTConstant {
 			{
 				info.setSuccesscount(1);
 			}
-			DhtContextHolder.PUBLIC_DHTINFO_QUEUE.put(info);
+			DhtinfoService		dhtinfoService=ContextHolder.getBean(DhtinfoService.class);
+			Boolean success=false;
+			try
+			{
+				success=	 dhtinfoService.saveDhtinfo(info);
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+				 logger.error("保存infohash失败:"+info_hash);
+			}
+			if(success)
+			{
+				String dowloadInfoHash=info_hash.trim().toUpperCase();
+				InputStream inputStream=null;
+				for(int i=0;i<TorrentinfoUrl.urls.length;i++)
+				{
+					String url=TorrentinfoUrl.formatUrl(dowloadInfoHash, i);
+				   inputStream=openConnection(url);
+					if(inputStream==null) //无法打开链接
+					{
+						info.setDhtstate(DhtinfoState.DHTSTATE_DOWNLOAD_FAIL);
+						continue ;
+					} else
+					{
+					Boolean result=	 TorrentParser.parse(inputStream, info);
+					if(result) 
+						break ;//如果解析成功，则不再执行下一个地址去解析了
+					}
+				}
+				dhtinfoService.updateDhtinfoDownLoad(info, true);
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
+			 logger.error("保存infohash解析信息失败:"+info_hash);
+		 
 		}
 
 	}
 
-//	@SuppressWarnings("unused")
-//	private void sendGet_Peers(String transaction, byte[] infohash, Node src) {
-//		GetPeersRequest getPeersRequest = new GetPeersRequest(transaction, src);
-//		getPeersRequest.setInfo_hash(ByteUtil.hex(infohash));
-//		sendGet_Peers(getPeersRequest);
-//	}
-
-	//int fail = 0;
-//	int countcount = 0;
-//
-//	private void sendGet_Peers(KadRequest getPeersRequest) {
-//		MessageDispatcher dispatcher = new MessageDispatcher(kadNet, getPeersRequest.getTransaction());
-//		dispatcher.setConsumable(true)//
-//				// .addFilter(new
-//				// IdMessageFilter(findNodeResponse.getTransaction()))// 只接受的类型
-//				// .addFilter(new TypeMessageFilter(FindNodeResponse.class))//
-//				.setCallback(null, new CompletionHandler<KadMessage, BMap>() {
-//					@Override
-//					public void completed(KadMessage msg, BMap decodedData) {
-//						// System.out.println(decodedData);
-//						BMap responseMap;
-//						try {
-//							responseMap = decodedData.getMap(R);
-//							if (responseMap.containsKey(NODES)) {
-//								byte[] bytesFromNodes = (byte[]) responseMap.get(NODES);
-//								parsergetpeersNodes(msg, bytesFromNodes);
-//							} else if (responseMap.containsKey(VALUES)) {
-//								// System.out.println("收到相应value==========" +
-//								// decodedData);
-//								BList bList = responseMap.getList(VALUES);
-//								GetPeersRequest request = (GetPeersRequest) msg;
-//								// request.g
-//								for (Object bytesobj : bList) {
-//									logger.error("这部分还没有完成，请速完善！！！");
-//									throw new Exception("这部分还没有完成，请速完善！！！");
-//									
-////									ClientPeer cp = new ClientPeer((byte[]) bytesobj, request);
-////									srvExecutor.execute(cp);
-//
-//								}
-//							}
-//						} catch (Exception e) {
-//							e.printStackTrace();
-//						}
-//					}
-//
-//					@Override
-//					public void failed(Throwable exc, BMap nothing) {
-//						// System.out.println("相响应错误了==" + ++fail);
-//					}
-//				});
-//		try {
-//			dispatcher.send(getPeersRequest);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//	}
-
-//	private void parsergetpeersNodes(KadMessage msg, byte[] bytesFromNodes) throws UnknownHostException {
-//		List<Node> nodes = BencodUtil.passNodes(bytesFromNodes);
-//		for (int i = 0; i < nodes.size(); i++) {
-//			KadRequest kadRequest = (KadRequest) msg;
-//			kadRequest.setNode(nodes.get(i));
-//			sendGet_Peers(kadRequest);
-//		}
-//
-//	}
-
-//	int count = 0;
+	private  InputStream  openConnection(String url)
+	{
+		InputStream inputStream = null;
+		try {
+			URL parsedUrl = new URL(url);
+			HttpURLConnection connection=(HttpURLConnection)parsedUrl.openConnection();
+			connection.setConnectTimeout( 3 * 1000);
+			connection.setReadTimeout( 3* 1000);
+			connection.setUseCaches(false);
+			connection.setDoInput(true);//重要
+			connection.setRequestMethod("GET");
+			int responseCode = connection.getResponseCode();
+			if (responseCode ==HttpURLConnection.HTTP_OK) {
+			inputStream =connection.getInputStream();
+			}
+		} catch (Exception e) {
+		
+		//	e.printStackTrace(); nothing todo 
+			//logger.debug("下载失败："+url);
+		}
+		return inputStream;
+		
+		}
 
 	/**
 	 * 处理请求信息
@@ -216,7 +208,7 @@ public class KadReceiveServer implements Runnable, DHTConstant {
 		if (decodedData.containsKey(Q)) {
 			String q_value = decodedData.getString(Q);// find_node or	// getpeers===
 			Key key = new Key((byte[]) decodedData.getMap(A).get(ID));
-// logger.debug("收到的"+inetSocketAddress.getHostString()+":"+inetSocketAddress.getPort()+"请求消息类型为:"+q_value+"消息:"+decodedData);
+         logger.debug("收到的"+inetSocketAddress.getHostString()+":"+inetSocketAddress.getPort()+"请求消息类型为:"+q_value+"消息:"+decodedData);
 			final Node to = new Node(key).setSocketAddress(inetSocketAddress);
 			if (q_value.equals(FIND_NODE)) {
 				handleFind_NodeRequest(transaction, decodedData, to);
