@@ -97,7 +97,7 @@ public class TorrentParser implements TorrentConstantKey {
 				return false;
 			}
 		} catch (Exception e) {
-		//	e.printStackTrace();
+	 	e.printStackTrace();
 			dhtinfo.setDhtstate(DhtinfoState.DHTSTATE_PARSING_FAIL);
 			return false;
 		} finally

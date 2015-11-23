@@ -32,6 +32,7 @@ import com.buswe.dht.DHTConstant;
 import com.buswe.dht.entity.Dhtinfo;
 import com.buswe.dht.entity.DhtinfoState;
 import com.buswe.dht.message.KadRequest;
+import com.buswe.dht.message.reqandres.AnnouncePeerResponse;
 import com.buswe.dht.message.reqandres.FindNodeRequest;
 import com.buswe.dht.message.reqandres.FindNodeResponse;
 import com.buswe.dht.message.reqandres.GetPeersRequest;
@@ -97,12 +98,6 @@ public class KadReceiveServer implements Runnable, DHTConstant {
 	protected void handleGet_PeersRequest(String transaction, BMap decodedData, Node src) throws BTypeException, IOException {
 		byte[] bytesFromInfohash = (byte[]) decodedData.getMap(A).get(INFO_HASH);
 	   String infoHash = ByteUtil.hex(bytesFromInfohash);
-	//	logger.debug(src.getKey()+"节点getpeers信息:"+infoHash);
-	// 	handleInfoHash(infoHash, src,"getPeer"); //get peer的方式，我不存储。有可能是无法下载的 TODO。
-//		GetPeersRequest getPeersRequest = new GetPeersRequest(transaction, src);
-//		getPeersRequest.setInfo_hash(Util.hex(bytesFromInfohash));
-		// sendGet_Peers(transaction, bytesFromInfohash, src);//
-		// *******发送请求。查找infohash
 		GetPeersResponse getPeersResponse = new GetPeersResponse(transaction, src);
 		List<Node> nodes = kadNet.findNode(new Key(bytesFromInfohash)); //我不返回它查找的peer，只返回相近的节点, 其实我只随机的返回8个节点 //TODO
 		getPeersResponse.setNodes(nodes);
@@ -116,22 +111,17 @@ public class KadReceiveServer implements Runnable, DHTConstant {
 	 * 
 	 * @param info_hash
 	 */
-	private void saveInfoHash(String info_hash, Node src,String type) { 
+	private void saveInfoHash(String info_hash, Node src) { 
 		try {
 	 logger.debug(src.getInetAddress()+":  保存了infohash:"+info_hash);
 			Dhtinfo info=new Dhtinfo();
 			info.setInfohash(info_hash);
 			info.setPeerIpport(src.getSocketAddress().toString());
-			if(type.equalsIgnoreCase("getPeer"))
-			{
-				info.setCrawcount(1);
-			}
-			else
-			{
+  
 				info.setSuccesscount(1);
-			}
+	 
 			DhtinfoService		dhtinfoService=ContextHolder.getBean(DhtinfoService.class);
-			Boolean success=false;
+			Integer success=0;
 			try
 			{
 				success=	 dhtinfoService.saveDhtinfo(info);
@@ -141,7 +131,7 @@ public class KadReceiveServer implements Runnable, DHTConstant {
 				e.printStackTrace();
 				 logger.error("保存infohash失败:"+info_hash);
 			}
-			if(success)
+			if(success==2)
 			{
 				String dowloadInfoHash=info_hash.trim().toUpperCase();
 				InputStream inputStream=null;
@@ -208,7 +198,7 @@ public class KadReceiveServer implements Runnable, DHTConstant {
 		if (decodedData.containsKey(Q)) {
 			String q_value = decodedData.getString(Q);// find_node or	// getpeers===
 			Key key = new Key((byte[]) decodedData.getMap(A).get(ID));
-         logger.debug("收到的"+inetSocketAddress.getHostString()+":"+inetSocketAddress.getPort()+"请求消息类型为:"+q_value+"消息:"+decodedData);
+  //           logger.debug("收到的"+inetSocketAddress.getHostString()+":"+inetSocketAddress.getPort()+"请求消息类型为:"+q_value+"消息:"+decodedData);
 			final Node to = new Node(key).setSocketAddress(inetSocketAddress);
 			if (q_value.equals(FIND_NODE)) {
 				handleFind_NodeRequest(transaction, decodedData, to);
@@ -230,23 +220,30 @@ public class KadReceiveServer implements Runnable, DHTConstant {
 		String info_hash = ByteUtil.hex((byte[]) decodedData.getMap(A).get(INFO_HASH));
 		handleInfoHash(info_hash, to,"announcePeer");
 		addNodeToQueue(to);//这种节点是健康节点，可以加到桶中
-//		AnnouncePeerResponse response=new AnnouncePeerResponse(transaction,to);
-//		try {
-//			kadNet.sendMessage(response);
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
+		AnnouncePeerResponse response=new AnnouncePeerResponse(transaction,to);
+		try {
+			kadNet.sendMessage(response);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 // logger.debug("Announce_Peer收到的信息为:"+info_hash+"  ");
 	}
 
-	private void handleInfoHash(String info_hash, Node to,String type) {
+	private void handleInfoHash(final String info_hash, final Node to,String type) {
 //		//TODO 这里的设计有点怪  infohashSet没有用，
 //		if (!info_hashset.contains(info_hash)) {
 //			if (info_hashset.size() > 1000) {
 //				info_hashset.removeAll(info_hashset);
 //			}
 //			info_hashset.add(info_hash);
-			saveInfoHash(info_hash, to,type);
+		new Thread(new Runnable(){
+			@Override
+			public void run() {
+				saveInfoHash(info_hash, to);
+			}
+		}).start();;
+		
+			
 		//	logger.debug("本次保存到的种子数="+ info_hashset.size());
 		//}
 	}

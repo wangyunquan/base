@@ -45,7 +45,7 @@ public class DhtinfoServiceImpl implements DhtinfoService {
 	}
 
 	@Override
-	public Boolean saveDhtinfo(Dhtinfo info) {
+	public Integer saveDhtinfo(Dhtinfo info) {
 			String infohash=info.getInfohash();
 			Boolean exsit = dhtinfoDao.dhtinfoExsit(infohash);
 			if(exsit)
@@ -61,13 +61,15 @@ public class DhtinfoServiceImpl implements DhtinfoService {
  			{
  				//TODO 错误
  			}
+				
+				return 1;
 			}
 			else
 			{
 				dhtinfoDao.insertDhtinfo(info);
+				return 2;
 			}
 	 
-		return true;
 	}
 
 	@Override

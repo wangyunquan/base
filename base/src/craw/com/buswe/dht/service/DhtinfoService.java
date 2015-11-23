@@ -44,10 +44,13 @@ public interface DhtinfoService {
  * 
  * 如果不存在，则新增
  * 
+ * 如果存在，更新，返回1
+ * 如果不存在，插入，返回2
+ * 保存失败，返回0
  * @param dhtinfoList
  * @return
  */
-	public Boolean saveDhtinfo(Dhtinfo dhtinfo);
+	public Integer saveDhtinfo(Dhtinfo dhtinfo);
 	
 	/**
 	 *  下载后更新链接信息 

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import com.buswe.dht.entity.Dhtfiles;
 import com.buswe.dht.entity.Dhtinfo;
+import com.buswe.dht.entity.DhtinfoState;
 @Repository
 public class DhtInfoDaoImpl implements DhtinfoDao  {
 
@@ -23,6 +24,16 @@ public class DhtInfoDaoImpl implements DhtinfoDao  {
 	private final String insertDhtinfosql = "INSERT INTO dhtinfo (infohash,peer_Ipport,lastrequesttime,tag,name,dhtstate,filelength,singerfile,isindex,validstate,successcount) values"
 			+ " ( :infohash,:peerIpport,:lastrequesttime,:tag,:name,:dhtstate,:filelength,:singerfile,:isindex,:validstate,:successcount)";
    private final String insertDhtFilesSql="insert into dhtfiles (infohash,singlefilelength,path) values (:infohash,:singlefilelength,:path)";
+   
+   
+	public void setNamedjdbc(NamedParameterJdbcTemplate namedjdbc) {
+	this.namedjdbc = namedjdbc;
+}
+
+public void setSimpleJdbc(JdbcTemplate simpleJdbc) {
+	this.simpleJdbc = simpleJdbc;
+}
+
 	/* (non-Javadoc)
 	 * @see com.buswe.dht.dao.DhtinfoDao#insertDhtinfo(com.buswe.dht.entity.Dhtinfo)
 	 */
@@ -85,6 +96,10 @@ public class DhtInfoDaoImpl implements DhtinfoDao  {
 	
 	public Boolean updateDhtinfoSate(String infohash,Integer state)
 	{
+		if(state.equals(DhtinfoState.DHTSTATE_DOWNLOAD_FAIL))
+		{
+			return simpleJdbc.update("update dhtinfo set dhtstate=3 ,failtime=failtime+1 where  infohash=?", infohash)>0?true:false;
+		}
 		return simpleJdbc.update("update dhtinfo set dhtstate=? where  infohash=?",state, infohash)>0?true:false;
 	}
 	

@@ -64,11 +64,18 @@ public class KadSendMsgServer implements Runnable {
 		while (this.isActive.get()) {
 			try {
 				List<KadNode> nodes = kadNet.getAllNodes();
-				logger.info("本地节点" + kadNet.getKey() + "桶内的节点:" + nodes.size());
-				for (int i = 0; i < nodes.size(); i++) { //每次全部发送？，还是只发送一部分？
+				Integer size=nodes.size();
+				logger.info("本地节点" + kadNet.getKey() + "桶内的节点:" + size);
+				for (int i = 0; i < size; i++) { //每次全部发送？，还是只发送一部分？
 					KadNode node = null;
 					try {
 						node = nodes.get(i);
+						if(node==null)
+						{
+							System.out.println("节点第为空:"+i);
+							continue;
+						}
+						
 						if(i%everyTimetoGepeer==0)
 						{
 							GetPeersRequest request=	getpeerRequest(node.getNode());

@@ -1,7 +1,6 @@
 package com.buswe.dht.node.bucket;
 
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeSet;
@@ -20,15 +19,13 @@ import com.buswe.dht.node.NodeComparator;
  */
 public class SlackBucket implements Bucket {
 
-	private final LinkedHashSet<KadNode> bucket;
-	private final int maxSize;
-	private final List<KadNode> publicBucket;
+	private   List<KadNode> bucket= new ArrayList<KadNode>();
+	private   int maxSize;
+	private   List<KadNode> publicBucket= new ArrayList<KadNode>();
 
 	public SlackBucket() {
 	 String buckSize=       ContextHolder.getProperty("dht.craw.config.node.buckSize");
 	 this.maxSize=Integer.valueOf(buckSize);
-		bucket = new LinkedHashSet<KadNode>();
-		publicBucket = new LinkedList<KadNode>();
 	}
 	
 	public List<Node> getRandomCosetNode(Integer size)
@@ -69,11 +66,14 @@ public class SlackBucket implements Bucket {
 
 	@Override
 	public void insert(KadNode n) {
- 
 			if (bucket.contains(n))
 				return;
-			if (bucket.size() == maxSize)
+			if (bucket.size() > maxSize)
+			{
 				bucket.remove(0);
+			}
+
+			//System.out.println("addNode "+n.getNode().getAddr());
 			bucket.add(n);
 	}
 

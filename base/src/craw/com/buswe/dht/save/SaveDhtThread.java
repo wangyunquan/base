@@ -35,7 +35,7 @@ public class SaveDhtThread implements Runnable {
 				try {
 					// 阻塞，一直等到获取到
 					Dhtinfo info = DhtContextHolder.PUBLIC_DHTINFO_QUEUE.take();
-						Boolean saveSuccess = false;
+						Integer saveSuccess = 0;
 						try {
 							saveSuccess = dhtinfoService.saveDhtinfo(info);
 							icrease++;
@@ -44,7 +44,7 @@ public class SaveDhtThread implements Runnable {
 							logger.error("保存信息失败", e);
 							logger.error("保存dhtinfo信息失败，数量：" + icrease + "infohash :" + info.getInfohash());
 						}
-						if (!saveSuccess)
+						if (saveSuccess==0)
 							logger.error("保存dhtinfo信息失败，数量：" + icrease + "infohash :" + info.getInfohash());
 						else {
 							   logger.info("本次已抓取到信息："+icrease);
