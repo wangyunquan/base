@@ -48,7 +48,9 @@ public class CmsUtil
     String url = request.getRequestURI();
     String context = request.getContextPath();
     String path = url.substring(context.length() + 1);
-    path = path.substring(0, path.indexOf("/"));
+   
+  
+  path = path.substring(0, path.indexOf("/"));
     SiteService service = (SiteService)ContextHolder.getBean(SiteService.class);
     List<Site> allSite = service.allSite();
     Iterator localIterator = allSite.iterator();

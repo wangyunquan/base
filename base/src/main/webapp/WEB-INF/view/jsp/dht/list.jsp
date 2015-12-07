@@ -88,15 +88,20 @@
 <br>
  </c:forEach>
 <div class="row"  >
-<div class="col-sm-10col-md-offset-2">
+<div class="col-sm-10 col-sm-offset-2">
 	<w:page page="${page}"  jumpFunction="pageto"></w:page>
 </div>
     </div>  
+   
+ 
+	 <%@ include file="/WEB-INF/layouts/frontFooter.jsp"%>
+ 
+    
     
         </div>
         
 	<script src="${ctx}/static/js/jquery/jquery.js"></script>
 	<script src="${ctx}/static/bootstrap/js/bootstrap.min.js"></script>
-	 <%@ include file="/WEB-INF/layouts/frontFooter.jsp"%>
+
   </body>
 </html>

@@ -24,7 +24,7 @@ private	Integer crawcount=0;//抓取到的次数，表示当前在网络环境�
 
 private	Integer hitcount=0;//被点击的次数
 private	String tag;//标签
-private	String name;//名称，即下载的名字
+private	String name="";//名称，即下载的名字
 private	Long filelength; //如果是单文件，表示文件大小
 private	Date creattime; //创建日期，是指文件的创建者
 private	Boolean singerfile;  //是否是单文件

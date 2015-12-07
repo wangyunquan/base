@@ -29,6 +29,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.buswe.base.config.ContextHolder;
@@ -113,7 +114,7 @@ public class CrawlServiceImpl implements CrawlService {
 		
 	}
 //正式的时候，必须打开这个，TODO
- //@Scheduled(cron="0 0/10 * * * ?  ") //每10分钟执行一次
+	//@Scheduled(cron="0 0/10 * * * ?  ") //每10分钟执行一次
   public void creatIndex() throws Exception
   {
 		  creatIndex(10000);
@@ -177,7 +178,8 @@ public class CrawlServiceImpl implements CrawlService {
 		IndexSearcher searcher = new IndexSearcher(reader);
 		
 		////reverse 为true是降序  false为升序
-	       Sort sort = new Sort(new SortField[]{new SortField(null,SortField.Type.SCORE),new SortField(DhtLuceneHelper.CREATTIME, SortField.Type.LONG)}); 
+	       Sort sort = new Sort(new SortField[]{//new SortField(null,SortField.Type.SCORE),
+	    		   new SortField(DhtLuceneHelper.CREATTIME, SortField.Type.LONG,true)}); 
 	//	TopFieldCollector  collector= TopFieldCollector.c
 	//	TopScoreDocCollector collector = TopScoreDocCollector.create(20000, true);
 	       

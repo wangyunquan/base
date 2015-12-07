@@ -61,8 +61,6 @@ public class ArticleServiceImpl
     Site site = cat.getSite();
     entity.setSite(site);
     entity.setOutline(CmsUtil.getOutLine(entity.getLobContent()));
-    
- 
     entity = (Article)this.articleDao.save(entity);
     String tag = entity.getTags();
     List<String> tags = new ArrayList<String>();

@@ -49,7 +49,7 @@ public class Article
   @NotFound(action=NotFoundAction.IGNORE)
   private Site site;
   @OneToMany(cascade={javax.persistence.CascadeType.PERSIST, javax.persistence.CascadeType.MERGE, javax.persistence.CascadeType.REMOVE}, fetch=FetchType.LAZY, mappedBy="article")
-  private List<Comment> comments = new ArrayList();
+  private List<Comment> comments = new ArrayList<Comment>();
   @Field(index=Index.YES, analyze=Analyze.YES, store=Store.NO)
   private String title;
   private String color;

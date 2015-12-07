@@ -1,8 +1,8 @@
       
       <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
-      <footer class="footer">
-      <div class="container">
+   
+    
         <p class="text-muted" align="center">
       本站内容为模拟协议加入加DHT<script type="text/javascript">
 var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
@@ -12,8 +12,8 @@ document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3
        如有侵权，请联系admin@buswe.com
         
         </p>
-      </div>
-    </footer>
+ 
+ 
     
 
 <script type="text/javascript">

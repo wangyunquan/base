@@ -4,57 +4,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv="Content-type" content="text/html; charset=UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <title>博客空间</title>
-    <link href="${contextPath}/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="${contextPath}/static/theme/default/css/post.css" rel="stylesheet">
-<!--[if lt IE 9]>
-      <script src="${ctx}/static/bootstrap/js/html5shiv.min.js"></script>
-      <script src="${ctx}/static/bootstrap/js/respond.min.js"></script>
-    <![endif]-->
+ 
 </head>
 <body>
 
-<#include "./header.html">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-8">
-                <h1 class="page-header">
-                   首页
-                    <small> </small>
-                </h1>
-                <#list page.content as item>
-                <h2>
-                    <a href="${contextPath}/blog/${item.id}.html">${item.title}  </a>
-                </h2>
-       
-                <p><span class="glyphicon glyphicon-time"></span> 发表于 ${item.timestamp} </p>
-           
-                <p>${item.outline}
-                </p>
-                <a class="btn btn-primary" href="${contextPath}/blog/${item.id}.html">Read More<span class="glyphicon glyphicon-chevron-right"></span></a>
-                <hr>
-             </#list>
-                <ul class="pager">
-                    <li class="previous">
-                        <a href="#">&larr; Older</a>
-                    </li>
-                    <li class="next">
-                        <a href="#">Newer &rarr;</a>
-                    </li>
-                </ul>
-            </div>
-    <#include "./sidebar.html">
-        </div>
-        <hr>
- <#include "./footer.html">
-    </div>
-    <script src="${contextPath}/static/js/jquery/jquery.js"></script>
-    <script src="${contextPath}/static/bootstrap/js/bootstrap.min.js"></script>
+ 
 </body>
 
 </html>

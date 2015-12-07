@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
@@ -37,7 +37,7 @@
 
 			<form class="form-horizontal" action="./search.htm">
 				<div class="form-group">
-					<div class="col-sm-5  col-md-offset-3">
+					<div class="col-sm-5  col-sm-offset-3">
 						<input type="text" class="form-control" id="q" name="q"
 							placeholder="输入关键字">
 					</div>
