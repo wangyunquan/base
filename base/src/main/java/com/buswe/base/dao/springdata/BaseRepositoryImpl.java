@@ -4,22 +4,29 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Selection;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 
+
 public class BaseRepositoryImpl<T, ID extends Serializable>
   extends SimpleJpaRepository<T, ID>
   implements BaseRepository<T, ID>
 {
+    private   Logger logger = LoggerFactory.getLogger(this.getClass());
   private EntityManager entityManager;
   private Class<T> domainClass;
   
@@ -64,4 +71,20 @@ public class BaseRepositoryImpl<T, ID extends Serializable>
   {
     return null;
   }
+  
+  public Page<T> findByExample(T example,Pageable pageable)
+  {
+      Specification<T> spec = new ExampleSpecification<T>(entityManager,example);
+      TypedQuery<T> query = getQuery(spec, pageable);
+      return pageable == null ? new PageImpl<T>(query.getResultList()) : readPage(query, pageable, spec);
+  }
+  
+  public List<T> findByExample(T example)
+  {
+	   Specification<T> spec = new ExampleSpecification<T>(entityManager,example);
+	   return super.findAll(spec);
+  }
+  
 }
+
+ 

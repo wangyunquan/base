@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.NoRepositoryBean;
@@ -19,4 +21,8 @@ public abstract interface BaseRepository<T, ID extends Serializable>
   public abstract Class<T> getDomainClass();
   
   public abstract List<T> findList(Collection<String> paramCollection);
+  
+  public Page<T> findByExample(T example,Pageable pageable);
+  
+  public List<T> findByExample(T example);
 }
