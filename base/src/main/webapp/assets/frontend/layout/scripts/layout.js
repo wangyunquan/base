@@ -384,7 +384,7 @@ var Layout = function () {
                     [1200, 6],
                     [1400, 6],
                     [1600, 6]
-                ],
+                ]
             });
 
             $(".owl-carousel5").owlCarousel({
@@ -404,7 +404,7 @@ var Layout = function () {
                     [1200, 5],
                     [1400, 5],
                     [1600, 5]
-                ],
+                ]
             });
 
             $(".owl-carousel4").owlCarousel({
@@ -429,7 +429,7 @@ var Layout = function () {
                     [1200, 3],
                     [1400, 3],
                     [1600, 3]
-                ],
+                ]
             });
 
             $(".owl-carousel2").owlCarousel({
@@ -446,7 +446,7 @@ var Layout = function () {
                     [1200, 2],
                     [1400, 2],
                     [1600, 2]
-                ],
+                ]
             });
         },
 

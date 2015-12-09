@@ -11,8 +11,9 @@
     <mapping path="/core/*"  decorator="/WEB-INF/layouts/default.jsp"/>
    <mapping path="/cms/*"  decorator="/WEB-INF/layouts/default.jsp"/>
   <mapping path="/dht/*"  decorator="/WEB-INF/layouts/default.jsp"/>
-  <mapping path="/blog/*"  decorator="/WEB-INF/layouts/index.jsp"/>
+    <mapping path="/blog/*"  decorator="/WEB-INF/layouts/index.jsp"/>
   <!-- 对不同的路径，启用不同的装饰器 
+    <mapping path="/blog/*"  decorator="/WEB-INF/layouts/index.jsp"/>
   <mapping path="/admin/*" decorator="/another-decorator.html"/>
   <mapping path="/*.special.jsp" decorator="/special-decorator.html"/>
 -->
