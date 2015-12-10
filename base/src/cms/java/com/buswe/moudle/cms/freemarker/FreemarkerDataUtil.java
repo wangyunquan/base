@@ -16,6 +16,11 @@ import com.buswe.moudle.cms.entity.Site;
 import com.buswe.moudle.cms.service.CategoryService;
 
 import freemarker.template.Template;
+import freemarker.template.TemplateException;
+import freemarker.template.TemplateModel;
+import freemarker.template.TemplateModelException;
+import freemarker.template.TemplateNumberModel;
+import freemarker.template.TemplateScalarModel;
 
 public class FreemarkerDataUtil
 {
@@ -35,7 +40,29 @@ public class FreemarkerDataUtil
     map.put("site", site);
     map.put("allCat", catService.findBySiteId(site.getId()));
   }
-  
+  /**
+   * 获取标签传入的变量
+   * @param name
+   * @param params
+   * @return
+   * @throws TemplateException
+   */
+	public static String getString(String name,
+			Map<String, TemplateModel> params) throws TemplateException {
+		TemplateModel model = params.get(name);
+		if (model == null) {
+			return null;
+		}
+		if (model instanceof TemplateScalarModel) {
+			return ((TemplateScalarModel) model).getAsString();
+		} else if ((model instanceof TemplateNumberModel)) {
+			return ((TemplateNumberModel) model).getAsNumber().toString();
+		} else {
+		 throw new TemplateModelException(" name  is null ");
+		 
+		}
+	}
+	
   public static void makeStaticFile(String path, Map<String, Object> map, Template template)
     throws Exception
   {

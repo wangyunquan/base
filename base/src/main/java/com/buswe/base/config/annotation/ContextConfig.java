@@ -1,5 +1,7 @@
 package com.buswe.base.config.annotation;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import org.springframework.context.MessageSource;
@@ -12,6 +14,8 @@ import org.springframework.format.support.FormattingConversionServiceFactoryBean
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 
 import com.buswe.base.config.ContextHolder;
+import com.buswe.moudle.cms.freemarker.TagsVarDirective;
+import com.buswe.moudle.cms.freemarker.TextCutDirective;
 
 @Configuration
 @Import({CacheConfig.class, ServiceConfig.class, DaoConfig.class, EventConfig.class,SecurityConfig.class})
@@ -46,6 +50,14 @@ public class ContextConfig
   FreeMarkerConfigurer freeMarkerConfigurer()
   {
     FreeMarkerConfigurer config = new FreeMarkerConfigurer();
+    
+    
+    Map<String, Object>   freemarkerVariables =new HashMap<String, Object> ();
+    freemarkerVariables.put("tags", TagsVarDirective.class);
+    freemarkerVariables.put("textCut", TextCutDirective.class);
+    config.setFreemarkerVariables(freemarkerVariables);
+    
+    
     Properties pro = new Properties();
     pro.put("template_update_delay", "5");
     pro.put("default_encoding", "UTF-8");
@@ -56,18 +68,6 @@ public class ContextConfig
     pro.put("whitespace_stripping", "true");
     pro.put("tag_syntax", "auto_detect");
     pro.put("url_escaping_charset", "UTF-8");
-    
-
-
-
-
-
-
-
-
-
-
-
     config.setFreemarkerSettings(pro);
     config.setTemplateLoaderPath("/WEB-INF/view/freemarker/");
     return config;
