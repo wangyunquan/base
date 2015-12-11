@@ -8,8 +8,8 @@
   <mime-type>application/xhtml+xml</mime-type>
   <!-- 默认装饰器，当下面的路径都不匹配时，启用该装饰器进行装饰 
   <mapping decorator="/WEB-INF/layouts/default.jsp"/>-->
-    <mapping path="/core/*"  decorator="/WEB-INF/layouts/default.jsp"/>
-   <mapping path="/cms/*"  decorator="/WEB-INF/layouts/default.jsp"/>
+    <mapping path="/core/*"  decorator="/WEB-INF/layouts/admin.jsp"/>
+   <mapping path="/cms/*"  decorator="/WEB-INF/layouts/admin.jsp"/>
   <mapping path="/dht/*"  decorator="/WEB-INF/layouts/default.jsp"/>
     <mapping path="/blog/*"  decorator="/WEB-INF/layouts/index.jsp"/>
   <!-- 对不同的路径，启用不同的装饰器 
